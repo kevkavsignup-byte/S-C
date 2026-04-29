@@ -1,0 +1,45 @@
+{
+  "name": "6M Strength Programme",
+  "short_name": "6M Strength",
+  "description": "6-Month Progressive Strength & Conditioning Programme with weight tracking",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d0d0d",
+  "theme_color": "#0d0d0d",
+  "scope": "./",
+  "lang": "en",
+  "categories": ["health", "fitness", "sports"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%230d0d0d'/><rect x='16' y='86' width='160' height='20' rx='4' fill='%23e63946'/><rect x='16' y='86' width='30' height='20' rx='4' fill='%23e63946'/><rect x='146' y='86' width='30' height='20' rx='4' fill='%23e63946'/><rect x='40' y='60' width='16' height='72' rx='4' fill='%23e63946'/><rect x='136' y='60' width='16' height='72' rx='4' fill='%23e63946'/><rect x='20' y='74' width='28' height='44' rx='6' fill='%23c1121f'/><rect x='144' y='74' width='28' height='44' rx='6' fill='%23c1121f'/><text x='96' y='148' font-family='Arial Black' font-size='22' font-weight='900' fill='%23e63946' text-anchor='middle' letter-spacing='1'>6M</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%230d0d0d'/><rect x='40' y='226' width='432' height='60' rx='8' fill='%23e63946'/><rect x='40' y='226' width='80' height='60' rx='8' fill='%23e63946'/><rect x='392' y='226' width='80' height='60' rx='8' fill='%23e63946'/><rect x='104' y='156' width='44' height='200' rx='10' fill='%23e63946'/><rect x='364' y='156' width='44' height='200' rx='10' fill='%23e63946'/><rect x='48' y='194' width='76' height='124' rx='14' fill='%23c1121f'/><rect x='388' y='194' width='76' height='124' rx='14' fill='%23c1121f'/><text x='256' y='420' font-family='Arial Black' font-size='64' font-weight='900' fill='%23e63946' text-anchor='middle' letter-spacing='2'>6M</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Start Workout",
+      "short_name": "Workout",
+      "description": "Jump straight into your next session",
+      "url": "./index.html#workout",
+      "icons": [{"src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect width='96' height='96' fill='%230d0d0d'/><polygon points='32,20 80,48 32,76' fill='%23e63946'/></svg>", "sizes": "96x96"}]
+    },
+    {
+      "name": "History",
+      "short_name": "History",
+      "description": "View your workout log",
+      "url": "./index.html#history",
+      "icons": [{"src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect width='96' height='96' fill='%230d0d0d'/><circle cx='48' cy='48' r='32' fill='none' stroke='%23e63946' stroke-width='8'/><line x1='48' y1='28' x2='48' y2='48' stroke='%23e63946' stroke-width='6' stroke-linecap='round'/><line x1='48' y1='48' x2='64' y2='56' stroke='%23e63946' stroke-width='6' stroke-linecap='round'/></svg>", "sizes": "96x96"}]
+    }
+  ],
+  "screenshots": [],
+  "prefer_related_applications": false
+}

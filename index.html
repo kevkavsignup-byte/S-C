@@ -1273,7 +1273,7 @@ function renderHistDetail(){
     ${ex.sets.map((s,i)=>`<div style="display:flex;gap:10px;padding:9px 14px;border-top:1px solid var(--border2);font-size:12px;align-items:center">
       <span style="color:var(--text4);min-width:28px">S${i+1}</span>
       <span style="font-family:var(--font-display);font-size:15px;font-weight:700;color:${s.done?'var(--text)':'var(--text4)'}">
-        ${parseFloat(s.weight)>0?s.weight+'${w.unit||'kg'}':'–'}
+        ${parseFloat(s.weight)>0?s.weight+(w.unit||'kg'):'–'}
       </span>
       <span style="color:var(--text3)">×</span>
       <span style="font-family:var(--font-display);font-size:15px;font-weight:700;color:${s.done?'var(--text)':'var(--text4)'}">

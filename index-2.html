@@ -1,0 +1,1936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>6M Strength</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%230d0d0d'/><rect x='16' y='86' width='160' height='20' rx='4' fill='%23e63946'/><rect x='40' y='60' width='16' height='72' rx='4' fill='%23e63946'/><rect x='136' y='60' width='16' height='72' rx='4' fill='%23e63946'/><rect x='20' y='74' width='28' height='44' rx='6' fill='%23c1121f'/><rect x='144' y='74' width='28' height='44' rx='6' fill='%23c1121f'/><text x='96' y='148' font-family='Arial Black' font-size='22' font-weight='900' fill='%23e63946' text-anchor='middle'>6M</text></svg>">
+<meta name="theme-color" content="#0d0d0d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0d0d0d;--surf:#111;--surf2:#161616;--surf3:#1a1a1a;
+  --border:#222;--border2:#1a1a1a;
+  --accent:#e63946;--accent-dim:rgba(230,57,70,0.12);
+  --text:#f0ede8;--text2:#aaa8a4;--text3:#666;--text4:#444;
+  --green:#5cb85c;--green-dim:rgba(92,184,92,0.12);
+  --font-display:'Barlow Condensed',sans-serif;
+  --font-mono:'IBM Plex Mono',monospace;
+  --nav-h:64px;--safe-bottom:env(safe-area-inset-bottom,0px);
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font-mono);overflow-x:hidden}
+#app{min-height:100vh;padding-bottom:calc(var(--nav-h) + var(--safe-bottom))}
+/* SCROLLBAR */
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
+/* BOTTOM NAV */
+#nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + var(--safe-bottom));background:rgba(10,10,10,0.97);border-top:1px solid var(--border);display:flex;align-items:flex-start;padding-top:0;backdrop-filter:blur(10px);z-index:100}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:12px 0 0;border:none;background:none;color:var(--text4);font-family:var(--font-mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:color .15s}
+.nav-btn.active{color:var(--accent)}
+.nav-icon{font-size:20px;line-height:1}
+/* HEADER */
+.hdr{background:var(--surf);border-bottom:1px solid var(--border);padding:52px 16px 14px;position:sticky;top:0;z-index:50;backdrop-filter:blur(8px)}
+.hdr-sub{font-size:9px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;margin-bottom:3px}
+.hdr-title{font-family:var(--font-display);font-size:26px;font-weight:900;letter-spacing:.01em;line-height:1}
+.hdr-back{display:flex;align-items:center;gap:8px;border:none;background:none;color:var(--text3);font-family:var(--font-mono);font-size:11px;cursor:pointer;padding:0 0 8px}
+/* CARDS */
+.card{background:var(--surf);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:12px 16px}
+.card-hdr{padding:14px 16px;border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center}
+.card-hdr-title{font-family:var(--font-display);font-size:16px;font-weight:700;letter-spacing:.04em}
+.card-body{padding:14px 16px}
+/* BUTTONS */
+.btn{border:none;border-radius:4px;font-family:var(--font-display);font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary{background:var(--accent);color:#fff;padding:14px 20px;font-size:15px;width:100%}
+.btn-primary:active{opacity:.85;transform:scale(.98)}
+.btn-secondary{background:var(--surf3);color:var(--text2);padding:10px 16px;font-size:13px;border:1px solid var(--border)}
+.btn-ghost{background:none;color:var(--text3);padding:8px 12px;font-size:12px;border:1px solid var(--border2)}
+.btn-danger{background:rgba(230,57,70,.15);color:var(--accent);padding:10px 16px;font-size:13px;border:1px solid rgba(230,57,70,.25)}
+.btn-success{background:var(--green);color:#fff;padding:14px 20px;font-size:15px;width:100%}
+/* CHIPS */
+.chip{display:inline-block;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border-radius:2px;font-weight:600}
+.chip-accent{background:var(--accent-dim);color:var(--accent);border:1px solid rgba(230,57,70,.25)}
+.chip-green{background:var(--green-dim);color:var(--green);border:1px solid rgba(92,184,92,.25)}
+.chip-muted{background:var(--surf3);color:var(--text4);border:1px solid var(--border2)}
+/* INPUTS */
+input[type=number],input[type=text]{background:var(--surf3);border:1px solid var(--border);border-radius:3px;color:var(--text);font-family:var(--font-display);font-size:18px;font-weight:700;text-align:center;width:100%;padding:10px 6px;-moz-appearance:textfield;outline:none;transition:border-color .15s}
+input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+input[type=number]:focus,input[type=text]:focus{border-color:var(--accent)}
+/* DIVIDER */
+.divider{height:1px;background:var(--border2);margin:0 16px}
+/* SECTION LABEL */
+.section-label{font-size:8px;font-weight:600;letter-spacing:.2em;color:var(--text4);text-transform:uppercase;padding:16px 16px 8px}
+/* TAG STRIP */
+.tag-strip{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 12px}
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border)}
+.stat-cell{background:var(--surf);padding:14px 0;text-align:center}
+.stat-val{font-family:var(--font-display);font-size:24px;font-weight:900;color:var(--text)}
+.stat-key{font-size:8px;letter-spacing:.14em;color:var(--text4);text-transform:uppercase;margin-top:2px}
+/* EXERCISE CARD */
+.ex-card{border:1px solid var(--border);border-radius:5px;margin:0 16px 12px;overflow:hidden}
+.ex-hdr{background:var(--surf2);padding:12px 14px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.ex-name{font-family:var(--font-display);font-size:17px;font-weight:700;letter-spacing:.02em;line-height:1.2}
+.ex-note{font-size:9px;color:var(--text3);margin-top:3px;line-height:1.5}
+.ex-prev{font-size:9px;color:var(--green);letter-spacing:.06em}
+.set-row{display:grid;grid-template-columns:28px 1fr 1fr 36px;gap:8px;padding:10px 14px;border-top:1px solid var(--border2);align-items:center}
+.set-num{font-size:10px;color:var(--text4);font-weight:600;text-align:center}
+.set-done{width:32px;height:32px;border-radius:3px;border:1px solid var(--border);background:var(--surf3);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:all .15s;flex-shrink:0}
+.set-done.checked{background:var(--green);border-color:var(--green);color:#fff}
+.set-label{font-size:8px;color:var(--text4);text-align:center;margin-top:2px;letter-spacing:.08em;text-transform:uppercase}
+/* MOBILITY ROW */
+.mob-row{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-top:1px solid var(--border2);gap:12px}
+.mob-check{width:24px;height:24px;border-radius:2px;border:1px solid var(--border);background:var(--surf3);display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;transition:all .15s;flex-shrink:0}
+.mob-check.checked{background:var(--green);border-color:var(--green)}
+.mob-name{font-family:var(--font-display);font-size:14px;font-weight:600;flex:1;line-height:1.2}
+.mob-dur{font-size:9px;color:var(--accent);font-weight:500;white-space:nowrap}
+.mob-cue{font-size:9px;color:var(--text4);line-height:1.5;margin-top:2px}
+/* HISTORY ITEM */
+.hist-item{padding:14px 16px;border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.hist-item:active{background:var(--surf2)}
+/* READINESS SPECIFIC */
+.ready-score-ring{position:relative;width:140px;height:140px;margin:0 auto}
+.ready-score-ring svg{transform:rotate(-90deg)}
+.ready-score-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.ready-score-num{font-family:var(--font-display);font-size:44px;font-weight:900;line-height:1}
+.ready-score-label{font-size:9px;letter-spacing:.16em;text-transform:uppercase;margin-top:2px}
+.ready-traffic{display:flex;gap:8px;justify-content:center;margin:16px 0}
+.ready-light{width:20px;height:20px;border-radius:50%;opacity:.2}
+.ready-light.on{opacity:1}
+.slider-wrap{padding:0 16px 16px}
+.slider-label{display:flex;justify-content:space-between;margin-bottom:8px}
+.slider-name{font-size:11px;color:var(--text2);letter-spacing:.04em}
+.slider-val{font-family:var(--font-display);font-size:18px;font-weight:900;color:var(--accent)}
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;background:var(--surf3);border-radius:3px;outline:none;border:1px solid var(--border)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--bg)}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px}
+.soreness-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 16px}
+.soreness-zone{background:var(--surf2);border:1px solid var(--border);border-radius:5px;padding:10px 12px}
+.soreness-zone-name{font-size:10px;color:var(--text3);letter-spacing:.06em;margin-bottom:6px;text-transform:uppercase}
+.soreness-zone-val{font-family:var(--font-display);font-size:22px;font-weight:900;text-align:center;margin:4px 0}
+.soreness-btns{display:flex;justify-content:center;gap:6px}
+.s-btn{width:28px;height:28px;border-radius:3px;border:1px solid var(--border);background:var(--surf3);color:var(--text2);font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s}
+.s-btn:active{transform:scale(.92)}
+.step-dots{display:flex;gap:6px;justify-content:center;padding:12px 0}
+.step-dot{width:8px;height:8px;border-radius:50%;background:var(--surf3);border:1px solid var(--border);transition:all .2s}
+.step-dot.active{background:var(--accent);border-color:var(--accent)}
+.step-dot.done{background:var(--green);border-color:var(--green)}
+.rec-item{display:flex;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border2);align-items:flex-start}
+.rec-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.rec-text{font-size:11px;color:var(--text2);line-height:1.6}
+.rec-title{font-family:var(--font-display);font-size:14px;font-weight:700;letter-spacing:.04em;color:var(--text);margin-bottom:2px}
+.factor-row{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border2)}
+.factor-label{font-size:10px;color:var(--text3)}
+.factor-bar{flex:1;height:4px;background:var(--surf3);border-radius:2px;margin:0 12px;overflow:hidden}
+.factor-fill{height:100%;border-radius:2px;transition:width .4s ease}
+.factor-score{font-family:var(--font-display);font-size:14px;font-weight:700;min-width:30px;text-align:right}
+.history-chip{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:2px;font-size:9px;font-weight:600;letter-spacing:.1em}
+.trend-up{color:var(--green)}
+.trend-down{color:var(--accent)}
+.trend-flat{color:var(--text4)}
+/* STEP NAV */
+.step-nav{display:flex;gap:8px;padding:16px 16px 0}
+{padding:0 16px 6px}
+.prog-bar-label{display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-bottom:4px}
+.prog-bar-track{height:6px;background:var(--surf3);border-radius:3px;overflow:hidden}
+.prog-bar-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .4s ease}
+/* BLOCK SELECTOR */
+.block-scroller{display:flex;gap:8px;padding:12px 16px;overflow-x:auto;scrollbar-width:none}
+.block-scroller::-webkit-scrollbar{display:none}
+.block-pill{flex-shrink:0;border:1px solid var(--border);border-radius:4px;padding:10px 14px;cursor:pointer;transition:all .15s;background:var(--surf)}
+.block-pill.active{border-color:var(--accent);border-top-width:2px;background:var(--surf2)}
+.block-pill-label{font-family:var(--font-display);font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--text3)}
+.block-pill.active .block-pill-label{color:var(--accent)}
+.block-pill-sub{font-family:var(--font-display);font-size:16px;font-weight:900;color:var(--text4);margin-top:1px}
+.block-pill.active .block-pill-sub{color:var(--text)}
+/* WEEK TABS */
+.week-tabs{display:flex;gap:6px;padding:0 16px 12px;overflow-x:auto;scrollbar-width:none}
+.week-tab{flex:1;min-width:70px;border:1px solid var(--border2);border-radius:3px;padding:8px 6px;text-align:center;cursor:pointer;background:var(--surf);transition:all .15s}
+.week-tab.active{border-color:var(--border);border-top:2px solid var(--accent);background:var(--surf2)}
+.week-tab-label{font-size:8px;letter-spacing:.12em;color:var(--text4);text-transform:uppercase}
+.week-tab.active .week-tab-label{color:var(--accent)}
+.week-tab-scheme{font-family:var(--font-display);font-size:16px;font-weight:900;color:var(--text4);margin-top:2px}
+.week-tab.active .week-tab-scheme{color:var(--text)}
+/* SESSION TABS */
+.sess-tabs{display:flex;gap:6px;padding:0 16px 12px}
+.sess-tab{flex:1;border:1px solid var(--border);border-radius:3px;padding:12px 6px;text-align:center;cursor:pointer;background:var(--surf);transition:all .15s;font-family:var(--font-display);font-weight:700;letter-spacing:.08em;font-size:13px;color:var(--text3)}
+.sess-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+/* COLLAPSIBLE */
+.collapsible-hdr{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;cursor:pointer;border-bottom:1px solid var(--border2)}
+.collapsible-hdr-l{display:flex;align-items:center;gap:10px}
+.collapsible-icon{width:26px;height:26px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.collapsible-icon.mob{background:var(--accent-dim);color:var(--accent);border:1px solid rgba(230,57,70,.3)}
+.collapsible-icon.main{background:var(--accent);color:#fff}
+.collapsible-icon.cool{background:var(--green-dim);color:var(--green);border:1px solid rgba(92,184,92,.25)}
+.collapsible-title{font-family:var(--font-display);font-size:15px;font-weight:700;letter-spacing:.06em}
+.collapsible-meta{font-size:8px;color:var(--text4);letter-spacing:.1em;margin-top:1px}
+.toggle-arrow{color:var(--text4);font-size:14px;transition:transform .2s}
+.toggle-arrow.open{transform:rotate(180deg)}
+/* WORKOUT HEADER */
+.wkt-hdr{background:var(--surf);border-bottom:1px solid var(--border);padding:52px 16px 14px;position:sticky;top:0;z-index:50}
+.wkt-progress{height:3px;background:var(--surf3);border-radius:2px;margin-top:10px;overflow:hidden}
+.wkt-progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .3s ease}
+/* TIMER */
+.timer-display{font-family:var(--font-display);font-size:32px;font-weight:900;color:var(--accent);letter-spacing:.02em}
+/* REST TIMER */
+.rest-overlay{position:fixed;bottom:calc(var(--nav-h) + 12px);left:16px;right:16px;background:var(--surf2);border:1px solid var(--border);border-radius:6px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;z-index:90;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+/* TOAST */
+#toast{position:fixed;bottom:calc(var(--nav-h) + 16px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--surf2);border:1px solid var(--border);border-radius:4px;padding:10px 20px;font-size:11px;letter-spacing:.06em;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;z-index:200}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* ADD SET BTN */
+.add-set-row{padding:10px 14px;border-top:1px solid var(--border2)}
+/* ANIMATIONS */
+@keyframes fadeSlide{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.fade-slide{animation:fadeSlide .22s ease forwards}
+/* HOME SPECIFIC */
+.next-sess-card{background:var(--surf);border:1px solid var(--border);border-radius:8px;margin:12px 16px;overflow:hidden}
+.next-sess-top{padding:16px;border-bottom:1px solid var(--border2)}
+.next-sess-label{font-size:9px;letter-spacing:.18em;color:var(--text4);text-transform:uppercase;margin-bottom:4px}
+.next-sess-name{font-family:var(--font-display);font-size:22px;font-weight:900;letter-spacing:.02em}
+.next-sess-focus{font-size:10px;color:var(--text3);margin-top:3px;line-height:1.5}
+.streak-badge{display:flex;align-items:center;gap:6px;font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--accent)}
+/* EMPTY STATE */
+.empty{padding:40px 16px;text-align:center;color:var(--text4);font-size:11px;line-height:1.8;letter-spacing:.04em}
+.empty-icon{font-size:40px;margin-bottom:12px;display:block;opacity:.4}
+/* PREV BEST BADGE */
+.prev-best{background:rgba(92,184,92,.08);border:1px solid rgba(92,184,92,.2);border-radius:3px;padding:3px 8px;font-size:9px;color:var(--green);letter-spacing:.06em;white-space:nowrap}
+/* SCHEME BADGE */
+.scheme-badge{background:var(--accent-dim);border:1px solid rgba(230,57,70,.3);border-radius:3px;padding:4px 10px;font-family:var(--font-display);font-size:16px;font-weight:900;color:var(--accent)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast"></div>
+<nav id="nav">
+  <button class="nav-btn active" data-nav="home" onclick="nav('home')">
+    <span class="nav-icon">⌂</span>HOME
+  </button>
+  <button class="nav-btn" data-nav="programme" onclick="nav('programme')">
+    <span class="nav-icon">☰</span>PLAN
+  </button>
+  <button class="nav-btn" data-nav="readiness" onclick="nav('readiness')">
+    <span class="nav-icon">◈</span>READINESS
+  </button>
+  <button class="nav-btn" data-nav="history" onclick="nav('history')">
+    <span class="nav-icon">◷</span>LOG
+  </button>
+  <button class="nav-btn" data-nav="settings" onclick="nav('settings')">
+    <span class="nav-icon">⚙</span>SETTINGS
+  </button>
+</nav>
+<script>
+// ═══════════════════════════════════════════════════════
+// PROGRAMME DATA
+// ═══════════════════════════════════════════════════════
+const BLOCKS=[
+{id:1,label:"Block 1",months:"Months 1–2",theme:"Foundation",
+loading:[
+{week:1,scheme:"3 × 12",sets:3,reps:12,intensity:"55–60%",note:"Technique focus — controlled tempo 3-1-2"},
+{week:2,scheme:"3 × 10",sets:3,reps:10,intensity:"60–65%",note:"Add small load where form is solid"},
+{week:3,scheme:"4 × 8",sets:4,reps:8,intensity:"65–70%",note:"Push last set to near-failure"},
+{week:4,scheme:"3 × 15",sets:3,reps:15,intensity:"50% DELOAD",note:"DELOAD — flush, recover, reassess",isDeload:true}
+],
+sessions:{
+upper:{label:"Upper A",focus:"Chest + Upper Back",
+mobility:[
+{name:"Thoracic Foam Roll",duration:"60s",cue:"Pause on tight spots, breathe into extension"},
+{name:"Banded Pull-Aparts",duration:"15 reps",cue:"Squeeze scapulae at back position"},
+{name:"Arm Circles (fwd/back)",duration:"10 each",cue:"Full range, controlled throughout"},
+{name:"Cat-Cow",duration:"8 reps",cue:"Initiate from hips, finish at neck"}
+],
+exercises:[
+{name:"Barbell Bench Press",isPrimary:true,notes:"Retract scapulae, slight arch, feet flat"},
+{name:"Barbell Bent-Over Row",notes:"Hinge 45°, pull elbows past torso"},
+{name:"Dumbbell Overhead Press",notes:"Seated or standing, core braced"},
+{name:"Lat Pulldown / Assisted Pull-Up",notes:"Lead with elbows, full stretch at top"},
+{name:"Face Pulls (cable/band)",defaultSets:3,defaultReps:15,notes:"External rotation cue — thumbs back"}
+],
+cooldown:[
+{name:"Doorframe Chest Stretch",duration:"30s each"},
+{name:"Lat Overhead Stretch",duration:"30s each"},
+{name:"Cross-Body Shoulder Stretch",duration:"30s each"}
+]},
+lower:{label:"Lower A",focus:"Quads + Hamstrings",
+mobility:[
+{name:"Hip 90/90 Stretch",duration:"60s each",cue:"Sit tall, drive hip into floor"},
+{name:"Leg Swings",duration:"10 each dir.",cue:"Use wall for support"},
+{name:"Ankle Circles + Dorsiflexion",duration:"10 each",cue:"Press knee over toe slowly"},
+{name:"Glute Bridge Activation",duration:"12 reps",cue:"Squeeze glutes at top"}
+],
+exercises:[
+{name:"Back Squat",isPrimary:true,notes:"Chest up, knees track toes, break parallel"},
+{name:"Romanian Deadlift",notes:"Hinge hips, soft knee, bar close to legs"},
+{name:"Walking Lunges (DB)",notes:"Knee hovers 1\" off floor, upright torso"},
+{name:"Lying Leg Curl",defaultSets:3,defaultReps:12,notes:"Plantarflex foot at top"},
+{name:"Seated Calf Raise",defaultSets:3,defaultReps:15,notes:"Full stretch at bottom, 1s pause"}
+],
+cooldown:[
+{name:"Kneeling Hip Flexor Stretch",duration:"60s each"},
+{name:"Standing Hamstring Stretch",duration:"45s each"},
+{name:"Calf + Achilles Stretch",duration:"30s each"}
+]},
+total:{label:"Total Body A",focus:"Full Compound Integration",
+mobility:[
+{name:"World's Greatest Stretch",duration:"5 each side",cue:"Lunge + rotation + hip drop"},
+{name:"Band Shoulder Pass-Throughs",duration:"10 reps",cue:"Wide grip, arms straight"},
+{name:"Hip Circles (standing)",duration:"10 each way",cue:"Large, controlled rotation"},
+{name:"Inchworm to Push-Up",duration:"5 reps",cue:"Hamstring stretch + spine activation"}
+],
+exercises:[
+{name:"Conventional Deadlift",isPrimary:true,notes:"Bar over mid-foot, neutral spine, drive floor away"},
+{name:"Dumbbell Push Press",notes:"Dip-drive-press — use leg drive"},
+{name:"KB / DB Swing",defaultSets:3,defaultReps:15,notes:"Hip hinge power — snap hips"},
+{name:"Single-Arm DB Row",notes:"Brace on bench, full stretch at bottom"},
+{name:"Plank Hold",defaultSets:3,defaultReps:"45s",notes:"Posterior pelvic tilt, squeeze glutes"}
+],
+cooldown:[
+{name:"Cobra / Sphinx Pose",duration:"45s"},
+{name:"Pigeon Pose",duration:"60s each"},
+{name:"Thread the Needle",duration:"30s each"}
+]}}},
+{id:2,label:"Block 2",months:"Months 2–3",theme:"Hypertrophy",
+loading:[
+{week:1,scheme:"4 × 12",sets:4,reps:12,intensity:"60–65%",note:"Short rest 60–75s for metabolic stress"},
+{week:2,scheme:"4 × 10",sets:4,reps:10,intensity:"65–70%",note:"Add 2.5–5kg from W1"},
+{week:3,scheme:"4 × 8",sets:4,reps:8,intensity:"70–75%",note:"Last 2 reps should be genuinely hard"},
+{week:4,scheme:"3 × 12",sets:3,reps:12,intensity:"55% DELOAD",note:"DELOAD — perfect reps, no failure",isDeload:true}
+],
+sessions:{
+upper:{label:"Upper B",focus:"Shoulders + Arms",
+mobility:[
+{name:"Neck Semi-Circles",duration:"5 each way",cue:"Ear to shoulder, avoid full extension"},
+{name:"Wall Slides",duration:"10 reps",cue:"Lower back against wall throughout"},
+{name:"Band Pull-Aparts",duration:"15 reps",cue:"Slight external rotation at end range"},
+{name:"Cross-Body Shoulder Reach",duration:"30s each",cue:"Actively pull arm across"}
+],
+exercises:[
+{name:"Barbell Overhead Press",isPrimary:true,notes:"Bar path vertical, full lockout overhead"},
+{name:"Arnold Press (DB)",notes:"Rotate palms during press — slow eccentric"},
+{name:"EZ-Bar Curl",defaultSets:3,defaultReps:12,notes:"Elbows pinned, full supination at top"},
+{name:"Skull Crushers (EZ-Bar)",defaultSets:3,defaultReps:12,notes:"Upper arms vertical, lower to forehead"},
+{name:"Lateral Raise (DB)",defaultSets:3,defaultReps:15,notes:"Lead with pinky, stop at shoulder height"},
+{name:"Hammer Curl",defaultSets:2,defaultReps:12,notes:"Neutral grip — targets brachialis"}
+],
+cooldown:[
+{name:"Tricep Overhead Stretch",duration:"30s each"},
+{name:"Bicep Wall Stretch",duration:"30s each"},
+{name:"Neck Side Stretch",duration:"20s each"}
+]},
+lower:{label:"Lower B",focus:"Glutes + Calves",
+mobility:[
+{name:"Hip Flexor Lunge Stretch",duration:"90s each",cue:"Posterior pelvic tilt — tuck hips under"},
+{name:"Pigeon Pose",duration:"60s each",cue:"Square hips to the floor"},
+{name:"Banded Clamshell",duration:"15 each side",cue:"Keep pelvis still — only hip rotates"},
+{name:"Ankle Rockers",duration:"10 each",cue:"Knee tracks over pinky toe"}
+],
+exercises:[
+{name:"Barbell Hip Thrust",isPrimary:true,notes:"Chin tucked, drive through heels, full hip lock"},
+{name:"Sumo Squat (DB)",notes:"Wide stance, toes out 45°, upright torso"},
+{name:"Single-Leg RDL (DB)",defaultSets:3,defaultReps:10,notes:"Hip hinge balance — feel hamstring tension"},
+{name:"Cable / Band Kickback",defaultSets:3,defaultReps:15,notes:"Squeeze glute at top, avoid hip rotation"},
+{name:"Standing Calf Raise",defaultSets:4,defaultReps:15,notes:"Full range — 3s eccentric, pause at bottom"}
+],
+cooldown:[
+{name:"Glute Figure-4 Stretch",duration:"60s each"},
+{name:"Kneeling Quad Stretch",duration:"45s each"},
+{name:"Seated Calf Stretch",duration:"30s each"}
+]},
+total:{label:"Total Body B",focus:"Push-Pull Balance + Carries",
+mobility:[
+{name:"Thoracic Rotation (half-kneeling)",duration:"8 each side",cue:"Keep hips square, reach arm to ceiling"},
+{name:"Hip Flexor Active Stretch",duration:"60s each",cue:"Drive knee forward then tilt pelvis"},
+{name:"Lat Stretch (wall)",duration:"30s each",cue:"Pull rib cage away from arm"},
+{name:"Squat to Stand",duration:"8 reps",cue:"Hands on toes, drive knees out, stand tall"}
+],
+exercises:[
+{name:"Trap Bar Deadlift",isPrimary:true,notes:"Neutral grip handles, chest up, drive through heels"},
+{name:"Dumbbell Bench Press",notes:"Elbows 45°, touch chest, full lockout"},
+{name:"Chest-Supported DB Row",notes:"Face down on incline — eliminate cheat completely"},
+{name:"Goblet Squat",defaultSets:3,defaultReps:12,notes:"Elbows inside knees, deep hip crease"},
+{name:"Farmer's Carry",defaultSets:3,defaultReps:"30m",notes:"Heavy DBs, tall posture, no lateral sway"}
+],
+cooldown:[
+{name:"Child's Pose",duration:"45s"},
+{name:"Supine Twist",duration:"30s each"},
+{name:"Hip Flexor Couch Stretch",duration:"60s each"}
+]}}},
+{id:3,label:"Block 3",months:"Months 3–4",theme:"Strength Base",
+loading:[
+{week:1,scheme:"4 × 8",sets:4,reps:8,intensity:"70–75%",note:"Rest 2–3 min between compound sets"},
+{week:2,scheme:"5 × 6",sets:5,reps:6,intensity:"75–80%",note:"Add 2.5–5kg where W1 felt manageable"},
+{week:3,scheme:"5 × 5",sets:5,reps:5,intensity:"80–85%",note:"No missed reps — reduce load if needed"},
+{week:4,scheme:"3 × 10",sets:3,reps:10,intensity:"60% DELOAD",note:"DELOAD — active recovery, movement quality",isDeload:true}
+],
+sessions:{
+upper:{label:"Upper C",focus:"Back + Biceps (Pull Volume)",
+mobility:[
+{name:"Foam Roll Thoracic",duration:"90s",cue:"Work upper, mid, lower thoracic segments"},
+{name:"Band Shoulder Dislocations",duration:"10 reps",cue:"Wide grip, overhead and behind — no jerking"},
+{name:"Dead Hang",duration:"30s",cue:"Shoulders active — slight depression"},
+{name:"Open Book Stretch",duration:"8 each side",cue:"Follow hand with eyes, breathe into rotation"}
+],
+exercises:[
+{name:"Weighted Pull-Up",isPrimary:true,notes:"Full hang, chin over bar, controlled descent"},
+{name:"Barbell Bent-Over Row (heavy)",notes:"Lower hinge, pull to hip, no swing"},
+{name:"Single-Arm DB Row",defaultSets:3,defaultReps:8,notes:"Stretch at bottom — elbow drives to ceiling"},
+{name:"EZ-Bar Curl",defaultSets:3,defaultReps:8,notes:"Add load from Block 2"},
+{name:"Cable Close-Grip Row",defaultSets:3,defaultReps:10,notes:"Squeeze mid-back, elbows stay close"},
+{name:"Incline DB Curl",defaultSets:2,defaultReps:12,notes:"Long head emphasis — full stretch at bottom"}
+],
+cooldown:[
+{name:"Lat Stretch with Rotation",duration:"30s each"},
+{name:"Bicep Chest Opener",duration:"30s"},
+{name:"Thoracic Extension over Roller",duration:"45s"}
+]},
+lower:{label:"Lower C",focus:"Posterior Chain",
+mobility:[
+{name:"Hip 90/90 Flow",duration:"90s each",cue:"Rotate between internal/external hip positions"},
+{name:"Active Hamstring Floss",duration:"10 each leg",cue:"Seated on floor, extend and reach"},
+{name:"Banded Hip Activation",duration:"12 each side",cue:"Monster walks + clam — glute pre-fatigue"},
+{name:"Cat-Cow + Extensions",duration:"8 reps",cue:"Prepare lumbar for heavy hinge work"}
+],
+exercises:[
+{name:"Romanian Deadlift (heavy)",isPrimary:true,notes:"Push hips back as far as possible — feel the pull"},
+{name:"Barbell Glute Bridge (pause)",notes:"2s pause at top — full hip extension"},
+{name:"Good Morning",defaultSets:3,defaultReps:8,notes:"Hinge pattern — erector activation, slow & deliberate"},
+{name:"Lying Leg Curl (slow eccentric)",defaultSets:3,defaultReps:10,notes:"3-second lowering phase"},
+{name:"Nordic Hamstring Curl",defaultSets:3,defaultReps:5,notes:"Eccentric emphasis — catch yourself"}
+],
+cooldown:[
+{name:"Lying Hamstring Stretch",duration:"60s each"},
+{name:"Pigeon Pose",duration:"90s each"},
+{name:"Low Back Extension Stretch",duration:"45s"}
+]},
+total:{label:"Total Body C",focus:"Heavy Compound Triad",
+mobility:[
+{name:"Shoulder Pass-Throughs",duration:"10 reps",cue:"Progressively narrow grip each set"},
+{name:"Deep Squat Hold",duration:"60s",cue:"Chest tall, heels flat, elbows between knees"},
+{name:"Hip Flexor Couch Stretch",duration:"60s each",cue:"Squeeze glute of rear leg throughout"},
+{name:"Thoracic Extension + Rotation",duration:"8 each",cue:"Half-kneeling for better range"}
+],
+exercises:[
+{name:"Back Squat (heavy)",isPrimary:true,notes:"Break parallel, 360° brace, controlled descent"},
+{name:"Barbell Overhead Press",notes:"Heavier than Block 1 — aim for progressive PR"},
+{name:"Conventional Deadlift",notes:"After squat — reduce reps, maintain quality"},
+{name:"KB Swing (heavy)",defaultSets:3,defaultReps:10,notes:"Power output focus — explosive hip snap"},
+{name:"Ab Wheel Rollout",defaultSets:3,defaultReps:8,notes:"Start from knees — full extension if able"}
+],
+cooldown:[
+{name:"Cobra to Child's Pose Flow",duration:"5 cycles"},
+{name:"Hip Flexor Deep Stretch",duration:"60s each"},
+{name:"Seated Piriformis Stretch",duration:"45s each"}
+]}}},
+{id:4,label:"Block 4",months:"Months 4–5",theme:"Strength Peak",
+loading:[
+{week:1,scheme:"4 × 6",sets:4,reps:6,intensity:"80–82%",note:"3 min rest between compound sets"},
+{week:2,scheme:"5 × 5",sets:5,reps:5,intensity:"82–85%",note:"Primary strength week — commit"},
+{week:3,scheme:"5 × 3",sets:5,reps:3,intensity:"87–90%",note:"Near-maximal — spotter advised on bench/squat"},
+{week:4,scheme:"3 × 8",sets:3,reps:8,intensity:"65% DELOAD",note:"DELOAD — light, fast, perfect technique",isDeload:true}
+],
+sessions:{
+upper:{label:"Upper D",focus:"Chest + Triceps (Press Strength)",
+mobility:[
+{name:"Chest Opener (doorframe/band)",duration:"30s each",cue:"Gentle traction — hold end range calmly"},
+{name:"Thoracic Foam Roll",duration:"90s",cue:"T4 to T10 — work methodically"},
+{name:"Wrist Flexor / Extensor Stretch",duration:"20s each",cue:"For bar position in heavy bench"},
+{name:"Light DB Internal Rotation",duration:"10 reps each",cue:"Rotator cuff prep before heavy pressing"}
+],
+exercises:[
+{name:"Barbell Bench Press (heavy)",isPrimary:true,notes:"Control descent 2–3s, explosive press up"},
+{name:"Incline DB Press",defaultSets:3,defaultReps:8,notes:"30–45° incline, upper chest emphasis"},
+{name:"Weighted Dips",defaultSets:3,defaultReps:8,notes:"Slight forward lean — chest dip, not tricep dip"},
+{name:"Close-Grip Bench Press",defaultSets:3,defaultReps:6,notes:"Hands shoulder-width, elbows tucked 45°"},
+{name:"Tricep Pushdown (rope)",defaultSets:3,defaultReps:12,notes:"Full extension and contraction — no ego load"}
+],
+cooldown:[
+{name:"Pec Minor Stretch (corner)",duration:"45s"},
+{name:"Overhead Tricep Stretch",duration:"30s each"},
+{name:"Wrist Extension Stretch",duration:"20s each"}
+]},
+lower:{label:"Lower D",focus:"Quad Dominance",
+mobility:[
+{name:"Hip Flexor Kneeling Stretch",duration:"90s each",cue:"Add lateral lean for TFL/IT band"},
+{name:"Quad Foam Roll",duration:"60s each",cue:"Pause on adhesions — breathe and sink"},
+{name:"Ankle Dorsiflexion Stretch",duration:"45s each",cue:"Knee over small toe — required for deep squats"},
+{name:"BW Box Squat Warm-Up",duration:"10 reps",cue:"Sit back, pause, drive up — pattern groove"}
+],
+exercises:[
+{name:"Back Squat (heavy)",isPrimary:true,notes:"Below parallel, brace, stay upright"},
+{name:"Front Squat / Goblet Squat",defaultSets:3,defaultReps:5,notes:"More upright torso — intensifies quad demand"},
+{name:"Bulgarian Split Squat (DB)",defaultSets:3,defaultReps:6,notes:"Rear foot on bench — front shin vertical"},
+{name:"Step-Up (high box, DB)",defaultSets:3,defaultReps:8,notes:"Drive through heel of front foot only"},
+{name:"Leg Extension / Sissy Squat",defaultSets:3,defaultReps:12,notes:"Finish with quad isolation pump"}
+],
+cooldown:[
+{name:"Kneeling Quad Stretch (wall)",duration:"60s each"},
+{name:"Seated Pigeon",duration:"60s each"},
+{name:"Supine IT Band Stretch",duration:"45s each"}
+]},
+total:{label:"Total Body D",focus:"Explosive Power Introduction",
+mobility:[
+{name:"Jump Prep — Ankle/Calf Activation",duration:"2 min",cue:"Calf raises → hops → pogos — progressively loaded"},
+{name:"Hip Flexor + Glute Activation",duration:"60s each",cue:"Prepare for sprint and jump mechanics"},
+{name:"Thoracic Rotation",duration:"8 each side",cue:"For rotational power in cleans"},
+{name:"Arm Swing Practice",duration:"10 reps",cue:"Coordinate arm-leg timing for jumps"}
+],
+exercises:[
+{name:"DB / BB Hang Clean",isPrimary:true,notes:"Hip pop → shrug → pull under → catch in quarter squat"},
+{name:"Push Press",notes:"Leg drive adds 20–30% load potential"},
+{name:"Box Jump",defaultSets:4,defaultReps:5,notes:"Land softly — full hip/knee extension at top"},
+{name:"DB / Med Ball Slam",defaultSets:3,defaultReps:8,notes:"Full overhead reach, explosive downward slam"},
+{name:"Broad Jump",defaultSets:3,defaultReps:5,notes:"Max distance — stick landing 2s"}
+],
+cooldown:[
+{name:"Hip Flexor + Quad Stretch",duration:"60s each"},
+{name:"Calf Stretch (straight + bent knee)",duration:"30s each"},
+{name:"Spinal Decompression Hang",duration:"30s"}
+]}}},
+{id:5,label:"Block 5",months:"Months 5–6",theme:"Power & Peaking",
+loading:[
+{week:1,scheme:"5 × 4",sets:5,reps:4,intensity:"82–85%",note:"Maximum intent on every rep — bar speed matters"},
+{week:2,scheme:"4 × 3",sets:4,reps:3,intensity:"87–90%",note:"Rest 3–4 min — full CNS recovery"},
+{week:3,scheme:"3 × 2",sets:3,reps:2,intensity:"90–93%",note:"Near-maximal — technique must remain perfect"},
+{week:4,scheme:"3 × 6",sets:3,reps:6,intensity:"65% DELOAD",note:"DELOAD — speed and movement quality only",isDeload:true}
+],
+sessions:{
+upper:{label:"Upper E",focus:"Horizontal Push + Pull Max",
+mobility:[
+{name:"Band Shoulder Warm-Up",duration:"10 reps each",cue:"Pass-throughs, press, row sequence"},
+{name:"Foam Roll Chest + Lat",duration:"60s each",cue:"Find restrictions before heavy loading"},
+{name:"Shoulder Internal/External Rotation",duration:"10 each way",cue:"Light band — rotator cuff activation"},
+{name:"Scapular Push-Ups",duration:"10 reps",cue:"Protract/retract only — arms stay straight"}
+],
+exercises:[
+{name:"Barbell Bench Press (near-max)",isPrimary:true,notes:"Heaviest bench of the programme — 5s descent W1"},
+{name:"Weighted Barbell Row",notes:"Heaviest rows of the programme"},
+{name:"Cable / DB Fly",defaultSets:3,defaultReps:12,notes:"Maintain tension — stretch pecs throughout"},
+{name:"Chest-Supported Row",defaultSets:3,defaultReps:10,notes:"Eliminate momentum — pure lat/rhomboid"},
+{name:"Rear Delt Fly (DB)",defaultSets:3,defaultReps:15,notes:"Lead with elbows, thumbs down, squeeze scapulae"}
+],
+cooldown:[
+{name:"Doorframe Chest Stretch",duration:"45s each angle"},
+{name:"Lat Hang Stretch",duration:"30s each"},
+{name:"Thoracic Extension over Roller",duration:"60s"}
+]},
+lower:{label:"Lower E",focus:"Hip Hinge Dominance",
+mobility:[
+{name:"Hip 90/90 Transition Flow",duration:"2 min",cue:"Flow between positions without hands"},
+{name:"Spinal Warm-Up (prone + supine)",duration:"8 reps each",cue:"Cobra → reverse cobra — lumbar prep"},
+{name:"BW Glute Bridge + Hip Thrust",duration:"10 reps",cue:"Activate posterior chain before loading"},
+{name:"Active Hamstring Stretch",duration:"10 each",cue:"Pull ankle to hip without pelvic tilt"}
+],
+exercises:[
+{name:"Conventional Deadlift (heavy)",isPrimary:true,notes:"Biggest deadlift numbers of the programme"},
+{name:"Sumo Deadlift",defaultSets:3,defaultReps:4,notes:"Variation — stresses adductors and hip abductors"},
+{name:"KB Swing (heavy)",defaultSets:4,defaultReps:8,notes:"Maximum hip extension power — snap and snap back"},
+{name:"Stiff-Leg Deadlift (DB)",defaultSets:3,defaultReps:8,notes:"Eccentric hamstring work — pause at bottom"},
+{name:"Good Morning",defaultSets:3,defaultReps:6,notes:"Erector and glute control — slow and deliberate"}
+],
+cooldown:[
+{name:"Hamstring Floss Stretch",duration:"60s each"},
+{name:"Pigeon Pose Deep Hold",duration:"90s each"},
+{name:"Supine Glute Stretch (figure-4)",duration:"45s each"}
+]},
+total:{label:"Total Body E",focus:"Athletic Performance",
+mobility:[
+{name:"Full Dynamic Warm-Up",duration:"5 min",cue:"High knees, butt kicks, A-skips, leg swings, arm circles"},
+{name:"Jump Prep Sequence",duration:"2 min",cue:"Pogo hops → broad jump × 2 → box jump × 2 sub-max"},
+{name:"Hip + Shoulder Activation",duration:"1 min",cue:"Band pull-aparts + glute bridges — CNS primer"}
+],
+exercises:[
+{name:"Hang Power Clean",isPrimary:true,notes:"Violent hip extension — triple extension ankle/knee/hip"},
+{name:"Push Jerk",notes:"Dip-drive-dip — land in quarter squat with locked arms"},
+{name:"Box Jump (max height)",defaultSets:5,defaultReps:3,notes:"Step down — don't jump down — full recovery between"},
+{name:"Weighted Broad Jump",defaultSets:4,defaultReps:4,notes:"Vest or light DBs — maximum horizontal power"},
+{name:"Farmer's Carry Sprint",defaultSets:3,defaultReps:"20m",notes:"Loaded carry at brisk pace — power endurance"}
+],
+cooldown:[
+{name:"Full Body Hold Stretch",duration:"30s each (6 positions)"},
+{name:"Diaphragmatic Breathing",duration:"2 min — 4-7-8 pattern",cue:"Down-regulate nervous system"}
+]}}},
+{id:6,label:"Block 6",months:"Month 6",theme:"Test & Peak",
+loading:[
+{week:1,scheme:"3 × 3",sets:3,reps:3,intensity:"90–93%",note:"Final heavy week — approach all major lifts"},
+{week:2,scheme:"2 × 2",sets:2,reps:2,intensity:"95–97%",note:"Near-maximal — 1 top set, 1 back-off"},
+{week:3,scheme:"1RM Test",sets:1,reps:1,intensity:"100%+",note:"Attempt 1RM on Bench, Squat & Deadlift"},
+{week:4,scheme:"Recovery",sets:0,reps:0,intensity:"40–50%",note:"FULL DELOAD — walk, swim, stretch, reset",isDeload:true}
+],
+sessions:{
+upper:{label:"Upper F",focus:"Bench Press Max + Overhead + Pull",
+mobility:[
+{name:"Full Shoulder Mobility Flow",duration:"5 min",cue:"All previous upper mobility drills — thorough prep"},
+{name:"Progressive Warm-Up Sets",duration:"10 min",cue:"50%×5, 60%×3, 70%×2, 80%×1, 90%×1, then attempt"}
+],
+exercises:[
+{name:"Barbell Bench Press — 1RM",isPrimary:true,notes:"Control descent, pause 1s on chest, full drive. USE A SPOTTER."},
+{name:"Overhead Press — Top Set",defaultSets:2,defaultReps:2,notes:"After bench — push OHP to near-max"},
+{name:"Max Pull-Ups (BW/Weighted)",defaultSets:1,defaultReps:"MAX",notes:"Record max reps — benchmark for next cycle"},
+{name:"Maintenance Rows",defaultSets:2,defaultReps:10,notes:"Don't grind accessory — conserve for main lifts"}
+],
+cooldown:[
+{name:"Full shoulder decompression sequence",duration:"5 min"},
+{name:"Breathing + recovery work",duration:"5 min"}
+]},
+lower:{label:"Lower F",focus:"Squat + Deadlift Max Test",
+mobility:[
+{name:"Full Hip + Ankle Mobility Flow",duration:"5 min",cue:"Every drill from Blocks 1–5 — most important warm-up of the programme"},
+{name:"Progressive Squat + Deadlift Warm-Ups",duration:"10 min",cue:"50%×5, 65%×3, 75%×2, 85%×1, 92%×1, attempt"}
+],
+exercises:[
+{name:"Back Squat — 1RM",isPrimary:true,notes:"6 months of work in this rep. Depth. Brace. Drive."},
+{name:"Conventional Deadlift — 1RM",defaultSets:1,defaultReps:1,notes:"Set-up the same as every other rep — it's just heavier"},
+{name:"Maintenance Posterior Chain",defaultSets:2,defaultReps:8,notes:"RDL or hip thrust — keep light after max effort"}
+],
+cooldown:[
+{name:"Full lower body stretch sequence",duration:"8 min"},
+{name:"Foam roll entire posterior chain",duration:"5 min"}
+]},
+total:{label:"Total Body F",focus:"Performance Benchmarks",
+mobility:[
+{name:"Full Body Flow",duration:"8 min",cue:"Celebrate the range of motion you have built"}
+],
+exercises:[
+{name:"Full-Body Benchmark Circuit",defaultSets:1,defaultReps:"1 round",notes:"10 pull-ups → 10 dips → 20 goblet squats → 10 KB swings → 200m carry. Record time."},
+{name:"KB Swing AMRAP (24/16kg)",defaultSets:1,defaultReps:"3 min",notes:"Record total reps — power endurance benchmark"},
+{name:"Push-Up AMRAP",defaultSets:1,defaultReps:"MAX",notes:"Perfect form only — record number"},
+{name:"Static Hold Benchmarks",defaultSets:1,defaultReps:"MAX",notes:"Dead hang + L-sit + plank — record all three"}
+],
+cooldown:[
+{name:"Full body restoration flow",duration:"10 min"},
+{name:"Log all benchmarks and plan next cycle",duration:"Ongoing"}
+]}}}
+];
+
+// ═══════════════════════════════════════════════════════
+// DATABASE
+// ═══════════════════════════════════════════════════════
+const DB={
+  getSettings:()=>{try{return JSON.parse(localStorage.getItem('s6m_settings'))||{startDate:null,unit:'kg'}}catch{return{startDate:null,unit:'kg'}}},
+  saveSettings:(s)=>localStorage.setItem('s6m_settings',JSON.stringify(s)),
+  getWorkouts:()=>{try{return JSON.parse(localStorage.getItem('s6m_workouts'))||{}}catch{return{}}},
+  saveWorkout:(w)=>{const all=DB.getWorkouts();all[w.id]=w;localStorage.setItem('s6m_workouts',JSON.stringify(all))},
+  deleteWorkout:(id)=>{const all=DB.getWorkouts();delete all[id];localStorage.setItem('s6m_workouts',JSON.stringify(all))},
+  getWorkoutList:()=>Object.values(DB.getWorkouts()).sort((a,b)=>new Date(b.date)-new Date(a.date)),
+  getReadinessLog:()=>{try{return JSON.parse(localStorage.getItem('s6m_readiness'))||[]}catch{return[]}},
+  saveReadiness:(entry)=>{
+    const log=DB.getReadinessLog();
+    const idx=log.findIndex(r=>r.date===entry.date);
+    if(idx>=0)log[idx]=entry; else log.unshift(entry);
+    log.splice(20); // keep last 20 entries
+    localStorage.setItem('s6m_readiness',JSON.stringify(log));
+  },
+  getTodayReadiness:()=>{
+    const log=DB.getReadinessLog();
+    return log.find(r=>r.date===today())||null;
+  },
+  getHRBaseline:()=>{
+    const log=DB.getReadinessLog().filter(r=>r.restingHR>0);
+    if(log.length<3)return null;
+    const recent=log.slice(0,7).map(r=>r.restingHR);
+    return Math.round(recent.reduce((a,b)=>a+b,0)/recent.length);
+  },
+  getExerciseHistory:(name)=>{
+    return Object.values(DB.getWorkouts())
+      .filter(w=>w.completed&&w.exercises&&w.exercises.some(e=>e.name===name))
+      .sort((a,b)=>new Date(b.date)-new Date(a.date))
+      .slice(0,12)
+      .map(w=>({date:w.date,blockLabel:w.blockLabel,weekLabel:w.weekLabel,sets:w.exercises.find(e=>e.name===name)?.sets||[]}))
+  },
+  getPrevBest:(name)=>{
+    const h=DB.getExerciseHistory(name);
+    const allSets=h.flatMap(s=>s.sets.filter(set=>parseFloat(set.weight)>0));
+    if(!allSets.length)return null;
+    return allSets.reduce((max,s)=>parseFloat(s.weight)>parseFloat(max.weight)?s:max,allSets[0]);
+  },
+  getLastSets:(name)=>{
+    const h=DB.getExerciseHistory(name);
+    return h.length?h[0].sets:[];
+  }
+};
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let S={
+  screen:'home',
+  prog:{block:0,week:0,session:'upper',open:null},
+  workout:null,
+  histDetail:null,
+  progExercise:null,
+  readiness:{
+    step:0, // 0=sleep, 1=body, 2=mind, 3=result
+    data:{
+      sleepHours:7.5,
+      sleepQuality:7,
+      sleepDeep:5,
+      restingHR:0,
+      hrv:0,
+      soreness:{chest:0,back:0,shoulders:0,arms:0,quads:0,hamstrings:0,glutes:0,calves:0},
+      mood:7,
+      motivation:7,
+      stress:3,
+      prevSessionRPE:6,
+      notes:''
+    }
+  },
+};
+
+// ═══════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════
+function fmtDate(d){
+  const dt=new Date(d+'T00:00:00');
+  return dt.toLocaleDateString('en-IE',{day:'numeric',month:'short',year:'numeric'});
+}
+function fmtDateShort(d){
+  const dt=new Date(d+'T00:00:00');
+  return dt.toLocaleDateString('en-IE',{day:'numeric',month:'short'});
+}
+function today(){return new Date().toISOString().split('T')[0]}
+function getCurrentRecommendation(){
+  const settings=DB.getSettings();
+  if(!settings.startDate)return{block:0,week:0,session:'upper'};
+  const start=new Date(settings.startDate);
+  const now=new Date();
+  const daysDiff=Math.floor((now-start)/(1000*60*60*24));
+  const workoutDay=daysDiff%21; // 3 weeks * 7 days cycle within each 4-week block
+  const blockIdx=Math.min(Math.floor(daysDiff/28),5);
+  const weekInBlock=Math.min(Math.floor((daysDiff%28)/7),3);
+  const sessions=['upper','lower','total'];
+  const sessionIdx=Math.floor((daysDiff%3));
+  return{block:blockIdx,week:weekInBlock,session:sessions[sessionIdx%3]};
+}
+function getStreak(){
+  const workouts=DB.getWorkoutList().filter(w=>w.completed);
+  if(!workouts.length)return 0;
+  let streak=0;
+  const now=new Date();
+  let checkDate=new Date(now);
+  checkDate.setHours(0,0,0,0);
+  for(let i=0;i<60;i++){
+    const ds=checkDate.toISOString().split('T')[0];
+    if(workouts.some(w=>w.date===ds)){streak++;checkDate.setDate(checkDate.getDate()-1);}
+    else if(i===0&&!workouts.some(w=>w.date===ds)){checkDate.setDate(checkDate.getDate()-1);}
+    else break;
+  }
+  return streak;
+}
+function getMaxWeight(sets){
+  const weights=sets.filter(s=>parseFloat(s.weight)>0).map(s=>parseFloat(s.weight));
+  return weights.length?Math.max(...weights):0;
+}
+function sessionTypeLabel(t){return t==='upper'?'UPPER':t==='lower'?'LOWER':'TOTAL BODY'}
+function sessionTypeIcon(t){return t==='upper'?'↑':t==='lower'?'↓':'◎'}
+function blockById(id){return BLOCKS.find(b=>b.id===id)}
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2200);
+}
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+function nav(screen,params={}){
+  // Update nav buttons
+  document.querySelectorAll('.nav-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.nav===screen);
+  });
+  S.screen=screen;
+  Object.assign(S,params);
+  render();
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER DISPATCH
+// ═══════════════════════════════════════════════════════
+function render(){
+  const app=document.getElementById('app');
+  switch(S.screen){
+    case'home':app.innerHTML=renderHome();break;
+    case'programme':app.innerHTML=renderProgramme();break;
+    case'session':app.innerHTML=renderSessionDetail();break;
+    case'workout':app.innerHTML=renderWorkout();break;
+    case'history':app.innerHTML=renderHistory();break;
+    case'hist-detail':app.innerHTML=renderHistDetail();break;
+    case'progress':app.innerHTML=renderProgress();break;
+    case'readiness':app.innerHTML=renderReadiness();break;
+    case'settings':app.innerHTML=renderSettings();break;
+    default:app.innerHTML=renderHome();
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// HOME SCREEN
+// ═══════════════════════════════════════════════════════
+function renderHome(){
+  const rec=getCurrentRecommendation();
+  const block=BLOCKS[rec.block];
+  const week=block.loading[rec.week];
+  const session=block.sessions[rec.session];
+  const workouts=DB.getWorkoutList();
+  const completed=workouts.filter(w=>w.completed);
+  const streak=getStreak();
+  const thisWeek=completed.filter(w=>{
+    const d=new Date(w.date+'T00:00:00');
+    const now=new Date();
+    const weekStart=new Date(now);weekStart.setDate(now.getDate()-now.getDay());weekStart.setHours(0,0,0,0);
+    return d>=weekStart;
+  }).length;
+  const recent=workouts.filter(w=>w.completed).slice(0,3);
+  return`<div class="fade-slide">
+  <div class="hdr">
+    <div class="hdr-sub">Good ${getTimeOfDay()}</div>
+    <div class="hdr-title">6M STRENGTH</div>
+  </div>
+  <div class="stat-grid" style="margin:0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+    <div class="stat-cell"><div class="stat-val">${completed.length}</div><div class="stat-key">Sessions</div></div>
+    <div class="stat-cell"><div class="stat-val">${thisWeek}/3</div><div class="stat-key">This Week</div></div>
+    <div class="stat-cell"><div class="stat-val">${streak>0?'🔥'+streak:'–'}</div><div class="stat-key">Streak</div></div>
+  </div>
+  ${renderHomeReadinessCard()}
+  <div class="section-label">NEXT SESSION</div>
+  <div class="next-sess-card">
+    <div class="next-sess-top">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div class="next-sess-label">${block.label} · ${week.isDeload?'DELOAD WEEK':'Week '+(rec.week+1)} · ${sessionTypeIcon(rec.session)} ${sessionTypeLabel(rec.session)}</div>
+          <div class="next-sess-name">${session.label}</div>
+          <div class="next-sess-focus">${session.focus}</div>
+        </div>
+        <div class="scheme-badge">${week.scheme}</div>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+        <span class="chip chip-muted">⏱ 60 MIN</span>
+        <span class="chip chip-muted">🏋️ ${session.exercises.length} EXERCISES</span>
+        <span class="chip chip-accent">${week.intensity}</span>
+      </div>
+    </div>
+    <div style="padding:14px 16px;display:flex;gap:8px">
+      <button class="btn btn-primary" style="flex:1" onclick="startWorkout(${rec.block},${rec.week},'${rec.session}')">▶ START WORKOUT</button>
+      <button class="btn btn-secondary" onclick="viewSession(${rec.block},${rec.week},'${rec.session}')">PREVIEW</button>
+    </div>
+  </div>
+  ${recent.length?`<div class="section-label">RECENT SESSIONS</div>
+  <div style="margin:0 16px;border:1px solid var(--border);border-radius:6px;overflow:hidden">
+  ${recent.map((w,i)=>`<div class="hist-item" style="${i<recent.length-1?'':'border-bottom:none'}" onclick="S.histDetail='${w.id}';nav('hist-detail')">
+    <div>
+      <div style="font-family:var(--font-display);font-size:15px;font-weight:700;letter-spacing:.02em">${sessionTypeIcon(w.sessionType)} ${w.sessionLabel||'Session'}</div>
+      <div style="font-size:9px;color:var(--text4);margin-top:2px;letter-spacing:.06em">${fmtDateShort(w.date)} · ${w.blockLabel} W${w.weekNum+1}</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--green)">${w.exercises?.filter(e=>e.sets?.some(s=>parseFloat(s.weight)>0)).length||0} logged</div>
+      <div style="font-size:9px;color:var(--text4)">›</div>
+    </div>
+  </div>`).join('')}
+  </div>`:``}
+  <div style="height:24px"></div>
+  </div>`;
+}
+function getTimeOfDay(){const h=new Date().getHours();return h<12?'Morning':h<17?'Afternoon':'Evening'}
+
+// ═══════════════════════════════════════════════════════
+// PROGRAMME SCREEN
+// ═══════════════════════════════════════════════════════
+function renderProgramme(){
+  const block=BLOCKS[S.prog.block];
+  const week=block.loading[S.prog.week];
+  return`<div class="fade-slide">
+  <div class="hdr">
+    <div class="hdr-sub">6-Month Plan</div>
+    <div class="hdr-title">PROGRAMME</div>
+  </div>
+  <div class="section-label">BLOCK</div>
+  <div class="block-scroller">
+  ${BLOCKS.map((b,i)=>`<div class="block-pill${S.prog.block===i?' active':''}" onclick="S.prog.block=${i};S.prog.week=0;S.prog.open=null;render()">
+    <div class="block-pill-label">${b.label}</div>
+    <div class="block-pill-sub">${b.theme}</div>
+  </div>`).join('')}
+  </div>
+  <div style="margin:0 16px 12px;background:var(--surf);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:4px;padding:12px 14px">
+    <div style="font-size:9px;color:var(--accent);letter-spacing:.16em;text-transform:uppercase;margin-bottom:3px">${block.months} · ${block.theme.toUpperCase()}</div>
+    <div style="font-size:10px;color:var(--text3);line-height:1.6">${getBlockFocus(block.id)}</div>
+  </div>
+  <div class="section-label">WEEK</div>
+  <div class="week-tabs">
+  ${block.loading.map((w,i)=>`<div class="week-tab${S.prog.week===i?' active':''}" onclick="S.prog.week=${i};render()">
+    <div class="week-tab-label">${w.isDeload?'DELOAD':'WK '+(i+1)}</div>
+    <div class="week-tab-scheme">${w.scheme}</div>
+    <div style="font-size:8px;color:var(--text4);margin-top:1px">${w.intensity}</div>
+  </div>`).join('')}
+  </div>
+  ${week.note?`<div style="margin:0 16px 12px;background:var(--surf3);border-radius:3px;padding:8px 12px;font-size:10px;color:var(--text3);border:1px solid var(--border2)">
+    <span style="color:var(--accent);margin-right:6px">◆</span>${week.note}</div>`:''}
+  <div class="section-label">SESSION</div>
+  <div class="sess-tabs">
+  ${['upper','lower','total'].map(t=>`<div class="sess-tab${S.prog.session===t?' active':''}" onclick="S.prog.session='${t}';S.prog.open=null;render()">
+    <div style="font-size:18px;margin-bottom:2px">${sessionTypeIcon(t)}</div>${sessionTypeLabel(t)}
+  </div>`).join('')}
+  </div>
+  ${renderSessionCard(block,S.prog.week,S.prog.session,true)}
+  </div>`;
+}
+function getBlockFocus(id){
+  const focuses={1:"Build movement patterns, connective tissue and baseline strength",2:"Maximise muscle stimulus with shoulder/arm + glute/calf isolation volume",3:"Build raw strength with back/biceps, posterior chain and heavy compounds",4:"Peak strength — chest/tricep press strength + quad dominance + explosive intro",5:"Peak power — horizontal push/pull max + hip hinge dominance + athletic performance",6:"Max strength testing, performance benchmarks and cycle consolidation"};
+  return focuses[id]||'';
+}
+function renderSessionCard(block,weekIdx,sessionType,showStartBtn=false){
+  const week=block.loading[weekIdx];
+  const session=block.sessions[sessionType];
+  if(!session)return'';
+  const o=S.prog.open;
+  return`<div style="margin:0 16px">
+  <div style="background:var(--surf);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:12px">
+    <div style="background:var(--surf2);padding:14px 16px;border-bottom:1px solid var(--border2)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div style="font-size:9px;color:var(--accent);letter-spacing:.16em;text-transform:uppercase;margin-bottom:3px">${sessionType.toUpperCase()}</div>
+          <div style="font-family:var(--font-display);font-size:20px;font-weight:900;letter-spacing:.02em">${session.label}</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:3px">${session.focus}</div>
+        </div>
+        <div class="scheme-badge">${week.scheme}</div>
+      </div>
+    </div>
+    <!-- Mobility -->
+    <div class="collapsible-hdr" onclick="S.prog.open=S.prog.open==='mob'?null:'mob';render()">
+      <div class="collapsible-hdr-l">
+        <div class="collapsible-icon mob">◉</div>
+        <div><div class="collapsible-title">MOBILITY WARM-UP</div>
+        <div class="collapsible-meta">0–8 MIN · ${session.mobility.length} DRILLS</div></div>
+      </div>
+      <div class="toggle-arrow${o==='mob'?' open':''}">▼</div>
+    </div>
+    ${o==='mob'?session.mobility.map((m,i)=>`<div class="mob-row" style="${i===0?'border-top:1px solid var(--border2)':''}">
+      <div style="flex:1"><div class="mob-name">${m.name}</div>${m.cue?`<div class="mob-cue">↳ ${m.cue}</div>`:''}</div>
+      <div class="mob-dur">${m.duration}</div>
+    </div>`).join(''):''}
+    <!-- Main Work -->
+    <div class="collapsible-hdr" style="border-top:1px solid var(--border2)" onclick="S.prog.open=S.prog.open==='main'?null:'main';render()">
+      <div class="collapsible-hdr-l">
+        <div class="collapsible-icon main">▶</div>
+        <div><div class="collapsible-title">MAIN WORK</div>
+        <div class="collapsible-meta">8–50 MIN · ${session.exercises.length} EXERCISES</div></div>
+      </div>
+      <div class="toggle-arrow${o==='main'?' open':''}">▼</div>
+    </div>
+    ${o==='main'?session.exercises.map((ex,i)=>`<div style="padding:12px 16px;border-top:1px solid var(--border2)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+        <div style="flex:1">
+          <div style="font-family:var(--font-display);font-size:15px;font-weight:${ex.isPrimary?700:600};color:${ex.isPrimary?'var(--text)':'var(--text2)'}">
+            ${i+1}. ${ex.name}${ex.isPrimary?' <span style="font-size:9px;color:var(--accent)">PRIMARY</span>':''}
+          </div>
+          ${ex.notes?`<div style="font-size:9px;color:var(--text4);margin-top:3px;line-height:1.5">${ex.notes}</div>`:''}
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          ${ex.isPrimary?`<div style="font-family:var(--font-display);font-size:14px;font-weight:900;color:var(--accent)">${week.scheme}</div>`
+            :`<div style="font-size:10px;color:var(--text4)">${ex.defaultSets||3}×${ex.defaultReps||week.reps}</div>`}
+        </div>
+      </div>
+    </div>`).join(''):''}
+    <!-- Cool-Down -->
+    <div class="collapsible-hdr" style="border-top:1px solid var(--border2)" onclick="S.prog.open=S.prog.open==='cool'?null:'cool';render()">
+      <div class="collapsible-hdr-l">
+        <div class="collapsible-icon cool">↓</div>
+        <div><div class="collapsible-title">COOL-DOWN</div>
+        <div class="collapsible-meta">55–60 MIN · ${session.cooldown.length} STRETCHES</div></div>
+      </div>
+      <div class="toggle-arrow${o==='cool'?' open':''}">▼</div>
+    </div>
+    ${o==='cool'?session.cooldown.map((c,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-top:1px solid var(--border2)">
+      <div style="font-family:var(--font-display);font-size:14px;font-weight:600;color:var(--text2)">${c.name}</div>
+      <div style="font-size:10px;color:var(--green);flex-shrink:0;margin-left:8px">${c.duration}</div>
+    </div>`).join(''):''}
+    ${showStartBtn?`<div style="padding:14px 16px;border-top:1px solid var(--border2)">
+      <button class="btn btn-primary" onclick="startWorkout(${block.id-1},${weekIdx},'${sessionType}')">▶ START THIS WORKOUT</button>
+    </div>`:''}
+  </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+// START WORKOUT
+// ═══════════════════════════════════════════════════════
+function startWorkout(blockIdx,weekIdx,sessionType){
+  const block=BLOCKS[blockIdx];
+  const week=block.loading[weekIdx];
+  const session=block.sessions[sessionType];
+  const settings=DB.getSettings();
+  if(!settings.startDate){settings.startDate=today();DB.saveSettings(settings);}
+  const unit=settings.unit||'kg';
+  // Build workout object
+  const exercises=session.exercises.map(ex=>{
+    const sets=ex.isPrimary?week.sets:(ex.defaultSets||3);
+    const reps=ex.isPrimary?week.reps:(ex.defaultReps||week.reps);
+    const lastSets=DB.getLastSets(ex.name);
+    const prevBest=DB.getPrevBest(ex.name);
+    const suggestedWeight=lastSets.length&&parseFloat(lastSets[0].weight)>0?lastSets[0].weight:'';
+    return{
+      name:ex.name,notes:ex.notes||'',isPrimary:ex.isPrimary||false,
+      defaultSets:sets,defaultReps:reps,
+      prevBest:prevBest,
+      sets:Array.from({length:sets},(_,i)=>({
+        weight:suggestedWeight,
+        reps:typeof reps==='number'?reps:'',
+        done:false
+      }))
+    };
+  });
+  const mobility=session.mobility.map(m=>({...m,done:false}));
+  const cooldown=session.cooldown.map(c=>({...c,done:false}));
+  S.workout={
+    id:`wkt_${Date.now()}`,
+    blockId:block.id,blockLabel:block.label,
+    weekNum:weekIdx,weekLabel:week.scheme,
+    sessionType,sessionLabel:session.label,sessionFocus:session.focus,
+    date:today(),
+    completed:false,
+    scheme:week.scheme,
+    intensity:week.intensity,
+    unit,
+    phase:'mobility', // mobility | main | cooldown
+    exercises,mobility,cooldown,
+    startTime:Date.now()
+  };
+  nav('workout');
+}
+function viewSession(blockIdx,weekIdx,sessionType){
+  S.prog={block:blockIdx,week:weekIdx,session:sessionType,open:'main'};
+  nav('programme');
+}
+
+// ═══════════════════════════════════════════════════════
+// WORKOUT SCREEN
+// ═══════════════════════════════════════════════════════
+function renderWorkout(){
+  if(!S.workout)return`<div class="empty"><span class="empty-icon">🏋️</span>No active workout</div>`;
+  const w=S.workout;
+  const totalExercises=w.exercises.length;
+  const doneExercises=w.exercises.filter(e=>e.sets.every(s=>s.done)).length;
+  const pct=totalExercises?Math.round((doneExercises/totalExercises)*100):0;
+  return`<div class="fade-slide">
+  <div class="wkt-hdr">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+      <div>
+        <div style="font-size:9px;color:var(--accent);letter-spacing:.16em;text-transform:uppercase;margin-bottom:2px">${w.blockLabel} W${w.weekNum+1} · ${sessionTypeLabel(w.sessionType)}</div>
+        <div style="font-family:var(--font-display);font-size:22px;font-weight:900;letter-spacing:.01em;line-height:1">${w.sessionLabel}</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px">${w.sessionFocus}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:var(--accent)">${w.scheme}</div>
+        <div style="font-size:9px;color:var(--text4)">${w.intensity}</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:10px">
+      <div class="wkt-progress" style="flex:1"><div class="wkt-progress-fill" style="width:${pct}%"></div></div>
+      <div style="font-size:10px;color:var(--text3);flex-shrink:0">${doneExercises}/${totalExercises}</div>
+    </div>
+  </div>
+
+  <!-- Phase Tabs -->
+  <div style="display:flex;border-bottom:1px solid var(--border);background:var(--surf)">
+    ${[['mobility','◉ MOBILITY'],['main','▶ MAIN WORK'],['cooldown','↓ COOL-DOWN']].map(([p,l])=>`<div onclick="S.workout.phase='${p}';render()" style="flex:1;padding:10px 4px;text-align:center;font-size:10px;font-family:var(--font-display);font-weight:700;letter-spacing:.06em;cursor:pointer;border-bottom:2px solid ${w.phase===p?'var(--accent)':'transparent'};color:${w.phase===p?'var(--accent)':'var(--text4)'};background:${w.phase===p?'var(--surf2)':'transparent'}">${l}</div>`).join('')}
+  </div>
+
+  ${w.phase==='mobility'?renderWorkoutMobility(w):w.phase==='main'?renderWorkoutMain(w):renderWorkoutCooldown(w)}
+
+  <!-- Complete Button -->
+  <div style="padding:16px 16px 8px;display:flex;gap:8px">
+    <button class="btn btn-success" onclick="completeWorkout()" style="flex:1">✓ COMPLETE WORKOUT</button>
+    <button class="btn btn-danger" onclick="abandonWorkout()">✕</button>
+  </div>
+  <div style="padding:0 16px 8px;font-size:9px;color:var(--text4);text-align:center;letter-spacing:.06em">Sets completed: ${w.exercises.reduce((acc,e)=>acc+e.sets.filter(s=>s.done).length,0)} / ${w.exercises.reduce((acc,e)=>acc+e.sets.length,0)}</div>
+  </div>`;
+}
+function renderWorkoutMobility(w){
+  const allDone=w.mobility.every(m=>m.done);
+  return`<div>
+  <div class="section-label" style="display:flex;justify-content:space-between;align-items:center;padding-right:16px">
+    MOBILITY WARM-UP (0–8 MIN)
+    ${allDone?'<span class="chip chip-green">✓ DONE</span>':''}
+  </div>
+  <div style="margin:0 16px;border:1px solid var(--border);border-radius:5px;overflow:hidden">
+  ${w.mobility.map((m,i)=>`<div class="mob-row" style="${i<w.mobility.length-1?'border-bottom:1px solid var(--border2)':''}">
+    <div class="mob-check${m.done?' checked':''}" onclick="toggleMobility(${i})">${m.done?'✓':''}</div>
+    <div style="flex:1">
+      <div class="mob-name" style="color:${m.done?'var(--text4)':'var(--text)'}">${m.name}</div>
+      ${m.cue?`<div class="mob-cue">↳ ${m.cue}</div>`:''}
+    </div>
+    <div class="mob-dur">${m.duration}</div>
+  </div>`).join('')}
+  </div>
+  ${allDone?`<div style="padding:12px 16px"><button class="btn btn-primary" onclick="S.workout.phase='main';render()">▶ START MAIN WORK</button></div>`:''}
+  </div>`;
+}
+function renderWorkoutMain(w){
+  const unit=w.unit||'kg';
+  return`<div>
+  ${w.exercises.map((ex,ei)=>{
+    const allDone=ex.sets.every(s=>s.done);
+    const prev=ex.prevBest;
+    return`<div style="margin-top:0">
+    <div class="ex-card" style="margin-top:12px">
+      <div class="ex-hdr">
+        <div style="flex:1">
+          ${ex.isPrimary?`<div style="font-size:8px;color:var(--accent);letter-spacing:.14em;margin-bottom:3px">PRIMARY · ${w.scheme}</div>`:''}
+          <div class="ex-name" style="color:${allDone?'var(--text3)':'var(--text)'}">${ex.name}</div>
+          ${ex.notes?`<div class="ex-note">${ex.notes}</div>`:''}
+          ${prev?`<div class="ex-prev" style="margin-top:4px">⬆ PB: ${prev.weight}${unit} × ${prev.reps}</div>`:''}
+        </div>
+        <div style="flex-shrink:0">${allDone?'<span class="chip chip-green">✓</span>':'<span class="chip chip-muted">'+ex.sets.filter(s=>s.done).length+'/'+ex.sets.length+'</span>'}</div>
+      </div>
+      <!-- Set header -->
+      <div style="display:grid;grid-template-columns:28px 1fr 1fr 36px;gap:8px;padding:6px 14px;border-top:1px solid var(--border2)">
+        <div class="set-label">SET</div>
+        <div class="set-label">WEIGHT (${unit})</div>
+        <div class="set-label">REPS</div>
+        <div class="set-label">✓</div>
+      </div>
+      ${ex.sets.map((set,si)=>`<div class="set-row" style="${set.done?'opacity:.6':''}">
+        <div class="set-num">${si+1}</div>
+        <div>
+          <input type="number" inputmode="decimal" min="0" step="0.5" value="${set.weight}"
+            onchange="updateSet(${ei},${si},'weight',this.value)"
+            style="${set.done?'opacity:.5':''}">
+          <div class="set-label">kg / lbs</div>
+        </div>
+        <div>
+          <input type="${typeof set.reps==='number'?'number':'text'}" inputmode="${typeof set.reps==='number'?'numeric':'text'}" min="1" value="${set.reps}"
+            onchange="updateSet(${ei},${si},'reps',this.value)"
+            style="${set.done?'opacity:.5':''}">
+          <div class="set-label">reps</div>
+        </div>
+        <div class="set-done${set.done?' checked':''}" onclick="toggleSet(${ei},${si})">${set.done?'✓':''}</div>
+      </div>`).join('')}
+      <div class="add-set-row" style="display:flex;gap:8px">
+        <button class="btn btn-ghost" style="flex:1;font-size:11px" onclick="addSet(${ei})">+ ADD SET</button>
+        ${ex.sets.length>1?`<button class="btn btn-ghost" style="font-size:11px" onclick="removeSet(${ei})">− SET</button>`:''}
+      </div>
+    </div>
+    </div>`;
+  }).join('')}
+  </div>`;
+}
+function renderWorkoutCooldown(w){
+  const allDone=w.cooldown.every(c=>c.done);
+  return`<div>
+  <div class="section-label" style="display:flex;justify-content:space-between;align-items:center;padding-right:16px">
+    COOL-DOWN (55–60 MIN)
+    ${allDone?'<span class="chip chip-green">✓ DONE</span>':''}
+  </div>
+  <div style="margin:0 16px;border:1px solid var(--border);border-radius:5px;overflow:hidden">
+  ${w.cooldown.map((c,i)=>`<div class="mob-row" style="${i<w.cooldown.length-1?'border-bottom:1px solid var(--border2)':''}">
+    <div class="mob-check${c.done?' checked':''}" onclick="toggleCooldown(${i})">${c.done?'✓':''}</div>
+    <div style="flex:1"><div class="mob-name" style="color:${c.done?'var(--text4)':'var(--text)'}">${c.name}</div></div>
+    <div style="font-size:10px;color:var(--green);white-space:nowrap">${c.duration}</div>
+  </div>`).join('')}
+  </div>
+  </div>`;
+}
+
+// Workout interactions
+function updateSet(ei,si,field,val){
+  if(!S.workout)return;
+  S.workout.exercises[ei].sets[si][field]=field==='weight'?parseFloat(val)||'':val;
+  DB.saveWorkout(S.workout);
+  // Partial re-render - just update progress
+  const doneExercises=S.workout.exercises.filter(e=>e.sets.every(s=>s.done)).length;
+  const pct=Math.round((doneExercises/S.workout.exercises.length)*100);
+  const fill=document.querySelector('.wkt-progress-fill');
+  if(fill)fill.style.width=pct+'%';
+}
+function toggleSet(ei,si){
+  if(!S.workout)return;
+  S.workout.exercises[ei].sets[si].done=!S.workout.exercises[ei].sets[si].done;
+  DB.saveWorkout(S.workout);
+  render();
+}
+function addSet(ei){
+  if(!S.workout)return;
+  const ex=S.workout.exercises[ei];
+  const lastSet=ex.sets[ex.sets.length-1];
+  ex.sets.push({weight:lastSet?.weight||'',reps:lastSet?.reps||'',done:false});
+  DB.saveWorkout(S.workout);
+  render();
+}
+function removeSet(ei){
+  if(!S.workout)return;
+  const ex=S.workout.exercises[ei];
+  if(ex.sets.length>1)ex.sets.pop();
+  DB.saveWorkout(S.workout);
+  render();
+}
+function toggleMobility(i){
+  if(!S.workout)return;
+  S.workout.mobility[i].done=!S.workout.mobility[i].done;
+  DB.saveWorkout(S.workout);
+  render();
+}
+function toggleCooldown(i){
+  if(!S.workout)return;
+  S.workout.cooldown[i].done=!S.workout.cooldown[i].done;
+  DB.saveWorkout(S.workout);
+  render();
+}
+function completeWorkout(){
+  if(!S.workout)return;
+  const setsLogged=S.workout.exercises.some(e=>e.sets.some(s=>parseFloat(s.weight)>0||s.done));
+  if(!setsLogged&&!confirm('No weights logged — still complete?'))return;
+  S.workout.completed=true;
+  S.workout.duration=Math.round((Date.now()-S.workout.startTime)/60000);
+  DB.saveWorkout(S.workout);
+  toast('✓ Workout saved!');
+  S.workout=null;
+  nav('history');
+}
+function abandonWorkout(){
+  if(confirm('Abandon this workout? Progress will be lost.')){
+    S.workout=null;nav('home');
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// HISTORY SCREEN
+// ═══════════════════════════════════════════════════════
+function renderHistory(){
+  const workouts=DB.getWorkoutList().filter(w=>w.completed);
+  if(!workouts.length)return`<div class="fade-slide">
+  <div class="hdr"><div class="hdr-sub">Your Log</div><div class="hdr-title">HISTORY</div></div>
+  <div class="empty"><span class="empty-icon">📋</span>NO SESSIONS YET<br>Complete your first workout to see it here</div>
+  </div>`;
+  // Group by month
+  const groups={};
+  workouts.forEach(w=>{
+    const d=new Date(w.date+'T00:00:00');
+    const key=d.toLocaleDateString('en-IE',{month:'long',year:'numeric'});
+    if(!groups[key])groups[key]=[];
+    groups[key].push(w);
+  });
+  const totalVol=workouts.reduce((acc,w)=>{
+    return acc+(w.exercises||[]).reduce((a,e)=>a+e.sets.reduce((s,set)=>{
+      const wt=parseFloat(set.weight)||0;
+      const r=parseInt(set.reps)||0;
+      return s+(wt*r);
+    },0),0);
+  },0);
+  return`<div class="fade-slide">
+  <div class="hdr"><div class="hdr-sub">Your Log</div><div class="hdr-title">HISTORY</div></div>
+  <div class="stat-grid" style="border-bottom:1px solid var(--border)">
+    <div class="stat-cell"><div class="stat-val">${workouts.length}</div><div class="stat-key">Sessions</div></div>
+    <div class="stat-cell"><div class="stat-val">${getStreak()}</div><div class="stat-key">Streak</div></div>
+    <div class="stat-cell"><div class="stat-val">${totalVol>0?Math.round(totalVol/1000)+'k':'–'}</div><div class="stat-key">Total Vol kg</div></div>
+  </div>
+  ${Object.entries(groups).map(([month,wkts])=>`
+  <div class="section-label">${month.toUpperCase()}</div>
+  <div style="margin:0 16px;border:1px solid var(--border);border-radius:6px;overflow:hidden">
+  ${wkts.map((w,i)=>`<div class="hist-item" style="${i<wkts.length-1?'':'border-bottom:none'}" onclick="S.histDetail='${w.id}';nav('hist-detail')">
+    <div>
+      <div style="font-family:var(--font-display);font-size:16px;font-weight:700;letter-spacing:.02em">${sessionTypeIcon(w.sessionType)} ${w.sessionLabel||'Session'}</div>
+      <div style="font-size:9px;color:var(--text4);margin-top:3px;letter-spacing:.04em">${fmtDateShort(w.date)} · ${w.blockLabel} · W${w.weekNum+1} · ${w.weekLabel}</div>
+    </div>
+    <div style="text-align:right">
+      ${w.duration?`<div style="font-size:10px;color:var(--text3)">${w.duration}min</div>`:''}
+      <div style="font-size:9px;color:var(--text4);margin-top:2px">›</div>
+    </div>
+  </div>`).join('')}
+  </div>`).join('')}
+  <div style="height:16px"></div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+// HISTORY DETAIL SCREEN
+// ═══════════════════════════════════════════════════════
+function renderHistDetail(){
+  const w=DB.getWorkouts()[S.histDetail];
+  if(!w)return`<div class="empty">Session not found</div>`;
+  const totalVol=w.exercises.reduce((a,e)=>a+e.sets.reduce((s,set)=>(s+(parseFloat(set.weight)||0)*(parseInt(set.reps)||0)),0),0);
+  return`<div class="fade-slide">
+  <div class="hdr">
+    <button class="hdr-back" onclick="nav('history')">‹ HISTORY</button>
+    <div class="hdr-sub">${fmtDate(w.date)}</div>
+    <div class="hdr-title">${w.sessionLabel}</div>
+  </div>
+  <div style="margin:12px 16px;display:flex;gap:8px;flex-wrap:wrap">
+    <span class="chip chip-muted">${w.blockLabel}</span>
+    <span class="chip chip-muted">W${w.weekNum+1} · ${w.weekLabel}</span>
+    ${w.duration?`<span class="chip chip-muted">${w.duration}min</span>`:''}
+    ${totalVol>0?`<span class="chip chip-accent">${Math.round(totalVol)}${w.unit||'kg'} vol</span>`:''}
+  </div>
+  <div class="section-label">EXERCISES</div>
+  ${w.exercises.map(ex=>{
+    const maxW=getMaxWeight(ex.sets);
+    const logged=ex.sets.filter(s=>parseFloat(s.weight)>0||s.done);
+    return`<div style="margin:0 16px 10px;border:1px solid var(--border);border-radius:5px;overflow:hidden">
+    <div style="background:var(--surf2);padding:11px 14px;display:flex;justify-content:space-between;align-items:center;gap:8px">
+      <div>
+        <div style="font-family:var(--font-display);font-size:15px;font-weight:700;letter-spacing:.02em;cursor:pointer;color:var(--accent)" onclick="S.progExercise='${ex.name.replace(/'/g,"\\'")}';nav('progress')">${ex.name} ›</div>
+        ${maxW>0?`<div style="font-size:9px;color:var(--text3);margin-top:2px">Top: ${maxW}${w.unit||'kg'}</div>`:''}
+      </div>
+      <span class="chip chip-muted">${logged.length} sets</span>
+    </div>
+    ${ex.sets.map((s,i)=>`<div style="display:flex;gap:10px;padding:9px 14px;border-top:1px solid var(--border2);font-size:12px;align-items:center">
+      <span style="color:var(--text4);min-width:28px">S${i+1}</span>
+      <span style="font-family:var(--font-display);font-size:15px;font-weight:700;color:${s.done?'var(--text)':'var(--text4)'}">
+        ${parseFloat(s.weight)>0?s.weight+(w.unit||'kg'):'–'}
+      </span>
+      <span style="color:var(--text3)">×</span>
+      <span style="font-family:var(--font-display);font-size:15px;font-weight:700;color:${s.done?'var(--text)':'var(--text4)'}">
+        ${s.reps||'–'}
+      </span>
+      ${s.done?'<span style="margin-left:auto;color:var(--green);font-size:11px">✓</span>':''}
+    </div>`).join('')}
+    </div>`;
+  }).join('')}
+  <div style="padding:12px 16px;display:flex;gap:8px">
+    <button class="btn btn-danger" onclick="deleteSession('${w.id}')">DELETE SESSION</button>
+  </div>
+  <div style="height:16px"></div>
+  </div>`;
+}
+function deleteSession(id){
+  if(confirm('Delete this session permanently?')){
+    DB.deleteWorkout(id);toast('Session deleted');nav('history');
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// PROGRESS SCREEN
+// ═══════════════════════════════════════════════════════
+function renderProgress(){
+  const name=S.progExercise;
+  if(!name)return`<div class="empty">No exercise selected</div>`;
+  const history=DB.getExerciseHistory(name);
+  if(!history.length)return`<div class="fade-slide">
+  <div class="hdr">
+    <button class="hdr-back" onclick="nav('history')">‹ BACK</button>
+    <div class="hdr-title" style="font-size:18px">${name}</div>
+  </div>
+  <div class="empty"><span class="empty-icon">📈</span>NO DATA YET<br>Complete sessions to track progress</div>
+  </div>`;
+  const maxWeights=history.map(h=>({date:h.date,label:h.blockLabel+' W'+(parseInt(h.weekLabel?.split('×')[0])||''),max:getMaxWeight(h.sets),sets:h.sets}));
+  const allMaxes=maxWeights.map(m=>m.max).filter(m=>m>0);
+  const overallMax=allMaxes.length?Math.max(...allMaxes):0;
+  const pb=DB.getPrevBest(name);
+  return`<div class="fade-slide">
+  <div class="hdr">
+    <button class="hdr-back" onclick="nav('history')">‹ BACK</button>
+    <div class="hdr-sub">Exercise Progress</div>
+    <div class="hdr-title" style="font-size:20px;line-height:1.1">${name}</div>
+  </div>
+  <div class="stat-grid" style="border-bottom:1px solid var(--border)">
+    <div class="stat-cell"><div class="stat-val">${pb?pb.weight+(pb.unit||'kg'):'–'}</div><div class="stat-key">Best Weight</div></div>
+    <div class="stat-cell"><div class="stat-val">${history.length}</div><div class="stat-key">Sessions</div></div>
+    <div class="stat-cell"><div class="stat-val">${pb?pb.reps:'–'}</div><div class="stat-key">Reps at PB</div></div>
+  </div>
+  <div class="section-label">WEIGHT PROGRESSION</div>
+  ${maxWeights.filter(m=>m.max>0).map(m=>{
+    const pct=overallMax>0?Math.round((m.max/overallMax)*100):0;
+    return`<div class="prog-bar-wrap">
+    <div class="prog-bar-label">
+      <span>${fmtDateShort(m.date)}</span>
+      <span style="color:var(--accent);font-weight:600">${m.max}${DB.getSettings().unit||'kg'}</span>
+    </div>
+    <div class="prog-bar-track"><div class="prog-bar-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('')}
+  <div class="section-label" style="margin-top:8px">SESSION HISTORY</div>
+  ${history.map(h=>`<div style="margin:0 16px 10px;border:1px solid var(--border);border-radius:5px;overflow:hidden">
+  <div style="background:var(--surf2);padding:10px 14px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div style="font-size:9px;color:var(--text4);letter-spacing:.08em">${fmtDate(h.date)} · ${h.blockLabel}</div>
+      ${getMaxWeight(h.sets)>0?`<span style="font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--accent)">↑ ${getMaxWeight(h.sets)}${DB.getSettings().unit||'kg'}</span>`:''}
+    </div>
+  </div>
+  ${h.sets.map((s,i)=>`<div style="display:flex;gap:12px;padding:8px 14px;border-top:1px solid var(--border2);font-size:12px;align-items:center">
+    <span style="color:var(--text4);min-width:24px">S${i+1}</span>
+    <span style="font-family:var(--font-display);font-size:14px;font-weight:700">${s.weight||'–'} ${s.weight?DB.getSettings().unit||'kg':''}</span>
+    <span style="color:var(--text3)">×</span>
+    <span style="font-family:var(--font-display);font-size:14px;font-weight:700">${s.reps||'–'}</span>
+    ${s.done?'<span style="margin-left:auto;color:var(--green)">✓</span>':''}
+  </div>`).join('')}
+  </div>`).join('')}
+  <div style="height:16px"></div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+// SETTINGS SCREEN
+// ═══════════════════════════════════════════════════════
+function renderSettings(){
+  const settings=DB.getSettings();
+  const workouts=DB.getWorkoutList();
+  return`<div class="fade-slide">
+  <div class="hdr"><div class="hdr-sub">Preferences</div><div class="hdr-title">SETTINGS</div></div>
+
+  <div class="section-label">PROGRAMME START DATE</div>
+  <div class="card">
+    <div class="card-body">
+      <div style="font-size:10px;color:var(--text3);margin-bottom:10px;line-height:1.6">Sets your start date so the app can recommend the correct block and week. Change this if you started at a different time.</div>
+      <input type="date" id="startDate" value="${settings.startDate||today()}"
+        style="background:var(--surf3);border:1px solid var(--border);border-radius:3px;color:var(--text);font-family:var(--font-mono);font-size:14px;width:100%;padding:10px 12px;outline:none">
+      <button class="btn btn-primary" style="margin-top:10px" onclick="saveStartDate()">SAVE DATE</button>
+    </div>
+  </div>
+
+  <div class="section-label">WEIGHT UNIT</div>
+  <div class="card">
+    <div class="card-body" style="display:flex;gap:8px">
+      <button class="btn ${settings.unit==='kg'?'btn-primary':'btn-secondary'}" style="flex:1" onclick="saveUnit('kg')">KG</button>
+      <button class="btn ${settings.unit==='lbs'?'btn-primary':'btn-secondary'}" style="flex:1" onclick="saveUnit('lbs')">LBS</button>
+    </div>
+  </div>
+
+  <div class="section-label">PROGRAMME INFO</div>
+  <div style="margin:0 16px;border:1px solid var(--border);border-radius:6px;overflow:hidden">
+  ${[
+    ['Total Blocks','6'],['Weeks per Block','4'],['Deloads','Every Week 4'],
+    ['Sessions/Week','3'],['Session Length','60 min'],['Equipment','Free Weights + BW']
+  ].map(([k,v],i,arr)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;${i<arr.length-1?'border-bottom:1px solid var(--border2)':''}">
+    <span style="font-size:11px;color:var(--text3)">${k}</span>
+    <span style="font-family:var(--font-display);font-size:14px;font-weight:700">${v}</span>
+  </div>`).join('')}
+  </div>
+
+  <div class="section-label">DATA</div>
+  <div class="card">
+    <div class="card-body">
+      <div style="font-size:10px;color:var(--text3);margin-bottom:10px">${workouts.filter(w=>w.completed).length} completed sessions stored locally on this device.</div>
+      <button class="btn btn-danger" style="width:100%" onclick="clearAllData()">CLEAR ALL DATA</button>
+    </div>
+  </div>
+
+  <div class="section-label">INSTALL ON ANDROID</div>
+  <div class="card">
+    <div class="card-body" style="font-size:10px;color:var(--text3);line-height:1.8">
+      1. Open this page in <strong style="color:var(--text)">Chrome</strong> on your Android device<br>
+      2. Tap the <strong style="color:var(--text)">⋮ menu</strong> (top right)<br>
+      3. Select <strong style="color:var(--text)">"Add to Home screen"</strong><br>
+      4. Tap <strong style="color:var(--text)">"Install"</strong> when prompted<br>
+      <br>The app will work fully offline once installed.
+    </div>
+  </div>
+  <div style="height:16px"></div>
+  </div>`;
+}
+function saveStartDate(){
+  const val=document.getElementById('startDate')?.value;
+  if(!val)return;
+  const s=DB.getSettings();s.startDate=val;DB.saveSettings(s);
+  toast('Start date saved!');render();
+}
+function saveUnit(unit){
+  const s=DB.getSettings();s.unit=unit;DB.saveSettings(s);
+  toast(`Unit set to ${unit}`);render();
+}
+function clearAllData(){
+  if(confirm('Delete ALL workout and readiness data? This cannot be undone.')){
+    localStorage.removeItem('s6m_workouts');
+    localStorage.removeItem('s6m_readiness');
+    S.workout=null;toast('All data cleared');render();
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// READINESS ALGORITHM
+// ═══════════════════════════════════════════════════════
+function calcReadiness(d){
+  const factors={};
+  // ── SLEEP DURATION (0-25pts) ────────────────────────
+  const h=parseFloat(d.sleepHours)||7;
+  let sleepDurScore=25;
+  if(h>=7&&h<=9)sleepDurScore=25;
+  else if(h>=6.5&&h<7)sleepDurScore=20;
+  else if(h>9&&h<=10)sleepDurScore=22;
+  else if(h>=6&&h<6.5)sleepDurScore=14;
+  else if(h>=5&&h<6)sleepDurScore=7;
+  else sleepDurScore=0;
+  factors.sleepDuration={score:sleepDurScore,max:25,label:'Sleep Duration',value:`${h}h`};
+
+  // ── SLEEP QUALITY (0-20pts) ─────────────────────────
+  const sq=parseInt(d.sleepQuality)||5;
+  const sleepQScore=Math.round((sq/10)*20);
+  factors.sleepQuality={score:sleepQScore,max:20,label:'Sleep Quality',value:`${sq}/10`};
+
+  // ── SORENESS (0-20pts) ──────────────────────────────
+  const zones=Object.values(d.soreness||{});
+  const avgSoreness=zones.length?zones.reduce((a,b)=>a+b,0)/zones.length:0;
+  const maxSoreness=zones.length?Math.max(...zones):0;
+  // Penalise high peak soreness more than average
+  const sorenessScore=Math.max(0,20-Math.round(avgSoreness*1.5)-Math.round(maxSoreness*0.5));
+  factors.soreness={score:sorenessScore,max:20,label:'Muscle Soreness',value:`Avg ${avgSoreness.toFixed(1)}/10`};
+
+  // ── MOOD & MOTIVATION (0-15pts) ─────────────────────
+  const mood=parseInt(d.mood)||5;
+  const motiv=parseInt(d.motivation)||5;
+  const moodScore=Math.round(((mood+motiv)/20)*15);
+  factors.mood={score:moodScore,max:15,label:'Mood & Motivation',value:`${mood}/10 · ${motiv}/10`};
+
+  // ── STRESS (0-10pts) ────────────────────────────────
+  const stress=parseInt(d.stress)||5;
+  const stressScore=Math.round(((10-stress)/10)*10);
+  factors.stress={score:stressScore,max:10,label:'Stress Level',value:`${stress}/10`};
+
+  // ── RESTING HR vs BASELINE (0-10pts) ────────────────
+  let hrScore=5; // neutral if no data
+  const baseline=DB.getHRBaseline();
+  if(d.restingHR>0&&baseline){
+    const diff=d.restingHR-baseline;
+    if(diff<=0)hrScore=10;
+    else if(diff<=2)hrScore=9;
+    else if(diff<=4)hrScore=7;
+    else if(diff<=7)hrScore=4;
+    else if(diff<=10)hrScore=2;
+    else hrScore=0;
+    factors.restingHR={score:hrScore,max:10,label:'Resting HR',value:`${d.restingHR}bpm (base: ${baseline})`};
+  } else if(d.restingHR>0){
+    hrScore=5;
+    factors.restingHR={score:hrScore,max:10,label:'Resting HR',value:`${d.restingHR}bpm (no baseline yet)`};
+  } else {
+    factors.restingHR={score:hrScore,max:10,label:'Resting HR',value:'Not entered'};
+  }
+
+  // ── HRV BONUS (0-5pts) ──────────────────────────────
+  let hrvScore=0;
+  if(d.hrv>0){
+    // Simple: higher HRV is better. We give up to 5 bonus points.
+    // Average HRV varies widely; we use relative feel (>50ms good, <20ms poor)
+    if(d.hrv>=60)hrvScore=5;
+    else if(d.hrv>=45)hrvScore=4;
+    else if(d.hrv>=30)hrvScore=3;
+    else if(d.hrv>=20)hrvScore=1;
+    factors.hrv={score:hrvScore,max:5,label:'HRV',value:`${d.hrv}ms`};
+  } else {
+    factors.hrv={score:0,max:5,label:'HRV',value:'Not entered (optional)'};
+  }
+
+  const total=Object.values(factors).reduce((a,f)=>a+f.score,0);
+  const maxTotal=Object.values(factors).reduce((a,f)=>a+f.max,0);
+  const pct=Math.round((total/maxTotal)*100);
+
+  return{score:pct,factors,total,maxTotal};
+}
+
+function getReadinessStatus(score){
+  if(score>=80)return{label:'READY TO TRAIN',color:'#5cb85c',bg:'rgba(92,184,92,0.1)',border:'rgba(92,184,92,0.3)',light:'green',emoji:'🟢'};
+  if(score>=60)return{label:'MODIFIED SESSION',color:'#f4a261',bg:'rgba(244,162,97,0.1)',border:'rgba(244,162,97,0.3)',light:'amber',emoji:'🟡'};
+  if(score>=40)return{label:'LIGHT ONLY',color:'#e76f51',bg:'rgba(231,111,81,0.1)',border:'rgba(231,111,81,0.3)',light:'orange',emoji:'🟠'};
+  return{label:'REST DAY',color:'#e63946',bg:'rgba(230,57,70,0.1)',border:'rgba(230,57,70,0.3)',light:'red',emoji:'🔴'};
+}
+
+function getReadinessRecommendations(score,data,sessionType){
+  const recs=[];
+  const zones=data.soreness||{};
+  const h=parseFloat(data.sleepHours)||7;
+  const sq=parseInt(data.sleepQuality)||5;
+  const stress=parseInt(data.stress)||5;
+
+  // Session-specific soreness warnings
+  const upperMuscles=['chest','back','shoulders','arms'];
+  const lowerMuscles=['quads','hamstrings','glutes','calves'];
+  const relevantMuscles=sessionType==='upper'?upperMuscles:sessionType==='lower'?lowerMuscles:[...upperMuscles,...lowerMuscles];
+  const soreMuscles=relevantMuscles.filter(m=>(zones[m]||0)>=6).map(m=>m.charAt(0).toUpperCase()+m.slice(1));
+  if(soreMuscles.length){
+    recs.push({icon:'⚠️',title:'Soreness Alert',text:`${soreMuscles.join(', ')} soreness is high for today's ${sessionType} session. Consider reducing load on these movements by 15–20% or substituting.`});
+  }
+
+  // Sleep
+  if(h<6){
+    recs.push({icon:'😴',title:'Poor Sleep',text:'Under 6 hours significantly impairs strength output and recovery. Reduce session intensity by 20–25%. Prioritise technique over load today.'});
+  } else if(h<7||sq<=4){
+    recs.push({icon:'😴',title:'Sleep Below Target',text:'Sleep was below optimal. Warm up thoroughly and gauge how your body feels before pushing hard on primary compounds.'});
+  }
+
+  // Score-based
+  if(score>=80){
+    recs.push({icon:'💪',title:'Full Training',text:'Your recovery markers are strong. Train as programmed. This is a good session to push for progressive overload on primary compounds.'});
+  } else if(score>=60){
+    recs.push({icon:'↘️',title:'Load Reduction',text:'Reduce primary compound loads by 10–15%. Keep volume (sets/reps) the same. Focus on quality of movement over maximum weight.'});
+    recs.push({icon:'⏸️',title:'Skip High-Intensity',text:'Avoid max-effort sets or PR attempts today. Save those for when your readiness score is above 80.'});
+  } else if(score>=40){
+    recs.push({icon:'🔄',title:'Active Recovery Mode',text:'Today is not a day to challenge your body. Perform mobility work, light movement at 40–50% usual load, or swap to a full rest day.'});
+    recs.push({icon:'📉',title:'Reduce Volume',text:'Cut sets by 40–50%. Do 2 sets instead of 4–5. Focus on movement quality. End the session if you feel worse during warm-up.'});
+  } else {
+    recs.push({icon:'🛌',title:'Take a Full Rest Day',text:'Your body is in significant recovery debt. Training today risks injury and will delay your overall progress. Sleep, eat well, hydrate.'});
+    recs.push({icon:'🧘',title:'Active Rest Options',text:'Light walking, gentle stretching, or a 10-minute mobility flow are the most beneficial activities today.'});
+  }
+
+  // Stress
+  if(stress>=7){
+    recs.push({icon:'🧠',title:'High Stress',text:'Psychological stress elevates cortisol, which competes with recovery. Keep the session short and enjoyable — not grinding. This is not the day to test yourself.'});
+  }
+
+  // HR spike
+  const baseline=DB.getHRBaseline();
+  if(data.restingHR>0&&baseline&&(data.restingHR-baseline)>7){
+    recs.push({icon:'❤️',title:'Elevated Resting HR',text:`Your resting HR is ${data.restingHR-baseline}bpm above your baseline of ${baseline}bpm. This commonly signals incomplete recovery, mild illness, or dehydration. Drink water and reassess during warm-up.`});
+  }
+
+  return recs;
+}
+
+// ═══════════════════════════════════════════════════════
+// READINESS SCREEN
+// ═══════════════════════════════════════════════════════
+function renderReadiness(){
+  const today_entry=DB.getTodayReadiness();
+  if(S.readiness.step===3||today_entry){
+    return renderReadinessResult(today_entry||null);
+  }
+  const step=S.readiness.step;
+  const d=S.readiness.data;
+  const steps=['Sleep','Body','Mind'];
+  return`<div class="fade-slide">
+  <div class="hdr">
+    <div class="hdr-sub">Daily Check-In</div>
+    <div class="hdr-title">READINESS</div>
+  </div>
+  <!-- Step Dots -->
+  <div class="step-dots">
+    ${steps.map((s,i)=>`<div class="step-dot${i===step?' active':i<step?' done':''}" title="${s}"></div>`).join('')}
+  </div>
+  <div style="text-align:center;font-family:var(--font-display);font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--text4);text-transform:uppercase;margin-bottom:4px">Step ${step+1} of 3 — ${steps[step]}</div>
+
+  ${step===0?renderReadinessStep0(d):step===1?renderReadinessStep1(d):renderReadinessStep2(d)}
+
+  <div class="step-nav">
+    ${step>0?`<button class="btn btn-ghost" style="flex:1" onclick="S.readiness.step--;render()">‹ BACK</button>`:''}
+    ${step<2?`<button class="btn btn-primary" style="flex:${step>0?1:2}" onclick="S.readiness.step++;render()">NEXT ›</button>`
+      :`<button class="btn btn-success" style="flex:1" onclick="submitReadiness()">CALCULATE READINESS ›</button>`}
+  </div>
+  <div style="padding:8px 16px;text-align:center">
+    <button class="btn btn-ghost" style="font-size:10px;color:var(--text4)" onclick="S.readiness.step=0;S.readiness.data=getDefaultReadinessData();render()">RESET</button>
+  </div>
+  <div style="height:16px"></div>
+  </div>`;
+}
+
+function getDefaultReadinessData(){
+  return{sleepHours:7.5,sleepQuality:7,restingHR:0,hrv:0,
+    soreness:{chest:0,back:0,shoulders:0,arms:0,quads:0,hamstrings:0,glutes:0,calves:0},
+    mood:7,motivation:7,stress:3,prevSessionRPE:6,notes:''};
+}
+
+function renderReadinessStep0(d){
+  return`<div>
+  <div class="section-label" style="margin-top:8px">LAST NIGHT'S SLEEP</div>
+  <div class="slider-wrap">
+    <div class="slider-label">
+      <span class="slider-name">Hours slept</span>
+      <span class="slider-val" id="val-sleep">${parseFloat(d.sleepHours).toFixed(1)}h</span>
+    </div>
+    <input type="range" min="3" max="11" step="0.5" value="${d.sleepHours}"
+      oninput="S.readiness.data.sleepHours=this.value;document.getElementById('val-sleep').textContent=parseFloat(this.value).toFixed(1)+'h'">
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text4);margin-top:4px"><span>3h</span><span style="color:var(--green)">7–9h optimal</span><span>11h</span></div>
+  </div>
+  <div class="slider-wrap">
+    <div class="slider-label">
+      <span class="slider-name">Sleep quality</span>
+      <span class="slider-val" id="val-sq">${d.sleepQuality}/10</span>
+    </div>
+    <input type="range" min="1" max="10" step="1" value="${d.sleepQuality}"
+      oninput="S.readiness.data.sleepQuality=this.value;document.getElementById('val-sq').textContent=this.value+'/10'">
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text4);margin-top:4px"><span>Terrible</span><span>Average</span><span>Perfect</span></div>
+  </div>
+  <div class="section-label">WATCH METRICS (OPTIONAL)</div>
+  <div style="margin:0 16px 12px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div style="background:var(--surf2);border:1px solid var(--border);border-radius:5px;padding:12px">
+      <div style="font-size:9px;color:var(--text4);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">Resting HR</div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <input type="number" inputmode="numeric" min="30" max="120" placeholder="–" value="${d.restingHR||''}"
+          style="background:var(--surf3);border:1px solid var(--border);border-radius:3px;color:var(--text);font-family:var(--font-display);font-size:20px;font-weight:900;text-align:center;width:70px;padding:8px 4px;outline:none"
+          oninput="S.readiness.data.restingHR=parseInt(this.value)||0">
+        <span style="font-size:11px;color:var(--text4)">bpm</span>
+      </div>
+      <div style="font-size:9px;color:var(--text4);margin-top:4px">Glance at your Galaxy Watch</div>
+    </div>
+    <div style="background:var(--surf2);border:1px solid var(--border);border-radius:5px;padding:12px">
+      <div style="font-size:9px;color:var(--text4);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">HRV (ms)</div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <input type="number" inputmode="numeric" min="1" max="200" placeholder="–" value="${d.hrv||''}"
+          style="background:var(--surf3);border:1px solid var(--border);border-radius:3px;color:var(--text);font-family:var(--font-display);font-size:20px;font-weight:900;text-align:center;width:70px;padding:8px 4px;outline:none"
+          oninput="S.readiness.data.hrv=parseInt(this.value)||0">
+        <span style="font-size:11px;color:var(--text4)">ms</span>
+      </div>
+      <div style="font-size:9px;color:var(--text4);margin-top:4px">Samsung Health → Heart</div>
+    </div>
+  </div>
+  <div style="margin:0 16px 4px;background:var(--surf2);border:1px solid var(--border);border-radius:4px;padding:10px 12px;font-size:9px;color:var(--text4);line-height:1.7">
+    💡 Open <strong style="color:var(--text2)">Samsung Health</strong> on your phone or watch and check Heart Rate → Resting HR and HRV from last night's sleep report.
+  </div>
+  </div>`;
+}
+
+function renderReadinessStep1(d){
+  const zones=['chest','back','shoulders','arms','quads','hamstrings','glutes','calves'];
+  const icons={chest:'🫁',back:'🔙',shoulders:'💪',arms:'💪',quads:'🦵',hamstrings:'🦵',glutes:'🍑',calves:'🦶'};
+  return`<div>
+  <div class="section-label" style="margin-top:8px">MUSCLE SORENESS</div>
+  <div style="padding:0 16px 8px;font-size:9px;color:var(--text4);line-height:1.7">Rate soreness in each zone: 0 = none, 10 = very sore. This adapts your session recommendations to today's working muscles.</div>
+  <div class="soreness-grid">
+  ${zones.map(z=>`<div class="soreness-zone">
+    <div class="soreness-zone-name">${icons[z]||''} ${z}</div>
+    <div class="soreness-zone-val" id="sval-${z}" style="color:${getSorenessColor(d.soreness[z]||0)}">${d.soreness[z]||0}</div>
+    <div class="soreness-btns">
+      <button class="s-btn" onclick="changeSoreness('${z}',-1)">−</button>
+      <button class="s-btn" onclick="changeSoreness('${z}',1)">+</button>
+    </div>
+  </div>`).join('')}
+  </div>
+  <div style="margin:0 16px 4px;padding:10px 12px;background:var(--surf2);border:1px solid var(--border);border-radius:4px;font-size:9px;color:var(--text4);line-height:1.7">
+    💡 <strong style="color:var(--text2)">0–2</strong> No soreness &nbsp;·&nbsp; <strong style="color:var(--text2)">3–5</strong> Mild DOMS &nbsp;·&nbsp; <strong style="color:var(--text2)">6–8</strong> Significant &nbsp;·&nbsp; <strong style="color:var(--text2)">9–10</strong> Severe
+  </div>
+  </div>`;
+}
+
+function getSorenessColor(v){
+  if(v<=2)return'var(--text3)';
+  if(v<=4)return'var(--green)';
+  if(v<=6)return'#f4a261';
+  if(v<=8)return'#e76f51';
+  return'var(--accent)';
+}
+
+function changeSoreness(zone,delta){
+  const cur=S.readiness.data.soreness[zone]||0;
+  const next=Math.max(0,Math.min(10,cur+delta));
+  S.readiness.data.soreness[zone]=next;
+  const el=document.getElementById('sval-'+zone);
+  if(el){el.textContent=next;el.style.color=getSorenessColor(next);}
+}
+
+function renderReadinessStep2(d){
+  const rec=getCurrentRecommendation();
+  const block=BLOCKS[rec.block];
+  const week=block.loading[rec.week];
+  return`<div>
+  <div class="section-label" style="margin-top:8px">MENTAL STATE</div>
+  <div class="slider-wrap">
+    <div class="slider-label">
+      <span class="slider-name">Mood</span>
+      <span class="slider-val" id="val-mood">${d.mood}/10</span>
+    </div>
+    <input type="range" min="1" max="10" step="1" value="${d.mood}"
+      oninput="S.readiness.data.mood=parseInt(this.value);document.getElementById('val-mood').textContent=this.value+'/10'">
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text4);margin-top:4px"><span>Low</span><span>Neutral</span><span>Great</span></div>
+  </div>
+  <div class="slider-wrap">
+    <div class="slider-label">
+      <span class="slider-name">Motivation to train</span>
+      <span class="slider-val" id="val-motiv">${d.motivation}/10</span>
+    </div>
+    <input type="range" min="1" max="10" step="1" value="${d.motivation}"
+      oninput="S.readiness.data.motivation=parseInt(this.value);document.getElementById('val-motiv').textContent=this.value+'/10'">
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text4);margin-top:4px"><span>Dread it</span><span>Neutral</span><span>Pumped</span></div>
+  </div>
+  <div class="slider-wrap">
+    <div class="slider-label">
+      <span class="slider-name">Stress level</span>
+      <span class="slider-val" id="val-stress">${d.stress}/10</span>
+    </div>
+    <input type="range" min="1" max="10" step="1" value="${d.stress}"
+      oninput="S.readiness.data.stress=parseInt(this.value);document.getElementById('val-stress').textContent=this.value+'/10'">
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text4);margin-top:4px"><span>None</span><span>Moderate</span><span>Very high</span></div>
+  </div>
+  <div class="section-label">PREVIOUS SESSION</div>
+  <div class="slider-wrap">
+    <div class="slider-label">
+      <span class="slider-name">Last session RPE</span>
+      <span class="slider-val" id="val-rpe">${d.prevSessionRPE}/10</span>
+    </div>
+    <input type="range" min="1" max="10" step="1" value="${d.prevSessionRPE}"
+      oninput="S.readiness.data.prevSessionRPE=parseInt(this.value);document.getElementById('val-rpe').textContent=this.value+'/10'">
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text4);margin-top:4px"><span>Easy</span><span>Moderate</span><span>Maximal</span></div>
+  </div>
+  <div style="margin:4px 16px 0">
+    <div style="font-size:10px;color:var(--text3);margin-bottom:6px">Optional notes</div>
+    <textarea placeholder="Any injuries, illness, travel, stress events..."
+      style="width:100%;background:var(--surf2);border:1px solid var(--border);border-radius:3px;color:var(--text);font-family:var(--font-mono);font-size:11px;padding:10px;resize:none;outline:none;height:70px;line-height:1.6"
+      oninput="S.readiness.data.notes=this.value">${d.notes||''}</textarea>
+  </div>
+  </div>`;
+}
+
+function submitReadiness(){
+  const result=calcReadiness(S.readiness.data);
+  const rec=getCurrentRecommendation();
+  const entry={
+    date:today(),
+    data:{...S.readiness.data},
+    score:result.score,
+    factors:result.factors,
+    sessionType:rec.session,
+    blockIdx:rec.block,
+    weekIdx:rec.week
+  };
+  DB.saveReadiness(entry);
+  S.readiness.step=3;
+  render();
+}
+
+function renderReadinessResult(entry){
+  const e=entry||DB.getTodayReadiness();
+  if(!e){
+    // No entry - prompt check-in
+    return`<div class="fade-slide">
+    <div class="hdr"><div class="hdr-sub">Daily Check-In</div><div class="hdr-title">READINESS</div></div>
+    <div class="empty"><span class="empty-icon">◈</span>NO CHECK-IN YET TODAY<br>Takes 2 minutes to complete</div>
+    <div style="padding:0 16px"><button class="btn btn-primary" onclick="S.readiness.step=0;S.readiness.data=getDefaultReadinessData();render()">START CHECK-IN</button></div>
+    ${renderReadinessHistory()}
+    </div>`;
+  }
+  const status=getReadinessStatus(e.score);
+  const rec=getCurrentRecommendation();
+  const recs=getReadinessRecommendations(e.score,e.data,e.sessionType||rec.session);
+  const block=BLOCKS[e.blockIdx||rec.block];
+  const week=block.loading[e.weekIdx||rec.week];
+  const session=block.sessions[e.sessionType||rec.session];
+  const log=DB.getReadinessLog();
+  const trend=log.length>=2?e.score-log[1].score:null;
+
+  // SVG ring
+  const r=54;const circ=2*Math.PI*r;const dash=circ*(e.score/100);
+
+  return`<div class="fade-slide">
+  <div class="hdr">
+    <div class="hdr-sub">Today's Check-In — ${fmtDateShort(e.date)}</div>
+    <div class="hdr-title">READINESS</div>
+  </div>
+
+  <!-- Score Ring -->
+  <div style="background:var(--surf);border-bottom:1px solid var(--border);padding:24px 16px 20px;text-align:center">
+    <div class="ready-score-ring">
+      <svg width="140" height="140" viewBox="0 0 140 140">
+        <circle cx="70" cy="70" r="${r}" fill="none" stroke="var(--surf3)" stroke-width="10"/>
+        <circle cx="70" cy="70" r="${r}" fill="none" stroke="${status.color}" stroke-width="10"
+          stroke-dasharray="${dash} ${circ}" stroke-linecap="round"
+          style="transition:stroke-dasharray .6s ease"/>
+      </svg>
+      <div class="ready-score-text">
+        <div class="ready-score-num" style="color:${status.color}">${e.score}</div>
+        <div class="ready-score-label" style="color:${status.color}">/ 100</div>
+      </div>
+    </div>
+    <div style="margin-top:14px">
+      <div style="font-family:var(--font-display);font-size:22px;font-weight:900;letter-spacing:.04em;color:${status.color}">${status.emoji} ${status.label}</div>
+      ${trend!==null?`<div style="font-size:10px;color:var(--text4);margin-top:4px">${trend>0?'▲ +'+trend+' from yesterday':'▼ '+Math.abs(trend)+' from yesterday'} ${trend>0?'<span class="trend-up">↑</span>':'<span class="trend-down">↓</span>'}</div>`:''}
+    </div>
+    <div style="margin-top:14px;background:${status.bg};border:1px solid ${status.border};border-radius:4px;padding:12px 16px;display:inline-block;min-width:260px">
+      <div style="font-size:9px;color:var(--text4);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px">Planned Session</div>
+      <div style="font-family:var(--font-display);font-size:18px;font-weight:900;color:${status.color}">${session?.label||'–'} · ${week.scheme}</div>
+    </div>
+  </div>
+
+  <!-- Factor Breakdown -->
+  <div style="margin:12px 16px;background:var(--surf);border:1px solid var(--border);border-radius:6px;overflow:hidden">
+    <div style="padding:12px 16px;border-bottom:1px solid var(--border2)">
+      <div style="font-family:var(--font-display);font-size:14px;font-weight:700;letter-spacing:.06em">FACTOR BREAKDOWN</div>
+    </div>
+    ${Object.values(e.factors||{}).map(f=>{
+      const pct=Math.round((f.score/f.max)*100);
+      const col=pct>=75?'var(--green)':pct>=50?'#f4a261':'var(--accent)';
+      return`<div class="factor-row">
+        <span class="factor-label">${f.label}</span>
+        <div class="factor-bar"><div class="factor-fill" style="width:${pct}%;background:${col}"></div></div>
+        <span class="factor-score" style="color:${col}">${f.score}/${f.max}</span>
+      </div>`;
+    }).join('')}
+  </div>
+
+  <!-- Recommendations -->
+  <div style="margin:0 16px 12px;background:var(--surf);border:1px solid var(--border);border-radius:6px;overflow:hidden">
+    <div style="padding:12px 16px;border-bottom:1px solid var(--border2)">
+      <div style="font-family:var(--font-display);font-size:14px;font-weight:700;letter-spacing:.06em">COACHING RECOMMENDATIONS</div>
+    </div>
+    ${recs.map((r,i)=>`<div class="rec-item" style="${i===recs.length-1?'border-bottom:none':''}">
+      <div class="rec-icon">${r.icon}</div>
+      <div><div class="rec-title">${r.title}</div><div class="rec-text">${r.text}</div></div>
+    </div>`).join('')}
+  </div>
+
+  <!-- Actions -->
+  <div style="padding:0 16px;display:flex;gap:8px">
+    <button class="btn btn-primary" style="flex:2" onclick="startWorkout(${e.blockIdx||rec.block},${e.weekIdx||rec.week},'${e.sessionType||rec.session}')">▶ START SESSION</button>
+    <button class="btn btn-ghost" style="flex:1" onclick="S.readiness.step=0;S.readiness.data=getDefaultReadinessData();render()">REDO</button>
+  </div>
+
+  ${renderReadinessHistory(true)}
+  <div style="height:16px"></div>
+  </div>`;
+}
+
+function renderReadinessHistory(compact=false){
+  const log=DB.getReadinessLog().slice(compact?1:0,compact?8:20);
+  if(!log.length)return'';
+  return`<div class="section-label" style="margin-top:12px">READINESS HISTORY</div>
+  <div style="margin:0 16px;border:1px solid var(--border);border-radius:6px;overflow:hidden">
+  ${log.map((entry,i)=>{
+    const st=getReadinessStatus(entry.score);
+    return`<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;${i<log.length-1?'border-bottom:1px solid var(--border2)':''}">
+      <div>
+        <div style="font-size:10px;color:var(--text3);letter-spacing:.04em">${fmtDateShort(entry.date)}</div>
+        <div style="font-size:9px;color:var(--text4);margin-top:1px">${st.label}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-family:var(--font-display);font-size:22px;font-weight:900;color:${st.color}">${entry.score}</div>
+        <div style="width:8px;height:8px;border-radius:50%;background:${st.color}"></div>
+      </div>
+    </div>`;
+  }).join('')}
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+// READINESS MINI-CARD FOR HOME
+// ═══════════════════════════════════════════════════════
+function renderHomeReadinessCard(){
+  const e=DB.getTodayReadiness();
+  if(!e){
+    return`<div class="section-label">TODAY'S READINESS</div>
+    <div style="margin:0 16px 12px;background:var(--surf);border:1px solid var(--border);border-radius:6px;padding:16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="nav('readiness')">
+      <div>
+        <div style="font-family:var(--font-display);font-size:16px;font-weight:700;letter-spacing:.04em;color:var(--text2)">Not checked in yet</div>
+        <div style="font-size:10px;color:var(--text4);margin-top:3px">Complete your daily readiness check-in</div>
+      </div>
+      <button class="btn btn-secondary" style="white-space:nowrap" onclick="event.stopPropagation();nav('readiness')">CHECK IN</button>
+    </div>`;
+  }
+  const st=getReadinessStatus(e.score);
+  const r=28;const circ=2*Math.PI*r;const dash=circ*(e.score/100);
+  return`<div class="section-label">TODAY'S READINESS</div>
+  <div style="margin:0 16px 12px;background:var(--surf);border:1px solid var(--border);border-left:3px solid ${st.color};border-radius:6px;padding:14px 16px;display:flex;align-items:center;gap:16px;cursor:pointer" onclick="nav('readiness')">
+    <div style="position:relative;width:64px;height:64px;flex-shrink:0">
+      <svg width="64" height="64" viewBox="0 0 64 64" style="transform:rotate(-90deg)">
+        <circle cx="32" cy="32" r="${r}" fill="none" stroke="var(--surf3)" stroke-width="6"/>
+        <circle cx="32" cy="32" r="${r}" fill="none" stroke="${st.color}" stroke-width="6"
+          stroke-dasharray="${dash.toFixed(1)} ${circ.toFixed(1)}" stroke-linecap="round"/>
+      </svg>
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
+        <div style="font-family:var(--font-display);font-size:18px;font-weight:900;color:${st.color};line-height:1">${e.score}</div>
+      </div>
+    </div>
+    <div style="flex:1">
+      <div style="font-family:var(--font-display);font-size:17px;font-weight:900;letter-spacing:.02em;color:${st.color}">${st.label}</div>
+      <div style="font-size:9px;color:var(--text4);margin-top:3px;line-height:1.6">
+        😴 ${parseFloat(e.data.sleepHours).toFixed(1)}h sleep · Q${e.data.sleepQuality}/10
+        ${e.data.restingHR>0?` · ♥ ${e.data.restingHR}bpm`:''}
+      </div>
+    </div>
+    <div style="font-size:14px;color:var(--text4)">›</div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+render();
+</script>
+</body>
+</html>

@@ -3,8 +3,8 @@
 // Caches the app for full offline use after first load
 // ═══════════════════════════════════════════════════════
 
-const CACHE_NAME = '6m-strength-v1';
-const CACHE_VERSION = 1;
+const CACHE_NAME = '6m-strength-v3';
+const CACHE_VERSION = 3;
 
 // Files to cache on install
 const STATIC_ASSETS = [
@@ -58,7 +58,7 @@ self.addEventListener('fetch', event => {
   // Skip chrome-extension and other non-http requests
   if (!event.request.url.startsWith('http')) return;
 
-  // For HTML and app files: Cache First with Network Fallback
+  // For HTML and app files: Network First, cache as fallback
   if (
     url.pathname.endsWith('.html') ||
     url.pathname.endsWith('.json') ||
@@ -66,31 +66,18 @@ self.addEventListener('fetch', event => {
     url.origin === self.location.origin
   ) {
     event.respondWith(
-      caches.match(event.request).then(cached => {
-        if (cached) {
-          // Return cached version and update cache in background
-          const networkFetch = fetch(event.request)
-            .then(response => {
-              if (response && response.status === 200) {
-                const responseClone = response.clone();
-                caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone));
-              }
-              return response;
-            })
-            .catch(() => {/* offline — cached version already returned */});
-          return cached;
-        }
-        // Not in cache — fetch from network and cache it
-        return fetch(event.request).then(response => {
-          if (!response || response.status !== 200) return response;
-          const responseClone = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone));
+      fetch(event.request)
+        .then(response => {
+          if (response && response.status === 200) {
+            const responseClone = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone));
+          }
           return response;
-        }).catch(() => {
-          // Full offline fallback
-          return caches.match('./index.html');
-        });
-      })
+        })
+        .catch(() => {
+          // Offline fallback — serve from cache
+          return caches.match(event.request).then(cached => cached || caches.match('./index.html'));
+        })
     );
     return;
   }

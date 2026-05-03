@@ -27,7 +27,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 /* SCROLLBAR */
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
 /* BOTTOM NAV */
-#nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + var(--safe-bottom));background:rgba(10,10,10,0.97);border-top:1px solid var(--border);display:flex;align-items:flex-start;padding-top:0;backdrop-filter:blur(10px);z-index:100}
+#nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + var(--safe-bottom));background:rgba(10,10,10,0.97);border-top:1px solid var(--border);display:flex;align-items:flex-start;padding-top:0;backdrop-filter:blur(10px);z-index:100;overflow-x:auto;scrollbar-width:none}
+#nav::-webkit-scrollbar{display:none}
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:12px 0 0;border:none;background:none;color:var(--text4);font-family:var(--font-mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:color .15s}
 .nav-btn.active{color:var(--accent)}
 .nav-icon{font-size:20px;line-height:1}
@@ -90,7 +91,38 @@ input[type=number]:focus,input[type=text]:focus{border-color:var(--accent)}
 /* HISTORY ITEM */
 .hist-item{padding:14px 16px;border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center;cursor:pointer}
 .hist-item:active{background:var(--surf2)}
-/* READINESS SPECIFIC */
+/* LIBRARY */
+.lib-search{display:flex;gap:8px;padding:12px 16px;background:var(--surf);border-bottom:1px solid var(--border);position:sticky;top:88px;z-index:40}
+.lib-search input{flex:1;background:var(--surf3);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:var(--font-mono);font-size:12px;padding:9px 12px;outline:none}
+.lib-search input:focus{border-color:var(--accent)}
+.lib-search input::placeholder{color:var(--text4)}
+.filter-scroll{display:flex;gap:6px;padding:10px 16px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--border2)}
+.filter-scroll::-webkit-scrollbar{display:none}
+.filter-chip{flex-shrink:0;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:var(--surf);font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;color:var(--text4);cursor:pointer;transition:all .15s;text-transform:uppercase;white-space:nowrap}
+.filter-chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.ex-lib-item{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;border-bottom:1px solid var(--border2);cursor:pointer;transition:background .1s}
+.ex-lib-item:active{background:var(--surf2)}
+.ex-lib-name{font-family:var(--font-display);font-size:16px;font-weight:700;letter-spacing:.02em;line-height:1.2}
+.ex-lib-meta{font-size:9px;color:var(--text4);margin-top:3px;letter-spacing:.06em}
+.ex-lib-cat{font-size:8px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:2px 7px;border-radius:2px;flex-shrink:0;margin-left:10px}
+.step-item{display:flex;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border2)}
+.step-num{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-family:var(--font-display);font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-text{font-size:11px;color:var(--text2);line-height:1.7}
+.step-title{font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--text);letter-spacing:.04em;margin-bottom:3px}
+.mistake-item{display:flex;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border2);align-items:flex-start}
+.mistake-x{color:var(--accent);font-size:14px;flex-shrink:0;margin-top:1px}
+.mistake-text{font-size:11px;color:var(--text2);line-height:1.6}
+.cue-item{display:flex;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border2);align-items:flex-start}
+.cue-tick{color:var(--green);font-size:14px;flex-shrink:0;margin-top:1px}
+.cue-text{font-size:11px;color:var(--text2);line-height:1.6}
+.muscle-tags{display:flex;gap:6px;flex-wrap:wrap;padding:12px 16px}
+.muscle-tag{font-size:9px;padding:3px 9px;border-radius:2px;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+.muscle-primary{background:rgba(230,57,70,.12);color:var(--accent);border:1px solid rgba(230,57,70,.25)}
+.muscle-secondary{background:var(--surf3);color:var(--text3);border:1px solid var(--border)}
+.section-block{background:var(--surf);border:1px solid var(--border);border-radius:6px;margin:12px 16px;overflow:hidden}
+.section-block-hdr{padding:11px 16px;border-bottom:1px solid var(--border2);background:var(--surf2)}
+.section-block-hdr-title{font-family:var(--font-display);font-size:13px;font-weight:700;letter-spacing:.1em;color:var(--text3);text-transform:uppercase}
+
 .ready-score-ring{position:relative;width:140px;height:140px;margin:0 auto}
 .ready-score-ring svg{transform:rotate(-90deg)}
 .ready-score-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
@@ -211,10 +243,13 @@ input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px}
     <span class="nav-icon">☰</span>PLAN
   </button>
   <button class="nav-btn" data-nav="readiness" onclick="nav('readiness')">
-    <span class="nav-icon">◈</span>READINESS
+    <span class="nav-icon">◈</span>READY
   </button>
   <button class="nav-btn" data-nav="history" onclick="nav('history')">
     <span class="nav-icon">◷</span>LOG
+  </button>
+  <button class="nav-btn" data-nav="library" onclick="nav('library')">
+    <span class="nav-icon">📖</span>LIBRARY
   </button>
   <button class="nav-btn" data-nav="settings" onclick="nav('settings')">
     <span class="nav-icon">⚙</span>SETTINGS
@@ -659,6 +694,7 @@ let S={
   workout:null,
   histDetail:null,
   progExercise:null,
+  library:{search:'',filter:'ALL',exercise:null},
   readiness:{
     step:0, // 0=sleep, 1=body, 2=mind, 3=result
     data:{
@@ -757,7 +793,7 @@ function render(){
     case'history':app.innerHTML=renderHistory();break;
     case'hist-detail':app.innerHTML=renderHistDetail();break;
     case'progress':app.innerHTML=renderProgress();break;
-    case'readiness':app.innerHTML=renderReadiness();break;
+    case'library':app.innerHTML=renderLibrary();break;
     case'settings':app.innerHTML=renderSettings();break;
     default:app.innerHTML=renderHome();
   }
@@ -1921,6 +1957,732 @@ function renderHomeReadinessCard(){
     <div style="font-size:14px;color:var(--text4)">›</div>
   </div>`;
 }
+
+// ═══════════════════════════════════════════════════════
+// EXERCISE LIBRARY DATABASE
+// ═══════════════════════════════════════════════════════
+const EXERCISE_LIBRARY = [
+  // ── UPPER PUSH ──────────────────────────────────────
+  {
+    name:'Barbell Bench Press',category:'UPPER PUSH',equipment:'Barbell, Bench, Rack',
+    primary:['Pectoralis Major'],secondary:['Anterior Deltoid','Triceps'],
+    setup:[
+      {title:'Rack Height',text:'Set the J-hooks so the bar sits roughly arm\'s length above your chest when lying down — 2–3 inches above your sternum when unracked.'},
+      {title:'Grip',text:'Take a grip slightly wider than shoulder-width. Wrap your thumbs fully around the bar — never use a thumbless grip.'},
+      {title:'Arch & Tightness',text:'Retract and depress your scapulae — think "bend the bar" to activate your lats. Plant feet flat on the floor. Create a slight natural arch in your lower back.'},
+      {title:'Unrack',text:'Take a deep breath into your belly, brace your core 360°. Lift the bar out and hold it directly over your chest with arms fully extended.'},
+    ],
+    execution:[
+      {title:'Descent',text:'Lower the bar with control — 2 to 3 seconds down. The bar should travel to the lower portion of your chest (nipple line). Elbows at roughly 45–60° from your torso, not flared to 90°.'},
+      {title:'Touch',text:'Touch the bar lightly to your chest — do not bounce. Maintain your brace and arch throughout.'},
+      {title:'Drive',text:'Press the bar explosively back up in a slight arc toward the rack. Squeeze your pecs at the top.'},
+      {title:'Breathing',text:'Inhale on the way down, exhale forcefully on the drive up. On heavy sets, use the Valsalva manoeuvre — hold your breath through the sticking point.'},
+    ],
+    mistakes:['Bouncing the bar off the chest — loses tension and risks rib injury','Elbows flared to 90° — dangerous shoulder stress','Feet leaving the floor — eliminates leg drive and stability','Butt rising off the bench — reduces range of motion','Bar path going straight up — should arc slightly back toward the rack'],
+    cues:['"Bend the bar" — activates lats and creates full-body tightness','Push yourself into the bench, not just the bar up','Chest to bar, not bar to chest','Keep your wrists straight — knuckles to the ceiling'],
+  },
+  {
+    name:'Barbell Overhead Press',category:'UPPER PUSH',equipment:'Barbell, Rack',
+    primary:['Anterior Deltoid','Medial Deltoid'],secondary:['Triceps','Upper Trapezius','Serratus Anterior'],
+    setup:[
+      {title:'Rack Height',text:'Set the bar at upper-chest height. Grip just outside shoulder width with full thumb wrap.'},
+      {title:'Front Rack',text:'Unrack the bar onto the front of your shoulders. Elbows slightly in front of the bar — not pointing straight down.'},
+      {title:'Stance',text:'Feet hip-width apart. Brace your glutes and core — your lower back should not excessively arch.'},
+    ],
+    execution:[
+      {title:'Initiate',text:'Press the bar straight up. At the start, move your head slightly back to allow the bar to pass your face, then push your head back through as the bar clears.'},
+      {title:'Lockout',text:'At full extension overhead, shrug your traps slightly — this is the safe, strong lockout. Arms fully locked.'},
+      {title:'Descent',text:'Lower the bar with control back to the front rack position.'},
+    ],
+    mistakes:['Pressing in front of the face — bar path should be vertical, head moves','Excessive lower back arch — squeeze glutes hard','Not reaching full lockout — shortchanges the upper trap and serratus'],
+    cues:['"Squeeze a coin between your glutes" — stops lumbar hyperextension','Bar travels in a straight line — your head moves, not the bar','Stack your joints — wrist over elbow over shoulder at lockout'],
+  },
+  {
+    name:'Dumbbell Overhead Press',category:'UPPER PUSH',equipment:'Dumbbells, Bench (optional)',
+    primary:['Anterior Deltoid','Medial Deltoid'],secondary:['Triceps','Rotator Cuff'],
+    setup:[{title:'Starting Position',text:'Sit on a bench or stand with feet hip-width. Clean the dumbbells to shoulder height with palms facing forward or neutral. Elbows roughly 90° and slightly in front of the body.'}],
+    execution:[
+      {title:'Press',text:'Drive the dumbbells directly overhead, allowing a natural slight rotation. Do not let them crash together at the top.'},
+      {title:'Lockout',text:'Fully extend the arms. Control the descent back to start.'},
+    ],
+    mistakes:['Flaring elbows too wide — shoulder capsule stress','Arching the lower back — brace core and tuck the pelvis','Using momentum — keep the movement strict'],
+    cues:['"Armpits forward" — keeps elbows in a safe pressing angle','Slow 2-second descent to maximise stimulus'],
+  },
+  {
+    name:'Incline DB Press',category:'UPPER PUSH',equipment:'Dumbbells, Incline Bench',
+    primary:['Upper Pectoralis Major','Anterior Deltoid'],secondary:['Triceps'],
+    setup:[{title:'Bench Angle',text:'Set the bench to 30–45°. Higher than 45° shifts emphasis too far onto the front delts. Sit back fully against the pad. Retract shoulder blades.'}],
+    execution:[
+      {title:'Press',text:'Press the dumbbells up and slightly together — arc, not a straight vertical path. Squeeze the upper chest at the top.'},
+      {title:'Descent',text:'Lower with a 2-second count, feeling a full stretch at the bottom. Elbows at 45–60° to the body.'},
+    ],
+    mistakes:['Too steep an angle — becomes a shoulder press','Elbows flared too wide — shoulder impingement risk','Partial reps — missing the stretch at the bottom'],
+    cues:['Pinch your shoulder blades into the bench','Think "up and in" at the top — arc the dumbbells slightly together'],
+  },
+  {
+    name:'Weighted Dips',category:'UPPER PUSH',equipment:'Parallel Bars, Dip Belt or Weighted Vest',
+    primary:['Lower Pectoralis Major','Triceps'],secondary:['Anterior Deltoid'],
+    setup:[{title:'Grip & Lean',text:'Grip the bars with palms facing in. For chest emphasis, lean forward 15–20°. Shoulders depressed and retracted — do not let them rise to the ears. Attach weight via a dip belt.'}],
+    execution:[
+      {title:'Descent',text:'Lower until upper arms are at least parallel to the floor. Keep elbows from flaring excessively.'},
+      {title:'Drive',text:'Press back up explosively to full lockout. Shoulders stay retracted throughout.'},
+    ],
+    mistakes:['Shoulders rising to ears — maintain depression throughout','Half reps — must reach parallel for chest activation','Too upright when aiming for chest — lean forward'],
+    cues:['"Elbows travel back, not out"','Chest forward — lean into the movement'],
+  },
+  {
+    name:'Close-Grip Bench Press',category:'UPPER PUSH',equipment:'Barbell, Bench, Rack',
+    primary:['Triceps'],secondary:['Pectoralis Major','Anterior Deltoid'],
+    setup:[{title:'Grip Width',text:'Hands shoulder-width apart. Do not go too narrow (wrist strain) or too wide (becomes regular bench). Same body position as regular bench press.'}],
+    execution:[
+      {title:'Descent',text:'Lower the bar to the lower chest with elbows tucked close to the body at roughly 45°. Elbows in — this is the key difference.'},
+      {title:'Drive',text:'Press explosively back to lockout, focusing on squeezing the triceps at the top.'},
+    ],
+    mistakes:['Grip too narrow — excessive wrist stress','Elbows flaring — defeats the purpose','Bouncing off the chest'],
+    cues:['"Elbows in, elbows back"','Think about pushing your elbows toward the ceiling'],
+  },
+  {
+    name:'Arnold Press (DB)',category:'UPPER PUSH',equipment:'Dumbbells, Bench (optional)',
+    primary:['Anterior Deltoid','Medial Deltoid'],secondary:['Triceps','Posterior Deltoid','Rotator Cuff'],
+    setup:[{title:'Start',text:'Hold dumbbells at chin height with palms facing your face (supinated). This is the unique starting position that sets the Arnold Press apart.'}],
+    execution:[
+      {title:'Rotation + Press',text:'As you press overhead, rotate your palms outward so that at the top, your palms face away. This rotation recruits all three deltoid heads.'},
+      {title:'Return',text:'Reverse the rotation as you lower — finish back at the start position with palms facing your face.'},
+    ],
+    mistakes:['Rushing the rotation — the rotation is the key stimulus','Not completing end ranges — both start and finish positions must be fully achieved'],
+    cues:['"Open the book, close the book"','Slow on the way down — control the rotation'],
+  },
+  {
+    name:'Lateral Raise (DB)',category:'UPPER PUSH',equipment:'Dumbbells',
+    primary:['Medial Deltoid'],secondary:['Supraspinatus','Anterior Deltoid'],
+    setup:[{title:'Stance',text:'Stand with feet hip-width. Tilt forward very slightly at the hip. Thumbs slightly higher than pinkies — reduces impingement risk.'}],
+    execution:[
+      {title:'Raise',text:'Raise the dumbbells out to the sides, leading with your elbows and pinky-side of the hand. Stop at shoulder height — do not raise above.'},
+      {title:'Control',text:'Lower with a 2–3 second count. The eccentric is equally important for this movement.'},
+    ],
+    mistakes:['Swinging the weight up — use strict form with lighter weight','Leading with thumbs — raises impingement risk','Going above shoulder height — reduces tension, stresses AC joint','Too heavy — this is an isolation move'],
+    cues:['"Pour a jug of water" — lead with the pinky','Think about raising from the elbow, not the hand','Stop at shoulder height — no higher'],
+  },
+  {
+    name:'Tricep Pushdown (rope)',category:'UPPER PUSH',equipment:'Cable Machine, Rope Attachment',
+    primary:['Triceps (all 3 heads)'],secondary:['Anconeus'],
+    setup:[{title:'Setup',text:'Set cable to highest position. Attach a rope. Stand close to the machine, lean slightly forward, pin your elbows at your sides.'}],
+    execution:[
+      {title:'Push',text:'Drive the rope down and slightly out at the bottom — rope should split apart as hands reach full extension. Hold the contraction for 1 second.'},
+      {title:'Return',text:'Allow the rope to travel back up — elbows stay pinned, only the forearm moves. Do not let the weight stack touch between reps.'},
+    ],
+    mistakes:['Elbows drifting forward — must stay pinned throughout','Using momentum — a strict squeeze is the goal','Not splitting the rope at the bottom — misses peak contraction'],
+    cues:['"Elbows pinned, hands move"','Split the rope apart at the bottom'],
+  },
+  {
+    name:'Push Press',category:'UPPER PUSH',equipment:'Barbell or Dumbbells',
+    primary:['Anterior Deltoid','Triceps'],secondary:['Quadriceps','Gluteus Maximus','Core'],
+    setup:[{title:'Position',text:'Bar in the front rack (barbell) or at shoulder height (DBs). Feet hip-width.'}],
+    execution:[
+      {title:'Dip',text:'Quick, shallow dip — bend the knees about 10–15cm. Keep the torso vertical — do not lean forward.'},
+      {title:'Drive',text:'Explosively drive through the legs to generate upward momentum, then press overhead. Leg drive allows 20–30% more load than a strict press.'},
+      {title:'Lockout',text:'Complete the press to full lockout overhead. Control the bar back to start.'},
+    ],
+    mistakes:['Torso leaning forward on the dip — drive becomes less efficient and stresses the lower back','Dipping too deep — small, explosive dip; not a squat'],
+    cues:['"Dip vertical, drive vertical"','The bar should feel weightless at the top of the leg drive — use that window to lock out'],
+  },
+  {
+    name:'Push Jerk',category:'POWER',equipment:'Barbell or Dumbbells',
+    primary:['Anterior Deltoid','Triceps'],secondary:['Quadriceps','Core'],
+    setup:[{title:'Same as Push Press',text:'Same starting position as the push press.'}],
+    execution:[
+      {title:'Drive',text:'Identical leg drive to the push press. Instead of pressing out, drop into a quarter squat to receive the bar overhead.'},
+      {title:'Receive',text:'Catch the bar in a quarter squat with arms fully locked out. Stand to complete.'},
+    ],
+    mistakes:['Not dropping under the bar — results in a push press, not a jerk','Arms not locked at receive — dangerous with heavy loads'],
+    cues:['"Dip-drive-dip"','Jump the bar up, then drop under it'],
+  },
+  // ── UPPER PULL ──────────────────────────────────────
+  {
+    name:'Barbell Bent-Over Row',category:'UPPER PULL',equipment:'Barbell',
+    primary:['Latissimus Dorsi','Rhomboids','Middle Trapezius'],secondary:['Rear Deltoid','Biceps','Erector Spinae'],
+    setup:[
+      {title:'Hinge',text:'Stand over the bar, feet hip-width. Hinge at the hips to 45–70° — more upright targets upper back; more horizontal targets the lats.'},
+      {title:'Grip',text:'Double overhand grip slightly wider than shoulder width. Maintain a neutral spine — do not round the lower back.'},
+      {title:'Brace',text:'Before each rep, take a breath and brace your core. The back angle should not change throughout the set.'},
+    ],
+    execution:[
+      {title:'Pull',text:'Drive your elbows past your torso, pulling the bar toward your lower chest or upper abdomen. Lead with your elbows, not your hands. Squeeze scapulae together at the top.'},
+      {title:'Lower',text:'Lower the bar with control — 2 seconds. Allow full arm extension and slight scapular protraction at the bottom for a full stretch.'},
+    ],
+    mistakes:['Lower back rounding — the most common and dangerous error; reduce weight','Using leg drive to jerk the weight — each rep should be controlled','Torso rising on each rep — back angle stays fixed'],
+    cues:['"Drive elbows to the ceiling"','Think about putting your elbows in your back pockets','Chest proud, back flat'],
+  },
+  {
+    name:'Weighted Pull-Up',category:'UPPER PULL',equipment:'Pull-Up Bar, Dip Belt or Weighted Vest',
+    primary:['Latissimus Dorsi'],secondary:['Biceps','Rear Deltoid','Lower Trapezius','Rhomboids'],
+    setup:[
+      {title:'Grip',text:'Pronated (overhand) grip, slightly wider than shoulder width. Wider grip increases lat stretch; shoulder-width allows fuller range of motion.'},
+      {title:'Dead Hang',text:'Start from a full dead hang — arms fully extended, shoulders relaxed. This is the correct start position.'},
+      {title:'Hollow Body',text:'Before pulling, engage your core and create a slight hollow body — tuck the pelvis and squeeze the glutes.'},
+    ],
+    execution:[
+      {title:'Initiate',text:'Begin the pull by depressing your shoulder blades — "put your shoulder blades in your back pockets." This engages the lats before the biceps take over.'},
+      {title:'Pull',text:'Pull your chest toward the bar, leading with your elbows. Aim to get your chin clearly over the bar.'},
+      {title:'Descent',text:'Lower with full control over 2–3 seconds back to a full dead hang. No kipping for strength work.'},
+    ],
+    mistakes:['Starting from a bent-arm hang — removes the full stretch','Chin barely clearing the bar — aim for collarbone to bar','Neck craning to get chin over — the chin clears because your chest rises'],
+    cues:['"Elbows to hips" — visualise driving elbows down and back','Chest to bar, not chin to bar','Start with a proud chest — open the ribcage before you pull'],
+  },
+  {
+    name:'Lat Pulldown / Assisted Pull-Up',category:'UPPER PULL',equipment:'Cable Machine, Lat Bar Attachment',
+    primary:['Latissimus Dorsi'],secondary:['Biceps','Rear Deltoid','Rhomboids'],
+    setup:[{title:'Seat',text:'Adjust the thigh pad firmly. Sit tall with a slight lean back — 5–10°. Take a pronated grip slightly wider than shoulders. Arms fully extended at the top.'}],
+    execution:[
+      {title:'Pull',text:'Initiate by depressing shoulder blades, then pull the bar toward your upper chest. Lead with your elbows — drive them toward your hips.'},
+      {title:'Return',text:'Control the bar back to start — full arm extension, let shoulder blades protract and rise slightly for the full lat stretch.'},
+    ],
+    mistakes:['Pulling to the neck — always pull to the chest','Using too much lean — becomes a chest-supported row','Not reaching full extension at the top'],
+    cues:['"Elbows to hips"','Chest tall — pull the bar into your chest like a chest press in reverse'],
+  },
+  {
+    name:'Single-Arm DB Row',category:'UPPER PULL',equipment:'Dumbbell, Bench',
+    primary:['Latissimus Dorsi','Rhomboids'],secondary:['Rear Deltoid','Biceps','Lower Trapezius'],
+    setup:[{title:'Brace Position',text:'Place one hand and same-side knee on a flat bench. Back parallel to the floor. Hold the dumbbell in a neutral grip.'}],
+    execution:[
+      {title:'Row',text:'Pull the dumbbell up toward your hip — not your armpit. The elbow should drive past the torso and finish high. Allow a full stretch at the bottom.'},
+      {title:'Squeeze',text:'Hold the peak contraction for 1 second, feeling the shoulder blade retract and depress. Lower fully to a straight-arm stretch.'},
+    ],
+    mistakes:['Rowing to the armpit — aim for the hip, not the armpit','Torso rotation to add momentum — torso stays fixed','No stretch at the bottom — partial range robs the lat'],
+    cues:['"Elbow to hip, not armpit"','Let the weight hang at the bottom — feel the lat stretch'],
+  },
+  {
+    name:'Cable Close-Grip Row',category:'UPPER PULL',equipment:'Cable Machine, Close-Grip Handle',
+    primary:['Middle Trapezius','Rhomboids'],secondary:['Latissimus Dorsi','Biceps','Rear Deltoid'],
+    setup:[{title:'Seat',text:'Sit at the low cable row station, feet on pads, knees slightly bent. Grip the close-grip handle. Sit tall with a slight forward lean, arms extended — flat back throughout.'}],
+    execution:[
+      {title:'Row',text:'Initiate by squeezing shoulder blades together, then pull the handle to your lower abdomen. Elbows stay close to the body.'},
+      {title:'Squeeze',text:'Pause 1–2 seconds at the fully contracted position. Slowly return to full extension allowing full scapular protraction.'},
+    ],
+    mistakes:['Using the lower back to pull — rock forward to reach, pull back with arms only','Flaring elbows wide','No pause at contraction'],
+    cues:['"Pinch a pencil between your shoulder blades at the top"','Chest stays proud throughout'],
+  },
+  {
+    name:'Chest-Supported DB Row',category:'UPPER PULL',equipment:'Dumbbells, Incline Bench',
+    primary:['Latissimus Dorsi','Rhomboids','Middle Trapezius'],secondary:['Rear Deltoid','Biceps'],
+    setup:[{title:'Setup',text:'Set an incline bench to 30–45°. Lie face down with chest against the pad. Let the dumbbells hang directly below your shoulders, arms extended.'}],
+    execution:[
+      {title:'Row',text:'Retract your shoulder blades first, then row both dumbbells upward, driving elbows past the level of the bench. Squeeze hard at the top.'},
+      {title:'Return',text:'Lower fully — complete stretch at the bottom. Because the chest is supported, there is no lower back momentum possible.'},
+    ],
+    mistakes:['Chest leaving the bench — keep contact throughout','Using a shrugging motion — depress blades before pulling','Not going heavy enough — this is one of the safest rows, load it properly'],
+    cues:['Think about bending a barbell around your body','Let gravity give you a full stretch at the bottom'],
+  },
+  {
+    name:'Face Pulls (cable/band)',category:'UPPER PULL',equipment:'Cable Machine with Rope, or Band',
+    primary:['Rear Deltoid','External Rotators'],secondary:['Middle Trapezius','Rhomboids'],
+    setup:[{title:'Height',text:'Set the cable to face height or slightly above. Grip the rope with thumbs pointing backward. Step back so there is tension at the start.'}],
+    execution:[
+      {title:'Pull',text:'Pull the rope toward your face, separating it as you pull so hands end up on either side of your head. Upper arms roughly parallel to the floor.'},
+      {title:'External Rotation',text:'At the end, hands should be behind your head with thumbs pointing backward — this is full external rotation. Hold 1–2 seconds.'},
+    ],
+    mistakes:['Pulling below face height — becomes a row','Not separating the rope — limits external rotation','Using too much weight — shoulder health exercise; moderate load only'],
+    cues:['"Thumbs to ears" — cue for external rotation','Think about making a "double bicep" pose at the end of each rep'],
+  },
+  {
+    name:'Rear Delt Fly (DB)',category:'UPPER PULL',equipment:'Dumbbells',
+    primary:['Posterior Deltoid'],secondary:['Middle Trapezius','Rhomboids','Infraspinatus'],
+    setup:[{title:'Hinge',text:'Hinge forward until torso is nearly parallel to the floor. Hold dumbbells hanging straight down from the shoulders, elbows soft.'}],
+    execution:[
+      {title:'Raise',text:'Raise dumbbells out to the sides in a wide arc — lead with elbows. Thumbs point toward the floor at the top (slight internal rotation).'},
+      {title:'Control',text:'Lower with a 2–3 second eccentric. Hold the peak contraction. The rear delt responds well to slow, deliberate movement.'},
+    ],
+    mistakes:['Raising too heavy and shrugging — trapezius takes over','Straight arm raise — keep a soft elbow bend','Torso raising on each rep'],
+    cues:['"Thumbs down, pinkies up" — keeps the rear delt engaged','Think about opening a double door with your elbows'],
+  },
+  {
+    name:'EZ-Bar Curl',category:'UPPER PULL',equipment:'EZ Bar',
+    primary:['Biceps Brachii'],secondary:['Brachialis','Brachioradialis'],
+    setup:[{title:'Grip',text:'Take the angled (EZ) portion at shoulder width. This semi-supinated grip reduces wrist stress. Pin your elbows against your sides — they must not move throughout the set.'}],
+    execution:[
+      {title:'Curl',text:'Curl the bar up in a smooth arc, supinating the wrists as you raise. At the top, biceps fully contracted.'},
+      {title:'Lower',text:'Lower the bar to full extension at the bottom — do not stop at a 45° partial. Fully straighten the arms every rep.'},
+    ],
+    mistakes:['Swinging the torso — if you need to swing, the weight is too heavy','Elbows drifting forward — pin them to your sides','Partial reps — missing the full extension loses the long head stretch stimulus'],
+    cues:['"Elbows are pins in a wall"','Squeeze at the top — crack a walnut in the elbow crease','Full extension at the bottom — every rep'],
+  },
+  {
+    name:'Hammer Curl',category:'UPPER PULL',equipment:'Dumbbells',
+    primary:['Brachialis','Brachioradialis'],secondary:['Biceps Brachii'],
+    setup:[{title:'Grip',text:'Hold dumbbells with a neutral grip (palms facing each other). This shifts emphasis to the brachialis and brachioradialis — the muscles that add arm thickness underneath the bicep.'}],
+    execution:[{title:'Curl',text:'Curl both dumbbells keeping the neutral grip throughout — do not rotate the wrist. Full extension at the bottom.'}],
+    mistakes:['Rotating to a supinated grip at the top — becomes a regular curl','Swinging — keep it strict'],
+    cues:['"Thumbs to the ceiling all the way through"'],
+  },
+  {
+    name:'Incline DB Curl',category:'UPPER PULL',equipment:'Dumbbells, Incline Bench',
+    primary:['Biceps Brachii (Long Head)'],secondary:['Brachialis'],
+    setup:[{title:'Setup',text:'Set the bench to 45–60°. Sit back with arms hanging straight down behind your body. This puts the long head of the bicep in a stretched position before the curl even begins.'}],
+    execution:[{title:'Curl',text:'Curl both dumbbells with a supinating motion. You\'ll feel a deep stretch in the bicep at the bottom. Full extension every rep.'}],
+    mistakes:['Bringing the upper arm forward — defeats the long-head emphasis','Going too heavy — the stretched position makes this more injury-prone with excessive load'],
+    cues:['"Let the arms hang behind the body" — maintain this shoulder position throughout'],
+  },
+  {
+    name:'Skull Crushers (EZ-Bar)',category:'UPPER PUSH',equipment:'EZ Bar, Bench',
+    primary:['Triceps (Long Head)'],secondary:['Medial and Lateral Tricep Heads'],
+    setup:[{title:'Lie Back',text:'Lie on a flat bench. Hold the EZ bar with a narrow grip (inner grip position). Arms extended directly over your chest — perpendicular to the floor. Upper arms remain fixed and vertical throughout — only forearms move.'}],
+    execution:[
+      {title:'Lower',text:'Bend at the elbow, lowering the bar toward your forehead — or slightly behind the head for a greater long-head stretch. Elbows point to the ceiling.'},
+      {title:'Extend',text:'Press back to full extension by contracting the triceps. Do not let elbows flare as you fatigue.'},
+    ],
+    mistakes:['Upper arms moving backward on the descent — keep arms vertical','Elbows flaring wide — keep them narrow and fixed','Rushing — slow eccentrics significantly increase stimulus'],
+    cues:['"Upper arms are lamp posts — only forearms move"','Lower behind the head slightly for a deeper long-head stretch'],
+  },
+  // ── LOWER PUSH (QUAD DOMINANT) ───────────────────────
+  {
+    name:'Back Squat',category:'LOWER PUSH',equipment:'Barbell, Squat Rack',
+    primary:['Quadriceps','Gluteus Maximus'],secondary:['Hamstrings','Adductors','Erector Spinae','Core'],
+    setup:[
+      {title:'Bar Position',text:'High bar (bar on traps/upper back) for more quad dominance and upright torso. Low bar (on rear deltoids) allows more forward lean and posterior chain involvement. This programme defaults to high bar.'},
+      {title:'Stance',text:'Slightly wider than hip-width, toes pointed out 20–30°. The goal is knees track over toes throughout.'},
+      {title:'Brace',text:'Take a large breath into your belly, brace your core 360° like you\'re about to take a punch — the Valsalva manoeuvre. Hold it for the descent and drive, exhale at the top.'},
+    ],
+    execution:[
+      {title:'Descent',text:'Simultaneously push your knees out over your toes and sit your hips back and down. Do not collapse the knees inward. Descend until your hip crease is below your knee cap — "breaking parallel."'},
+      {title:'Drive',text:'Drive the floor away, pushing your knees outward. Think about pushing through the whole foot — heel, ball and toes. Hips and shoulders rise at the same rate.'},
+      {title:'Lockout',text:'Stand fully tall at the top. Squeeze your glutes. Do not hyperextend the lower back.'},
+    ],
+    mistakes:['"Butt wink" (pelvic tuck at the bottom) — caused by poor hip or ankle mobility; work on mobility first','Knees caving inward — push knees out; use a light band as a cue','Rising on the toes — work on ankle dorsiflexion mobility','Good morning squat (hips rise faster than shoulders) — weight is too heavy','Shallow squats — must break parallel'],
+    cues:['"Spread the floor" — push feet outward without moving them','Knees follow the toes — always','Drive through the whole foot'],
+  },
+  {
+    name:'Goblet Squat',category:'LOWER PUSH',equipment:'Dumbbell or Kettlebell',
+    primary:['Quadriceps','Gluteus Maximus'],secondary:['Core','Adductors'],
+    setup:[{title:'Grip',text:'Hold a single dumbbell or kettlebell at chest height with both hands cupped under the top. Feet slightly wider than shoulder-width, toes out 30–45°.'}],
+    execution:[{title:'Squat',text:'Keep the dumbbell at chest height throughout. Descend deeply — aim to touch your elbows to your knees at the bottom. Use your elbows to push your knees apart if they cave. Push through the whole foot back to standing.'}],
+    mistakes:['Letting the dumbbell drop — counterbalance must stay at chest height','Not going deep enough — the goblet squat is designed for full depth'],
+    cues:['"Elbows inside knees at the bottom"','Great drill for learning squat depth with an upright torso'],
+  },
+  {
+    name:'Front Squat / Goblet Squat',category:'LOWER PUSH',equipment:'Barbell or Dumbbell',
+    primary:['Quadriceps'],secondary:['Gluteus Maximus','Core','Upper Back'],
+    setup:[{title:'Bar Position (Front Squat)',text:'Bar sits in the "front rack" — on the front of the shoulders, resting on the fingertips with elbows high. The elbows must stay parallel to the floor throughout to avoid the bar rolling forward.'}],
+    execution:[{title:'Descent',text:'Significantly more upright torso than the back squat — this transfers more load to the quads. Knees track over toes, full depth required. Keep elbows high as you drive up.'}],
+    mistakes:['Elbows dropping — the most common front squat failure; practise the front rack position separately','Not enough thoracic mobility — work on upper back extension'],
+    cues:['"Elbows high and proud — higher than the bar"'],
+  },
+  {
+    name:'Bulgarian Split Squat (DB)',category:'LOWER PUSH',equipment:'Dumbbells, Bench',
+    primary:['Quadriceps','Gluteus Maximus'],secondary:['Hamstrings','Adductors','Core'],
+    setup:[{title:'Rear Foot',text:'Place the top of your rear foot on a bench behind you. Step far enough forward that your front shin is vertical when you descend. Hold dumbbells at your sides. Maintain a tall, upright torso.'}],
+    execution:[
+      {title:'Descent',text:'Lower your rear knee toward the floor — hover 1–2cm without touching. Front knee tracks over the toes.'},
+      {title:'Drive',text:'Drive through the heel of the front foot back to the starting position. All power comes from the front leg — the rear leg is for balance only.'},
+    ],
+    mistakes:['Front foot too close to bench — front shin angles forward excessively','Rear leg doing the work — it\'s a passenger','Torso collapsing forward'],
+    cues:['"Front shin vertical"','All weight and drive is in the front heel'],
+  },
+  {
+    name:'Walking Lunges (DB)',category:'LOWER PUSH',equipment:'Dumbbells',
+    primary:['Quadriceps','Gluteus Maximus'],secondary:['Hamstrings','Calves','Core'],
+    setup:[{title:'Start',text:'Stand tall with dumbbells at your sides. Take a long stride forward — enough that your back knee can lower close to the floor.'}],
+    execution:[{title:'Step',text:'Step forward, lower your rear knee to hover 1cm above the floor. Torso stays upright — do not lean forward. Drive through the front heel to bring the rear foot forward for the next step. Continue alternating.'}],
+    mistakes:['Knee touching the floor — hover, maintain tension','Short stride — leads to front knee passing toes aggressively','Torso collapsing forward'],
+    cues:['"Step, drop, drive"','Back knee to the floor — front shin stays vertical'],
+  },
+  {
+    name:'Step-Up (high box, DB)',category:'LOWER PUSH',equipment:'Dumbbells, Box or Bench',
+    primary:['Quadriceps','Gluteus Maximus'],secondary:['Hamstrings','Core'],
+    setup:[{title:'Box Height',text:'Use a box that brings your thigh to at least parallel when your foot is on it. Higher box means more glute and hip extension demand.'}],
+    execution:[{title:'Drive',text:'Place one foot fully on the box. Drive through that heel only — do not push off the rear foot. The trailing leg should simply come up due to the front leg\'s effort. Stand tall on top, pause briefly, lower with control.'}],
+    mistakes:['Pushing off the back foot — removes single-leg loading','Leaning too far forward — stay as upright as possible'],
+    cues:['"All pressure in the heel of the box foot"','The back foot is just along for the ride'],
+  },
+  // ── LOWER PULL (HIP DOMINANT) ────────────────────────
+  {
+    name:'Romanian Deadlift',category:'LOWER PULL',equipment:'Barbell or Dumbbells',
+    primary:['Hamstrings','Gluteus Maximus'],secondary:['Erector Spinae','Adductors'],
+    setup:[
+      {title:'Grip',text:'Hold the bar with a double overhand grip, hands just outside your hips. Stand tall with a soft knee bend — not locked out, not squatted.'},
+      {title:'Spine',text:'Maintain a neutral spine throughout. No rounding of the lower back at any point — the most important technical requirement.'},
+    ],
+    execution:[
+      {title:'Hinge',text:'Push your hips back as far as possible — think about touching the wall behind you. Let the bar travel close to your legs as you descend. The knees stay relatively fixed in their slightly bent position.'},
+      {title:'Depth',text:'Lower until you feel a significant hamstring stretch — typically mid-shin for most athletes. Do not go lower than your mobility allows with a neutral spine.'},
+      {title:'Drive',text:'Drive your hips forward to return to standing. Squeeze your glutes hard at the top. The movement is driven by the hips, not the lower back.'},
+    ],
+    mistakes:['Bending the knees too much — becomes a squat','Rounding the lower back — reduce range until you have the mobility','Bar drifting away from the legs — bar should skim the shins/thighs throughout'],
+    cues:['"Hips to the wall behind you"','Hamstrings like guitar strings — feel the tension build','Bar stays glued to your legs throughout'],
+  },
+  {
+    name:'Barbell Hip Thrust',category:'LOWER PULL',equipment:'Barbell, Bench, Barbell Pad',
+    primary:['Gluteus Maximus'],secondary:['Hamstrings','Adductors','Core'],
+    setup:[
+      {title:'Setup',text:'Sit on the floor with your upper back against a bench at shoulder blade level. Roll the barbell over your hips — use a pad. Feet flat on the floor, hip-width, toes slightly outward.'},
+      {title:'Foot Position',text:'Adjust feet so shins are vertical at the top. Too close means excessive hamstring, not glute.'},
+    ],
+    execution:[
+      {title:'Drive',text:'Drive through both heels to extend the hips up until thighs and torso form a straight line — full hip extension.'},
+      {title:'Pause',text:'Hold the top position for 1–2 seconds. Squeeze glutes as hard as possible. Chin tucked — looking at the ceiling causes lumbar hyperextension.'},
+    ],
+    mistakes:['Chin not tucked — causes lower back arching and reduces glute activation','Feet too close — hamstrings take over','Not reaching full hip extension'],
+    cues:['"Chin tucked, ribcage down"','Drive through the heels — feel the glutes, not the hamstrings'],
+  },
+  {
+    name:'Single-Leg RDL (DB)',category:'LOWER PULL',equipment:'Dumbbells',
+    primary:['Hamstrings','Gluteus Maximus','Gluteus Medius'],secondary:['Core','Erector Spinae'],
+    setup:[{title:'Balance',text:'Stand on one leg with a soft knee bend. Hold one or two dumbbells in front of your thighs.'}],
+    execution:[{title:'Hinge',text:'Hinge forward at the hip while extending the free leg behind you as a counterbalance. Keep your hips square to the floor — do not let the free hip rotate out. Lower until you feel a strong hamstring stretch. Return by driving through the heel of the standing leg.'}],
+    mistakes:['Hips rotating open — keep them level','Rounding the lower back','Using the free leg for balance push-off — it\'s a counterbalance only'],
+    cues:['"Hip hinge like a door — only hinges, does not rotate"'],
+  },
+  {
+    name:'Good Morning',category:'LOWER PULL',equipment:'Barbell',
+    primary:['Erector Spinae','Hamstrings'],secondary:['Gluteus Maximus','Adductors'],
+    setup:[{title:'Bar Position',text:'Bar in a high-bar squat position. Feet hip-width, knees soft.'}],
+    execution:[{title:'Hinge',text:'Hinge at the hips — not a squat — while maintaining a perfectly neutral spine. The bar travels downward as your torso approaches parallel. Drive hips forward to return to standing.'}],
+    mistakes:['Rounding the lower back — far more dangerous here than in an RDL; reduce load immediately','Squatting instead of hinging — knees stay relatively fixed','Going too heavy — a supplemental movement; heavy loading significantly increases injury risk'],
+    cues:['"Bow to the audience"','Treat it like an RDL with the bar on your back','Never go to failure on good mornings'],
+  },
+  {
+    name:'Nordic Hamstring Curl',category:'LOWER PULL',equipment:'Partner or Anchored Feet',
+    primary:['Hamstrings (Eccentric)'],secondary:['Gluteus Maximus','Calves'],
+    setup:[{title:'Position',text:'Kneel on a mat with feet anchored. Hold your torso upright, arms folded across chest or extended ready to catch yourself.'}],
+    execution:[{title:'Eccentric',text:'Allow your body to fall forward as slowly as possible — fighting gravity the entire way with your hamstrings. Catch yourself with your hands before you face-plant, push back up with your arms and reset.'}],
+    mistakes:['Dropping too fast — the entire point is a controlled descent','Hips breaking — maintain a stiff plank from knee to shoulder'],
+    cues:['"Hold back the fall as long as possible"','3–5 second lowering phase minimum','One of the most powerful hamstring injury prevention exercises known'],
+  },
+  {
+    name:'Barbell Glute Bridge (pause)',category:'LOWER PULL',equipment:'Barbell, Barbell Pad',
+    primary:['Gluteus Maximus'],secondary:['Hamstrings','Core'],
+    setup:[{title:'Position',text:'Lie completely on the floor. Bar across the hips with pad. Feet flat, hip-width, shins vertical at the top.'}],
+    execution:[{title:'Bridge',text:'Drive through both heels to lift the hips. Squeeze the glutes maximally and hold the top position for 2 seconds. Lower hips back to the floor between each rep — reset the brace and drive again.'}],
+    mistakes:['Driving from the lower back instead of the glutes — squeeze glutes before you drive','Feet too close or far — shins should be vertical at the top'],
+    cues:['"Squeeze the glutes before you drive — activate before loading"'],
+  },
+  {
+    name:'Lying Leg Curl',category:'LOWER PULL',equipment:'Leg Curl Machine',
+    primary:['Hamstrings'],secondary:['Gastrocnemius'],
+    setup:[{title:'Position',text:'Lie face down. Adjust the pad to sit just above the heel. The knee joint should align with the machine\'s pivot point. Plantarflex (point) feet slightly for increased hamstring isolation.'}],
+    execution:[{title:'Curl',text:'Curl the pad toward your glutes through a full range. Squeeze the hamstrings for 1 second at the top. Lower with a 2–3 second eccentric. Do not let hips rise off the pad.'}],
+    mistakes:['Hips rising off the pad — reduce the load','Partial range — bring the pad as close to the glutes as possible'],
+    cues:['"Point the toes and squeeze the hamstrings at the top"'],
+  },
+  {
+    name:'Cable / Band Kickback',category:'LOWER PULL',equipment:'Cable Machine or Resistance Band',
+    primary:['Gluteus Maximus'],secondary:['Hamstrings'],
+    setup:[{title:'Setup',text:'Attach an ankle strap to the lowest cable position. Stand facing the machine holding it for balance. Lean slightly forward. Keep the working leg\'s knee soft throughout.'}],
+    execution:[{title:'Kick',text:'Drive the working leg back and slightly upward, extending at the hip. Keep the movement slow and controlled. Squeeze the glute hard at end range and hold 1 second. Return with control.'}],
+    mistakes:['Rotating the hip outward — becomes hip external rotation, not glute extension','Excessive range — quality squeeze beats large range; maintain pelvic stability'],
+    cues:['"Squeeze the glute at the top — hold 1 second"'],
+  },
+  {
+    name:'Seated Calf Raise',category:'LOWER PUSH',equipment:'Seated Calf Raise Machine',
+    primary:['Soleus'],secondary:['Gastrocnemius'],
+    setup:[{title:'Key Note',text:'The seated version primarily targets the soleus because the bent knee shortens the gastrocnemius and removes it from the movement. Critical for complete calf development.'}],
+    execution:[{title:'Full Range',text:'Lower the heel as far as possible — full Achilles and soleus stretch at the bottom, pause 1 second. Drive up to full plantarflexion peak contraction, pause 1 second at the top.'}],
+    mistakes:['Partial range — the stretch at the bottom is the key stimulus for the soleus','Bouncing at the bottom — hold the stretch'],
+    cues:['"Full stretch, full squeeze — every rep"'],
+  },
+  {
+    name:'Standing Calf Raise',category:'LOWER PUSH',equipment:'Calf Raise Machine, Smith Machine, or Step',
+    primary:['Gastrocnemius'],secondary:['Soleus'],
+    setup:[{title:'Position',text:'Stand with the balls of your feet on the edge of a step or platform. Let heels drop below the platform level for maximum stretch.'}],
+    execution:[{title:'Raise',text:'Rise up on to the balls of your feet as high as possible. Hold the peak for 1–2 seconds. Lower slowly — 3 seconds — until heels are below platform level.'}],
+    mistakes:['Not using a step — flat floor removes the bottom stretch, the primary stimulus','Bouncing — the calves are resistant to training; slow eccentrics and pauses are essential'],
+    cues:['"3 seconds down, 1 second up, 1 second hold at top"'],
+  },
+  // ── FULL BODY ────────────────────────────────────────
+  {
+    name:'Conventional Deadlift',category:'FULL BODY',equipment:'Barbell',
+    primary:['Posterior Chain (Hamstrings, Glutes, Erectors)'],secondary:['Quadriceps','Trapezius','Latissimus Dorsi','Core'],
+    setup:[
+      {title:'Bar Position',text:'Stand with the bar over your mid-foot — about 1 inch from your shins. Feet hip-width, toes slightly outward.'},
+      {title:'Grip',text:'Hinge down and grip the bar just outside your legs. Double overhand to start; add a mixed or hook grip for heavier loads. Engage your lats — "protect your armpits" — before lifting.'},
+      {title:'Spine & Hips',text:'Take a big breath and brace hard. Back flat — not rounded. Hips higher than knees, shoulders above or even with hips. Create tension throughout before the bar leaves the floor.'},
+    ],
+    execution:[
+      {title:'The Pull',text:'Think of it as pushing the floor away rather than pulling the bar up. Drive through your legs while maintaining your torso angle. The bar should travel in a perfectly straight vertical line.'},
+      {title:'Through the Knees',text:'As the bar passes the knees, drive your hips through — squeeze the glutes and stand tall. Do not hyperextend at the top.'},
+      {title:'Lowering',text:'Hinge at the hip to lower the bar — do not bend the knees first. Push the hips back as the bar passes the knee, then bend the knees to set the bar down.'},
+    ],
+    mistakes:['Bar drifting away from the body — it should skim the shins','Jerking the bar off the floor — take the slack out slowly before the big drive','Lower back rounding — reduce weight or range; never compromise the spine','Hips shooting up first — maintain the torso angle as the bar leaves the floor'],
+    cues:['"Push the floor away"','Take the slack out — feel tension before the big drive','Bar path is a vertical line','Protect your armpits — engage lats before lifting'],
+  },
+  {
+    name:'Trap Bar Deadlift',category:'FULL BODY',equipment:'Trap Bar (Hex Bar)',
+    primary:['Quadriceps','Gluteus Maximus','Hamstrings'],secondary:['Erector Spinae','Trapezius','Core'],
+    setup:[{title:'Position',text:'Stand inside the trap bar, feet hip-width. Handles at your sides. Hinge down and grip the handles — the neutral grip reduces wrist and shoulder stress. More upright torso than a conventional deadlift — sit into the lift more.'}],
+    execution:[{title:'Drive',text:'Push the floor away while maintaining a neutral spine. The bar naturally centres your load which is more forgiving than a barbell.'}],
+    mistakes:['Allowing hips to shoot up — torso angle stays fixed'],
+    cues:['An excellent variation for those with lower back sensitivity','Think of it as a squat-deadlift hybrid'],
+  },
+  {
+    name:'Sumo Deadlift',category:'FULL BODY',equipment:'Barbell',
+    primary:['Gluteus Maximus','Adductors','Quadriceps'],secondary:['Hamstrings','Erector Spinae'],
+    setup:[{title:'Stance',text:'Feet significantly wider than shoulder-width, toes pointed outward 45–60°. Grip the bar with a narrower grip (inside the legs). More upright torso than conventional. Hips start lower and closer to the bar.'}],
+    execution:[
+      {title:'Drive',text:'Push the floor outward through your feet (external rotation force) as you drive upward. This activates the glutes and adductors which are the prime movers.'},
+      {title:'Lockout',text:'Hips and shoulders lock out simultaneously. Do not hyperextend at the top.'},
+    ],
+    mistakes:['Knees caving inward — push outward aggressively throughout','Starting with hips too high — becomes a stiff-leg deadlift with a wide stance'],
+    cues:['"Push the floor apart" — external rotation force through both feet','Stand tall — do not lean back'],
+  },
+  {
+    name:'KB / DB Swing',category:'FULL BODY',equipment:'Kettlebell or Dumbbell',
+    primary:['Gluteus Maximus','Hamstrings'],secondary:['Core','Erector Spinae','Shoulder Stabilisers'],
+    setup:[{title:'Position',text:'Feet shoulder to hip-width, toes slightly out. KB/DB on the floor slightly in front. Hinge to grip it — not a squat.'}],
+    execution:[
+      {title:'Hike',text:'Pull the weight back between your legs aggressively — "hike" it like a football. This loads the hamstrings and glutes.'},
+      {title:'Snap',text:'Drive your hips forward explosively — this is the power source. Arms do not pull the weight up; the hip snap does. At the top, squeeze glutes hard with the weight floating at chest height.'},
+      {title:'Re-hinge',text:'As the weight descends, hinge again — push hips back, maintain flat back. Absorb the momentum and load the hamstrings for the next rep.'},
+    ],
+    mistakes:['Squatting instead of hinging — KB should go between thighs, not knees','Using arms to pull the weight up — arms are just a connection; hips create the power','Rounding the lower back at the bottom'],
+    cues:['"Hips like a mousetrap — snap them shut"','Arms are ropes attached to a cannonball','Hike, snap, float — then re-hinge'],
+  },
+  {
+    name:"Farmer's Carry",category:'FULL BODY',equipment:"Dumbbells, Kettlebells, or Farmer's Walk Handles",
+    primary:['Trapezius','Core','Grip'],secondary:['Quadriceps','Glutes','Erector Spinae','Shoulders'],
+    setup:[{title:'Load',text:'Pick up a heavy dumbbell or kettlebell in each hand. Choose a weight that challenges your grip and posture but allows you to walk for the prescribed distance without form breakdown.'}],
+    execution:[{title:'Walk',text:'Stand tall — chest up, shoulder blades retracted and depressed. Walk with purpose, taking controlled steps. Do not let the weights pull your shoulders forward or cause lateral trunk sway.'}],
+    mistakes:['Shoulders rounded forward — weights too heavy or distance too long','Lateral trunk sway — brace the core harder','Looking at the floor — head up, eyes forward'],
+    cues:['"Walk like you own the gym"','Shoulder blades in your back pockets','Tall spine, long neck'],
+  },
+  // ── CORE ─────────────────────────────────────────────
+  {
+    name:'Plank Hold',category:'CORE',equipment:'None',
+    primary:['Transverse Abdominis','Rectus Abdominis'],secondary:['Glutes','Erector Spinae','Shoulder Stabilisers'],
+    setup:[{title:'Position',text:'Forearms on the floor, elbows under shoulders. Feet hip-width. Body forms a straight line from head to heel — no sagging hips, no raised hips.'}],
+    execution:[{title:'Brace',text:'Apply a posterior pelvic tilt — tuck the pelvis slightly. Squeeze your glutes. Brace your entire core 360°. Breathe steadily in through the nose, out through pursed lips.'}],
+    mistakes:['Hips sagging — squeeze glutes and engage core','Hips too high (piked) — lower to a straight line','Breath holding — breathe throughout','Head dropping — neutral spine including the neck'],
+    cues:['"Posterior pelvic tilt — flatten your lower back"','Squeeze your glutes as hard as possible','If you\'re comfortable, you\'re not doing it right'],
+  },
+  {
+    name:'Ab Wheel Rollout',category:'CORE',equipment:'Ab Wheel',
+    primary:['Rectus Abdominis','Transverse Abdominis'],secondary:['Latissimus Dorsi','Shoulder Stabilisers','Hip Flexors'],
+    setup:[{title:'Start',text:'Kneel on a mat with the ab wheel directly under your shoulders. Brace your core hard and apply a posterior pelvic tilt.'}],
+    execution:[
+      {title:'Roll Out',text:'Roll the wheel forward while keeping your core braced and hips fixed — do not let your hips shoot back or your lower back arch. Roll as far as you can while maintaining a neutral spine.'},
+      {title:'Return',text:'Pull the wheel back using your core and lats — squeeze hard. Do not use momentum.'},
+    ],
+    mistakes:['Lower back arching on the way out — reduce range of motion until core is strong enough','Hips dropping at the bottom'],
+    cues:['"Hollow body position throughout"','Think of it as a moving plank — the core standard does not change'],
+  },
+  // ── POWER ────────────────────────────────────────────
+  {
+    name:'DB / BB Hang Clean',category:'POWER',equipment:'Barbell or Dumbbells',
+    primary:['Posterior Chain','Trapezius','Quadriceps'],secondary:['Core','Shoulder Stabilisers','Grip'],
+    setup:[{title:'Hang Position',text:'Hold the bar at hip height, hinge slightly at the hips — this is the "hang" starting position. Bar just above the knees, slight knee bend.'}],
+    execution:[
+      {title:'Triple Extension',text:'Explosively drive through the ankles, knees and hips simultaneously — this is the triple extension. Think of jumping without leaving the floor.'},
+      {title:'High Pull',text:'As the hips snap through, shrug the shoulders upward aggressively, then pull your elbows up and outward (high pull position).'},
+      {title:'Catch',text:'Drop into a quarter squat and rotate your elbows forward to catch the bar in the front rack position. Stand to complete the rep.'},
+    ],
+    mistakes:['Using arms to lift the bar — power comes from the legs and hips; arms just guide','Not achieving triple extension — hips must fully extend before the pull','Catching with soft wrists — strong front rack catches the bar safely'],
+    cues:['"Jump and shrug, then catch"','Hips drive the bar up — arms guide it into the rack','Be explosive — this is a power movement, not a strength movement'],
+  },
+  {
+    name:'Hang Power Clean',category:'POWER',equipment:'Barbell',
+    primary:['Posterior Chain','Trapezius','Quadriceps'],secondary:['Core','Shoulder Stabilisers'],
+    setup:[{title:'Setup',text:'Same as the DB/BB Hang Clean but with a barbell. The barbell version allows more load and is the foundation for Olympic lifting.'}],
+    execution:[{title:'Execution',text:'Identical mechanics to the Hang Clean. Focus on the quality of the hip snap and the speed of the elbow turnover into the front rack. Bar stays close to the body throughout.'}],
+    mistakes:['Bar drifting forward — keep it close to the body','Not dropping under the bar — the catch should be aggressive'],
+    cues:['"Jump and shrug, then catch"','The catch should be aggressive — drop under the bar rather than waiting for it'],
+  },
+  {
+    name:'Box Jump',category:'POWER',equipment:'Plyometric Box',
+    primary:['Quadriceps','Gluteus Maximus','Calves'],secondary:['Core','Hamstrings'],
+    setup:[{title:'Box Height',text:'Choose a height you can clear comfortably with full hip extension at the top. Do not use an ego height that forces excessive knee tuck.'}],
+    execution:[
+      {title:'Countermovement',text:'Swing your arms back, hinge at the hips and bend the knees into a quarter squat simultaneously.'},
+      {title:'Jump',text:'Explode up — drive the arms forward and extend fully through ankles, knees and hips (triple extension) to launch onto the box.'},
+      {title:'Land',text:'Land as softly as possible in an athletic quarter squat. Stand tall on the box. Step back down — do not jump down.'},
+    ],
+    mistakes:['Jumping down instead of stepping — high eccentric landing stress; step down every time','Landing with knees caving — knees track toes','Not standing fully on the box'],
+    cues:['"Jump and stick"','Land soft — pretend the box is made of glass','Full extension at the top — tall and proud'],
+  },
+  {
+    name:'Broad Jump',category:'POWER',equipment:'None',
+    primary:['Quadriceps','Gluteus Maximus','Calves'],secondary:['Hamstrings','Core'],
+    setup:[{title:'Start',text:'Stand at a line with feet hip-width. Swing arms back and hinge into a quarter squat.'}],
+    execution:[{title:'Jump',text:'Explode forward and upward simultaneously — arm swing is critical for maximising distance. Project the body at roughly 45° for maximum distance. Land on both feet, absorbing through ankles, knees and hips. Stick the landing for 2 full seconds.'}],
+    mistakes:['Not using arm swing — reduces power output significantly','Not sticking the landing — deceleration is part of the exercise'],
+    cues:['"Arms drive the jump"','Land and hold — 2 second stick'],
+  },
+  {
+    name:'DB / Med Ball Slam',category:'POWER',equipment:'Medicine Ball or Dumbbell',
+    primary:['Core','Latissimus Dorsi','Triceps'],secondary:['Glutes','Shoulders'],
+    setup:[{title:'Position',text:'Stand with feet shoulder-width, holding a medicine ball or light dumbbell.'}],
+    execution:[
+      {title:'Raise',text:'Reach both hands fully overhead — full extension, on your toes.'},
+      {title:'Slam',text:'Drive the ball downward as hard as possible — use your whole body, engage your core and lats. The ball should hit the floor with maximum force. Catch the rebound and flow into the next rep.'},
+    ],
+    mistakes:['Only using arms — this is a full-body power exercise; engage core and hips','Not going overhead — the full overhead reach is the eccentric load that makes the slam powerful'],
+    cues:['"Full reach up, maximum force down"','Think about driving the ball through the floor'],
+  },
+  {
+    name:'Stiff-Leg Deadlift (DB)',category:'LOWER PULL',equipment:'Dumbbells',
+    primary:['Hamstrings'],secondary:['Gluteus Maximus','Erector Spinae'],
+    setup:[{title:'Setup',text:'Hold dumbbells in front of thighs with a pronated grip. Stand tall with knees almost fully locked — this is stiffer-legged than an RDL.'}],
+    execution:[{title:'Hinge',text:'Hinge forward at the hip, keeping the legs almost straight. Lower the dumbbells toward the floor — you will feel a very intense hamstring stretch. Pause at the bottom for 1 second. Drive hips forward to return to standing.'}],
+    mistakes:['Rounding the lower back — reduce range of motion','Bending the knees too much — defeats the stiffer-leg emphasis'],
+    cues:['"Hamstrings like guitar strings — stretch them to the max"','Pause at the bottom — feel the full stretch before returning'],
+  },
+];
+
+// ── Library helpers ─────────────────────────────────────
+const LIB_CATEGORIES=['ALL','UPPER PUSH','UPPER PULL','LOWER PUSH','LOWER PULL','FULL BODY','CORE','POWER'];
+const CAT_COLORS={'UPPER PUSH':'rgba(230,57,70,.12)','UPPER PULL':'rgba(100,149,237,.12)','LOWER PUSH':'rgba(244,162,97,.12)','LOWER PULL':'rgba(92,184,92,.12)','FULL BODY':'rgba(180,100,220,.12)','CORE':'rgba(255,209,102,.12)','POWER':'rgba(255,100,100,.12)'};
+const CAT_TEXT={'UPPER PUSH':'#e63946','UPPER PULL':'#6495ed','LOWER PUSH':'#f4a261','LOWER PULL':'#5cb85c','FULL BODY':'#b464dc','CORE':'#ffd166','POWER':'#ff6464'};
+
+function getLibraryExercise(name){
+  return EXERCISE_LIBRARY.find(e=>e.name===name)
+    ||EXERCISE_LIBRARY.find(e=>name.includes(e.name)||e.name.includes(name.split(' (')[0].split(' /')[0].trim()));
+}
+
+// ═══════════════════════════════════════════════════════
+// LIBRARY SCREEN
+// ═══════════════════════════════════════════════════════
+function renderLibrary(){
+  if(S.library.exercise){
+    return renderExerciseDetail(S.library.exercise);
+  }
+  const q=(S.library.search||'').toLowerCase();
+  const cat=S.library.filter||'ALL';
+  const filtered=EXERCISE_LIBRARY.filter(e=>{
+    const matchCat=cat==='ALL'||e.category===cat;
+    const matchQ=!q||e.name.toLowerCase().includes(q)||e.primary.join(' ').toLowerCase().includes(q)||e.category.toLowerCase().includes(q);
+    return matchCat&&matchQ;
+  });
+  const groups={};
+  filtered.forEach(e=>{const l=e.name[0].toUpperCase();if(!groups[l])groups[l]=[];groups[l].push(e);});
+  return`<div class="fade-slide">
+  <div class="hdr">
+    <div class="hdr-sub">Exercise Repository</div>
+    <div class="hdr-title">LIBRARY</div>
+  </div>
+  <div class="lib-search">
+    <input type="text" placeholder="Search exercises, muscles..." value="${S.library.search||''}"
+      oninput="S.library.search=this.value;renderLibraryList()" id="lib-search-input">
+    ${S.library.search?`<button class="btn btn-ghost" style="padding:8px 12px;flex-shrink:0" onclick="S.library.search='';render()">✕</button>`:''}
+  </div>
+  <div class="filter-scroll">
+    ${LIB_CATEGORIES.map(c=>`<div class="filter-chip${cat===c?' active':''}" onclick="S.library.filter='${c}';render()">${c}</div>`).join('')}
+  </div>
+  <div style="padding:8px 16px 4px;font-size:9px;color:var(--text4);letter-spacing:.1em">${filtered.length} EXERCISES</div>
+  <div id="lib-list">
+  ${Object.keys(groups).sort().map(letter=>`
+    <div style="padding:6px 16px 2px;font-family:var(--font-display);font-size:11px;font-weight:900;color:var(--text4);letter-spacing:.14em;border-bottom:1px solid var(--border2)">${letter}</div>
+    ${groups[letter].map(ex=>`<div class="ex-lib-item" onclick="S.library.exercise='${ex.name.replace(/'/g,"\\'")}';render()">
+      <div style="flex:1">
+        <div class="ex-lib-name">${ex.name}</div>
+        <div class="ex-lib-meta">${ex.primary[0]}${ex.primary[1]?' · '+ex.primary[1]:''}</div>
+      </div>
+      <div class="ex-lib-cat" style="background:${CAT_COLORS[ex.category]||'var(--surf3)'};color:${CAT_TEXT[ex.category]||'var(--text4)'}">${ex.category}</div>
+    </div>`).join('')}
+  `).join('')}
+  ${filtered.length===0?`<div class="empty"><span class="empty-icon">🔍</span>No exercises match</div>`:''}
+  </div>
+  <div style="height:16px"></div>
+  </div>`;
+}
+
+function renderLibraryList(){
+  const q=(S.library.search||'').toLowerCase();
+  const cat=S.library.filter||'ALL';
+  const filtered=EXERCISE_LIBRARY.filter(e=>{
+    const matchCat=cat==='ALL'||e.category===cat;
+    const matchQ=!q||e.name.toLowerCase().includes(q)||e.primary.join(' ').toLowerCase().includes(q);
+    return matchCat&&matchQ;
+  });
+  const groups={};
+  filtered.forEach(e=>{const l=e.name[0];if(!groups[l])groups[l]=[];groups[l].push(e);});
+  const el=document.getElementById('lib-list');
+  if(!el)return;
+  el.innerHTML=Object.keys(groups).sort().map(letter=>`
+    <div style="padding:6px 16px 2px;font-family:var(--font-display);font-size:11px;font-weight:900;color:var(--text4);letter-spacing:.14em;border-bottom:1px solid var(--border2)">${letter}</div>
+    ${groups[letter].map(ex=>`<div class="ex-lib-item" onclick="S.library.exercise='${ex.name.replace(/'/g,"\\'")}';render()">
+      <div style="flex:1"><div class="ex-lib-name">${ex.name}</div><div class="ex-lib-meta">${ex.primary[0]}</div></div>
+      <div class="ex-lib-cat" style="background:${CAT_COLORS[ex.category]||'var(--surf3)'};color:${CAT_TEXT[ex.category]||'var(--text4)'}">${ex.category}</div>
+    </div>`).join('')}
+  `).join('')+(filtered.length===0?`<div class="empty"><span class="empty-icon">🔍</span>No results</div>`:'');
+}
+
+function renderExerciseDetail(name){
+  const ex=getLibraryExercise(name);
+  if(!ex)return`<div class="fade-slide">
+    <div class="hdr"><button class="hdr-back" onclick="S.library.exercise=null;render()">‹ LIBRARY</button><div class="hdr-title">Not found</div></div>
+    <div class="empty">Exercise not in library yet</div></div>`;
+  const pb=DB.getPrevBest(ex.name);
+  const hist=DB.getExerciseHistory(ex.name);
+  return`<div class="fade-slide">
+  <div class="hdr">
+    <button class="hdr-back" onclick="S.library.exercise=null;render()">‹ LIBRARY</button>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-top:2px">
+      <div style="flex:1">
+        <div class="hdr-sub">${ex.category} · ${ex.equipment}</div>
+        <div class="hdr-title" style="font-size:${ex.name.length>22?'18px':'24px'};line-height:1.15">${ex.name}</div>
+      </div>
+      <div class="ex-lib-cat" style="margin-top:6px;padding:4px 8px;font-size:8px;font-weight:700;letter-spacing:.1em;border-radius:3px;background:${CAT_COLORS[ex.category]};color:${CAT_TEXT[ex.category]};border:1px solid ${CAT_TEXT[ex.category]}30;white-space:nowrap">${ex.category}</div>
+    </div>
+  </div>
+
+  ${pb?`<div style="margin:12px 16px;background:var(--surf);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:5px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center">
+    <div>
+      <div style="font-size:9px;color:var(--text4);letter-spacing:.12em;margin-bottom:2px">YOUR PERSONAL BEST</div>
+      <div style="font-family:var(--font-display);font-size:24px;font-weight:900;color:var(--green)">${pb.weight}${DB.getSettings().unit||'kg'} × ${pb.reps} reps</div>
+      <div style="font-size:9px;color:var(--text4);margin-top:2px">${hist.length} sessions logged</div>
+    </div>
+    <button class="btn btn-ghost" style="font-size:10px" onclick="S.progExercise='${ex.name.replace(/'/g,"\\'")}';nav('progress')">PROGRESS ›</button>
+  </div>`:`<div style="margin:12px 16px;background:var(--surf);border:1px solid var(--border);border-radius:5px;padding:10px 14px;font-size:10px;color:var(--text4)">No sessions logged yet — complete a workout to track progress here</div>`}
+
+  <!-- Muscles -->
+  <div class="section-block">
+    <div class="section-block-hdr"><div class="section-block-hdr-title">💪 Muscles Targeted</div></div>
+    <div style="padding:8px 0 4px">
+      <div style="padding:4px 16px 4px;font-size:9px;color:var(--text4);letter-spacing:.1em;text-transform:uppercase">Primary</div>
+      <div class="muscle-tags">${ex.primary.map(m=>`<span class="muscle-tag muscle-primary">${m}</span>`).join('')}</div>
+      <div style="padding:4px 16px 4px;font-size:9px;color:var(--text4);letter-spacing:.1em;text-transform:uppercase">Secondary</div>
+      <div class="muscle-tags">${ex.secondary.map(m=>`<span class="muscle-tag muscle-secondary">${m}</span>`).join('')}</div>
+    </div>
+  </div>
+
+  <!-- Setup -->
+  <div class="section-block">
+    <div class="section-block-hdr"><div class="section-block-hdr-title">⚙ Setup</div></div>
+    ${ex.setup.map((s,i)=>`<div class="step-item">
+      <div class="step-num">${i+1}</div>
+      <div><div class="step-title">${s.title}</div><div class="step-text">${s.text}</div></div>
+    </div>`).join('')}
+  </div>
+
+  <!-- Execution -->
+  <div class="section-block">
+    <div class="section-block-hdr"><div class="section-block-hdr-title">▶ Execution</div></div>
+    ${ex.execution.map((s,i)=>`<div class="step-item">
+      <div class="step-num">${i+1}</div>
+      <div><div class="step-title">${s.title}</div><div class="step-text">${s.text}</div></div>
+    </div>`).join('')}
+  </div>
+
+  <!-- Mistakes -->
+  <div class="section-block">
+    <div class="section-block-hdr"><div class="section-block-hdr-title">⚠ Common Mistakes</div></div>
+    ${ex.mistakes.map(m=>`<div class="mistake-item">
+      <div class="mistake-x">✕</div><div class="mistake-text">${m}</div>
+    </div>`).join('')}
+  </div>
+
+  <!-- Cues -->
+  <div class="section-block">
+    <div class="section-block-hdr"><div class="section-block-hdr-title">💬 Coaching Cues</div></div>
+    ${ex.cues.map(c=>`<div class="cue-item">
+      <div class="cue-tick">✓</div><div class="cue-text">${c}</div>
+    </div>`).join('')}
+  </div>
+
+  <div style="padding:16px 16px 8px">
+    <button class="btn btn-ghost" style="width:100%" onclick="S.library.exercise=null;render()">‹ BACK TO LIBRARY</button>
+  </div>
+  <div style="height:16px"></div>
+  </div>`;
+}
+
 
 // ═══════════════════════════════════════════════════════
 // INIT

@@ -783,6 +783,7 @@ let S={
   progExercise:null,
   library:{search:'',filter:'ALL',exercise:null},
   rm:{weight:'',reps:'',result:null},
+  readinessRedo:false,
   readiness:{
     step:0, // 0=sleep, 1=body, 2=mind, 3=result
     data:{
@@ -1934,7 +1935,7 @@ function getReadinessRecommendations(score,data,sessionType){
 // ═══════════════════════════════════════════════════════
 function renderReadiness(){
   const today_entry=DB.getTodayReadiness();
-  if(S.readiness.step===3||today_entry){
+  if((S.readiness.step===3||today_entry) && !S.readinessRedo){
     return renderReadinessResult(today_entry||null);
   }
   const step=S.readiness.step;
@@ -1959,7 +1960,7 @@ function renderReadiness(){
       :`<button class="btn btn-success" style="flex:1" onclick="submitReadiness()">CALCULATE READINESS ›</button>`}
   </div>
   <div style="padding:8px 16px;text-align:center">
-    <button class="btn btn-ghost" style="font-size:10px;color:var(--text4)" onclick="S.readiness.step=0;S.readiness.data=getDefaultReadinessData();render()">RESET</button>
+    <button class="btn btn-ghost" style="font-size:10px;color:var(--text4)" onclick="S.readiness.step=0;S.readiness.data=getDefaultReadinessData();S.readinessRedo=true;render()">RESET</button>
   </div>
   <div style="height:16px"></div>
   </div>`;
@@ -2125,6 +2126,7 @@ function submitReadiness(){
   };
   DB.saveReadiness(entry);
   S.readiness.step=3;
+  S.readinessRedo=false;
   render();
 }
 
@@ -2211,7 +2213,7 @@ function renderReadinessResult(entry){
   <!-- Actions -->
   <div style="padding:0 16px;display:flex;gap:8px">
     <button class="btn btn-primary" style="flex:2" onclick="startWorkout(${e.blockIdx||rec.block},${e.weekIdx||rec.week},'${e.sessionType||rec.session}')">▶ START SESSION</button>
-    <button class="btn btn-ghost" style="flex:1" onclick="S.readiness.step=0;S.readiness.data=getDefaultReadinessData();render()">REDO</button>
+    <button class="btn btn-ghost" style="flex:1" onclick="S.readiness.step=0;S.readiness.data=getDefaultReadinessData();S.readinessRedo=true;render()">REDO</button>
   </div>
 
   ${renderReadinessHistory(true)}

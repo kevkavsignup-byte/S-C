@@ -22,6 +22,13 @@
   --font-mono:'IBM Plex Mono',monospace;
   --nav-h:64px;--safe-bottom:env(safe-area-inset-bottom,0px);
 }
+body.light{
+  --bg:#f5f4f0;--surf:#ffffff;--surf2:#f0eeea;--surf3:#e8e6e1;
+  --border:#d8d5cf;--border2:#e8e6e1;
+  --text:#1a1a1a;--text2:#444;--text3:#888;--text4:#aaa;
+  --green:#2d8a4e;--green-dim:rgba(45,138,78,0.1);
+  --accent:#e63946;--accent-dim:rgba(230,57,70,0.08);
+}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font-mono);overflow-x:hidden}
 #app{min-height:100vh;padding-bottom:calc(var(--nav-h) + var(--safe-bottom))}
 /* SCROLLBAR */
@@ -206,8 +213,68 @@ input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px}
 .wkt-progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .3s ease}
 /* TIMER */
 .timer-display{font-family:var(--font-display);font-size:32px;font-weight:900;color:var(--accent);letter-spacing:.02em}
-/* REST TIMER */
-.rest-overlay{position:fixed;bottom:calc(var(--nav-h) + 12px);left:16px;right:16px;background:var(--surf2);border:1px solid var(--border);border-radius:6px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;z-index:90;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+/* MUSCLE TRACKER */
+.muscle-strip{margin:0 16px 12px;background:var(--surf);border:1px solid var(--border);border-radius:6px;padding:12px 14px;cursor:pointer}
+.muscle-strip-title{font-size:8px;font-weight:600;letter-spacing:.18em;color:var(--text4);text-transform:uppercase;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.muscle-dot-row{display:flex;gap:5px;flex-wrap:wrap}
+.muscle-dot{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:36px}
+.muscle-dot-circle{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;border:2px solid transparent}
+.muscle-dot-label{font-size:7px;letter-spacing:.04em;text-align:center;color:var(--text4);text-transform:uppercase;line-height:1.2;max-width:36px}
+.heat-today{background:rgba(230,57,70,.15);border-color:rgba(230,57,70,.5);color:#e63946}
+.heat-2day{background:rgba(231,111,81,.15);border-color:rgba(231,111,81,.5);color:#e76f51}
+.heat-3day{background:rgba(244,162,97,.15);border-color:rgba(244,162,97,.4);color:#f4a261}
+.heat-ready{background:rgba(92,184,92,.12);border-color:rgba(92,184,92,.4);color:#5cb85c}
+.heat-fresh{background:var(--surf3);border-color:var(--border);color:var(--text4)}
+/* BODY SVG */
+.body-wrap{display:flex;gap:12px;justify-content:center;padding:16px 16px 8px}
+.body-panel{flex:1;max-width:160px;text-align:center}
+.body-label{font-size:8px;letter-spacing:.14em;color:var(--text4);text-transform:uppercase;margin-bottom:6px}
+/* MUSCLE LIST */
+.muscle-list-row{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border2);cursor:pointer}
+.muscle-list-row:active{background:var(--surf2)}
+.muscle-heat-bar-wrap{flex:1;height:5px;background:var(--surf3);border-radius:3px;overflow:hidden}
+.muscle-heat-bar{height:100%;border-radius:3px;transition:width .4s ease}
+.muscle-days-badge{font-family:var(--font-display);font-size:13px;font-weight:700;min-width:32px;text-align:right}
+.muscle-status-text{font-size:9px;min-width:64px;text-align:right;letter-spacing:.06em;text-transform:uppercase}
+
+#rest-timer{position:fixed;bottom:calc(var(--nav-h) + var(--safe-bottom) + 10px);left:16px;right:16px;background:var(--surf2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;z-index:95;box-shadow:0 4px 24px rgba(0,0,0,.4);display:none;align-items:center;gap:12px}
+#rest-timer.visible{display:flex}
+.rt-circle{width:48px;height:48px;flex-shrink:0;position:relative}
+.rt-circle svg{transform:rotate(-90deg)}
+.rt-count{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-display);font-size:16px;font-weight:900;color:var(--accent)}
+.rt-label{flex:1}
+.rt-title{font-family:var(--font-display);font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--text)}
+.rt-sub{font-size:9px;color:var(--text4);letter-spacing:.08em;margin-top:2px}
+.rt-presets{display:flex;gap:5px;margin-top:6px}
+.rt-preset{padding:5px 9px;border-radius:3px;border:1px solid var(--border);background:var(--surf3);font-family:var(--font-display);font-size:11px;font-weight:700;color:var(--text3);cursor:pointer;transition:all .1s}
+.rt-preset.active-preset{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+.rt-stop{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:var(--surf3);color:var(--text3);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+/* OVERLOAD SUGGESTION */
+.overload-bar{margin:8px 16px 0;background:rgba(230,57,70,.06);border:1px solid rgba(230,57,70,.2);border-radius:5px;padding:10px 14px;display:flex;align-items:center;gap:10px}
+.overload-icon{font-size:18px;flex-shrink:0}
+.overload-text{flex:1}
+.overload-title{font-family:var(--font-display);font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.06em;text-transform:uppercase}
+.overload-sub{font-size:10px;color:var(--text3);margin-top:2px;line-height:1.5}
+.overload-target{font-family:var(--font-display);font-size:22px;font-weight:900;color:var(--accent);flex-shrink:0;text-align:right}
+.overload-target-sub{font-size:9px;color:var(--text4);text-align:right}
+/* 1RM CALCULATOR */
+.rm-panel{margin:12px 16px;background:var(--surf);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.rm-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 16px}
+.rm-field label{font-size:9px;color:var(--text4);letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:6px}
+.rm-result{background:var(--surf2);border-top:1px solid var(--border);padding:14px 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.rm-result-num{font-family:var(--font-display);font-size:36px;font-weight:900;color:var(--accent)}
+.rm-result-label{font-size:9px;color:var(--text4);letter-spacing:.12em;text-transform:uppercase;margin-top:2px}
+.rm-intensity-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-top:1px solid var(--border)}
+.rm-int-cell{background:var(--surf);padding:10px 6px;text-align:center}
+.rm-int-pct{font-size:9px;color:var(--text4);letter-spacing:.08em}
+.rm-int-val{font-family:var(--font-display);font-size:16px;font-weight:900;color:var(--text);margin-top:2px}
+/* THEME TOGGLE */
+.theme-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--surf);border:1px solid var(--border);border-radius:6px;margin:0 16px;cursor:pointer;user-select:none}
+.toggle-track{width:48px;height:26px;border-radius:13px;background:var(--surf3);border:1px solid var(--border);position:relative;transition:background .2s;flex-shrink:0}
+.toggle-track.on{background:var(--accent);border-color:var(--accent)}
+.toggle-thumb{width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.toggle-track.on .toggle-thumb{transform:translateX(22px)}
+
 /* TOAST */
 #toast{position:fixed;bottom:calc(var(--nav-h) + 16px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--surf2);border:1px solid var(--border);border-radius:4px;padding:10px 20px;font-size:11px;letter-spacing:.06em;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;z-index:200}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -235,6 +302,26 @@ input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px}
 <body>
 <div id="app"></div>
 <div id="toast"></div>
+<div id="rest-timer">
+  <div class="rt-circle">
+    <svg width="48" height="48" viewBox="0 0 48 48">
+      <circle cx="24" cy="24" r="20" fill="none" stroke="var(--surf3)" stroke-width="4"/>
+      <circle id="rt-arc" cx="24" cy="24" r="20" fill="none" stroke="var(--accent)" stroke-width="4"
+        stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round"/>
+    </svg>
+    <div class="rt-count" id="rt-count">–</div>
+  </div>
+  <div class="rt-label">
+    <div class="rt-title">REST TIMER</div>
+    <div class="rt-presets">
+      <div class="rt-preset" onclick="startRest(60)">60s</div>
+      <div class="rt-preset" onclick="startRest(90)">90s</div>
+      <div class="rt-preset" onclick="startRest(120)">2m</div>
+      <div class="rt-preset" onclick="startRest(180)">3m</div>
+    </div>
+  </div>
+  <div class="rt-stop" onclick="stopRest()">✕</div>
+</div>
 <nav id="nav">
   <button class="nav-btn active" data-nav="home" onclick="nav('home')">
     <span class="nav-icon">⌂</span>HOME
@@ -642,7 +729,7 @@ cooldown:[
 // DATABASE
 // ═══════════════════════════════════════════════════════
 const DB={
-  getSettings:()=>{try{return JSON.parse(localStorage.getItem('s6m_settings'))||{startDate:null,unit:'kg'}}catch{return{startDate:null,unit:'kg'}}},
+  getSettings:()=>{try{return JSON.parse(localStorage.getItem('s6m_settings'))||{startDate:null,unit:'kg',theme:'dark'}}catch{return{startDate:null,unit:'kg',theme:'dark'}}},
   saveSettings:(s)=>localStorage.setItem('s6m_settings',JSON.stringify(s)),
   getWorkouts:()=>{try{return JSON.parse(localStorage.getItem('s6m_workouts'))||{}}catch{return{}}},
   saveWorkout:(w)=>{const all=DB.getWorkouts();all[w.id]=w;localStorage.setItem('s6m_workouts',JSON.stringify(all))},
@@ -695,6 +782,7 @@ let S={
   histDetail:null,
   progExercise:null,
   library:{search:'',filter:'ALL',exercise:null},
+  rm:{weight:'',reps:'',result:null},
   readiness:{
     step:0, // 0=sleep, 1=body, 2=mind, 3=result
     data:{
@@ -793,6 +881,8 @@ function render(){
     case'history':app.innerHTML=renderHistory();break;
     case'hist-detail':app.innerHTML=renderHistDetail();break;
     case'progress':app.innerHTML=renderProgress();break;
+    case'readiness':app.innerHTML=renderReadiness();break;
+    case'muscles':app.innerHTML=renderMuscleTracker();break;
     case'library':app.innerHTML=renderLibrary();break;
     case'settings':app.innerHTML=renderSettings();break;
     default:app.innerHTML=renderHome();
@@ -828,6 +918,7 @@ function renderHome(){
     <div class="stat-cell"><div class="stat-val">${streak>0?'🔥'+streak:'–'}</div><div class="stat-key">Streak</div></div>
   </div>
   ${renderHomeReadinessCard()}
+  ${renderHomeMuscleStrip()}
   <div class="section-label">NEXT SESSION</div>
   <div class="next-sess-card">
     <div class="next-sess-top">
@@ -1117,6 +1208,8 @@ function renderWorkoutMain(w){
         </div>
         <div style="flex-shrink:0">${allDone?'<span class="chip chip-green">✓</span>':'<span class="chip chip-muted">'+ex.sets.filter(s=>s.done).length+'/'+ex.sets.length+'</span>'}</div>
       </div>
+      ${(()=>{const ol=calcOverloadSuggestion(ex.name,w.scheme);return ol?`<div class="overload-bar"><div class="overload-icon">${ol.status==='increase'?'📈':'📊'}</div><div class="overload-text"><div class="overload-title">${ol.status==='increase'?'INCREASE LOAD':'HOLD LOAD'}</div><div class="overload-sub">${ol.rationale}</div></div><div><div class="overload-target">${ol.suggestedWeight}${ol.unit}</div><div class="overload-target-sub">TARGET</div></div></div>`:'';})()}
+      </div>
       <!-- Set header -->
       <div style="display:grid;grid-template-columns:28px 1fr 1fr 36px;gap:8px;padding:6px 14px;border-top:1px solid var(--border2)">
         <div class="set-label">SET</div>
@@ -1179,8 +1272,21 @@ function updateSet(ei,si,field,val){
 }
 function toggleSet(ei,si){
   if(!S.workout)return;
-  S.workout.exercises[ei].sets[si].done=!S.workout.exercises[ei].sets[si].done;
+  const wasDone = S.workout.exercises[ei].sets[si].done;
+  S.workout.exercises[ei].sets[si].done = !wasDone;
   DB.saveWorkout(S.workout);
+  // Auto-start rest timer when a set is marked done (not undone)
+  if(!wasDone){
+    const ex = S.workout.exercises[ei];
+    const isPrimary = ex.isPrimary;
+    // Suggest rest time based on exercise type and block
+    const blockId = S.workout.blockId || 1;
+    let restSecs = 90; // default
+    if(isPrimary && blockId >= 4) restSecs = 180;
+    else if(isPrimary && blockId >= 3) restSecs = 150;
+    else if(isPrimary) restSecs = 120;
+    startRest(restSecs);
+  }
   render();
 }
 function addSet(ei){
@@ -1398,8 +1504,21 @@ function renderProgress(){
 function renderSettings(){
   const settings=DB.getSettings();
   const workouts=DB.getWorkoutList();
+  const isLight = settings.theme === 'light';
   return`<div class="fade-slide">
   <div class="hdr"><div class="hdr-sub">Preferences</div><div class="hdr-title">SETTINGS</div></div>
+
+  <div class="section-label">APPEARANCE</div>
+  <div class="theme-toggle-row" onclick="toggleTheme()">
+    <div>
+      <div style="font-family:var(--font-display);font-size:15px;font-weight:700;letter-spacing:.04em">${isLight?'☀️ LIGHT MODE':'🌙 DARK MODE'}</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:3px">Tap to switch to ${isLight?'dark':'light'} mode</div>
+    </div>
+    <div class="toggle-track${isLight?' on':''}"><div class="toggle-thumb"></div></div>
+  </div>
+
+  <div class="section-label">1RM CALCULATOR</div>
+  ${renderRMCalc()}
 
   <div class="section-label">PROGRAMME START DATE</div>
   <div class="card">
@@ -1470,7 +1589,210 @@ function clearAllData(){
 }
 
 // ═══════════════════════════════════════════════════════
-// READINESS ALGORITHM
+// PROGRESSIVE OVERLOAD ENGINE
+// ═══════════════════════════════════════════════════════
+function calcOverloadSuggestion(exName, currentScheme){
+  const history = DB.getExerciseHistory(exName);
+  if(!history.length) return null;
+
+  const last = history[0]; // most recent session
+  const lastSets = last.sets.filter(s => parseFloat(s.weight) > 0 && parseInt(s.reps) > 0);
+  if(!lastSets.length) return null;
+
+  const unit = DB.getSettings().unit || 'kg';
+  const increment = unit === 'kg' ? 2.5 : 5;
+
+  // Parse current target reps from scheme e.g. "4 × 8" → 8
+  const targetReps = currentScheme ? parseInt(currentScheme.split('×')[1]) || 0 : 0;
+  const targetSets = currentScheme ? parseInt(currentScheme.split('×')[0]) || 0 : 0;
+
+  const lastMaxWeight = Math.max(...lastSets.map(s => parseFloat(s.weight)));
+  const lastAvgReps = Math.round(lastSets.reduce((a,s) => a + parseInt(s.reps), 0) / lastSets.length);
+  const lastSetsCount = lastSets.filter(s => s.done).length;
+  const allSetsCompleted = lastSetsCount >= (targetSets || lastSets.length);
+
+  let suggestedWeight = lastMaxWeight;
+  let rationale = '';
+  let status = 'maintain'; // 'increase' | 'maintain' | 'decrease'
+
+  if(allSetsCompleted && lastAvgReps >= targetReps){
+    // All sets completed at or above target reps → increase load
+    suggestedWeight = Math.round((lastMaxWeight + increment) * 2) / 2;
+    rationale = `Last session: ${lastMaxWeight}${unit} × ${lastAvgReps} (all sets ✓) — add ${increment}${unit}`;
+    status = 'increase';
+  } else if(!allSetsCompleted || lastAvgReps < targetReps - 1){
+    // Missed sets or significantly below target reps → hold load
+    suggestedWeight = lastMaxWeight;
+    rationale = `Last session: ${lastMaxWeight}${unit} — not all sets completed. Hold weight and nail the reps first.`;
+    status = 'maintain';
+  } else {
+    // Within 1 rep of target → hold and push for the extra rep
+    suggestedWeight = lastMaxWeight;
+    rationale = `Last session: ${lastMaxWeight}${unit} × ${lastAvgReps}. Hit all reps at this weight before adding load.`;
+    status = 'maintain';
+  }
+
+  return { suggestedWeight, rationale, status, lastMaxWeight, lastAvgReps, unit, increment };
+}
+
+// ═══════════════════════════════════════════════════════
+// 1RM CALCULATOR (Epley formula)
+// ═══════════════════════════════════════════════════════
+function calc1RM(weight, reps){
+  if(!weight || !reps || reps < 1) return null;
+  if(reps === 1) return parseFloat(weight);
+  // Epley: 1RM = w × (1 + r/30)
+  return Math.round(parseFloat(weight) * (1 + parseInt(reps)/30) * 2) / 2;
+}
+
+function renderRMCalc(prefilledWeight='', prefilledReps=''){
+  const unit = DB.getSettings().unit || 'kg';
+  const w = prefilledWeight || S.rm.weight || '';
+  const r = prefilledReps || S.rm.reps || '';
+  const rm = (w && r) ? calc1RM(w, r) : null;
+  const intensities = rm ? [100,95,90,85,80,75,70,65] : [];
+  return`<div class="rm-panel">
+  <div style="padding:12px 16px 0;border-bottom:1px solid var(--border2)">
+    <div style="font-family:var(--font-display);font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--text3);text-transform:uppercase;margin-bottom:12px">⚡ 1RM CALCULATOR</div>
+  </div>
+  <div class="rm-inputs">
+    <div class="rm-field">
+      <label>Weight (${unit})</label>
+      <input type="number" inputmode="decimal" min="0" step="0.5" placeholder="e.g. 80"
+        value="${w}" id="rm-weight"
+        oninput="S.rm.weight=this.value;S.rm.reps=document.getElementById('rm-reps')?.value||S.rm.reps;updateRMResult()">
+    </div>
+    <div class="rm-field">
+      <label>Reps</label>
+      <input type="number" inputmode="numeric" min="1" max="30" placeholder="e.g. 5"
+        value="${r}" id="rm-reps"
+        oninput="S.rm.reps=this.value;S.rm.weight=document.getElementById('rm-weight')?.value||S.rm.weight;updateRMResult()">
+    </div>
+  </div>
+  <div class="rm-result" id="rm-result-row">
+    ${rm ? `
+    <div>
+      <div class="rm-result-num">${rm}${unit}</div>
+      <div class="rm-result-label">Estimated 1RM (Epley)</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:9px;color:var(--text4);line-height:1.7">
+        Based on ${w}${unit} × ${r} reps<br>
+        <span style="color:var(--text3)">Accurate within ±5% for 1–10 rep ranges</span>
+      </div>
+    </div>` : `<div style="font-size:10px;color:var(--text4)">Enter weight and reps above to calculate</div>`}
+  </div>
+  ${rm ? `<div class="rm-intensity-grid">
+    ${intensities.map(pct=>`<div class="rm-int-cell">
+      <div class="rm-int-pct">${pct}%</div>
+      <div class="rm-int-val">${Math.round(rm*(pct/100)*2)/2}</div>
+    </div>`).join('')}
+  </div>` : ''}
+  </div>`;
+}
+
+function updateRMResult(){
+  const w = S.rm.weight;
+  const r = S.rm.reps;
+  const rm = (w && r) ? calc1RM(w, r) : null;
+  const unit = DB.getSettings().unit || 'kg';
+  const row = document.getElementById('rm-result-row');
+  if(!row) return;
+  row.innerHTML = rm ? `
+    <div>
+      <div class="rm-result-num">${rm}${unit}</div>
+      <div class="rm-result-label">Estimated 1RM (Epley)</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:9px;color:var(--text4);line-height:1.7">
+        Based on ${w}${unit} × ${r} reps<br>
+        <span style="color:var(--text3)">Accurate within ±5% for 1–10 rep ranges</span>
+      </div>
+    </div>` : `<div style="font-size:10px;color:var(--text4)">Enter weight and reps above to calculate</div>`;
+  // Update intensity table
+  const panel = row.closest('.rm-panel');
+  if(!panel) return;
+  let grid = panel.querySelector('.rm-intensity-grid');
+  if(rm){
+    const intensities = [100,95,90,85,80,75,70,65];
+    const html = `<div class="rm-intensity-grid">${intensities.map(pct=>`<div class="rm-int-cell"><div class="rm-int-pct">${pct}%</div><div class="rm-int-val">${Math.round(rm*(pct/100)*2)/2}</div></div>`).join('')}</div>`;
+    if(grid) grid.outerHTML = html;
+    else row.insertAdjacentHTML('afterend', html);
+  } else {
+    if(grid) grid.remove();
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// REST TIMER ENGINE
+// ═══════════════════════════════════════════════════════
+let restTimer = { interval: null, total: 0, remaining: 0, preset: 0 };
+
+function startRest(seconds){
+  stopRest(false);
+  restTimer.total = seconds;
+  restTimer.remaining = seconds;
+  restTimer.preset = seconds;
+  // Update active preset highlight
+  document.querySelectorAll('.rt-preset').forEach(el => {
+    const s = el.onclick?.toString().match(/\d+/)?.[0];
+    el.classList.toggle('active-preset', parseInt(s) === seconds);
+  });
+  const timer = document.getElementById('rest-timer');
+  if(timer) timer.classList.add('visible');
+  updateRestDisplay();
+  restTimer.interval = setInterval(() => {
+    restTimer.remaining--;
+    if(restTimer.remaining <= 0){
+      restTimer.remaining = 0;
+      updateRestDisplay();
+      stopRest(false);
+      // Vibrate if available
+      if(navigator.vibrate) navigator.vibrate([200, 100, 200]);
+      toast('✓ Rest complete — next set!');
+    } else {
+      updateRestDisplay();
+    }
+  }, 1000);
+}
+
+function stopRest(hide=true){
+  if(restTimer.interval){ clearInterval(restTimer.interval); restTimer.interval = null; }
+  if(hide){
+    const timer = document.getElementById('rest-timer');
+    if(timer) timer.classList.remove('visible');
+    document.querySelectorAll('.rt-preset').forEach(el => el.classList.remove('active-preset'));
+  }
+}
+
+function updateRestDisplay(){
+  const count = document.getElementById('rt-count');
+  const arc = document.getElementById('rt-arc');
+  if(!count || !arc) return;
+  const s = restTimer.remaining;
+  count.textContent = s >= 60 ? `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}` : s;
+  const circ = 125.6;
+  const pct = restTimer.total > 0 ? restTimer.remaining / restTimer.total : 0;
+  arc.style.strokeDashoffset = circ * (1 - pct);
+  // Colour shift: green → amber → red as time runs out
+  arc.style.stroke = pct > 0.5 ? '#5cb85c' : pct > 0.25 ? '#f4a261' : '#e63946';
+  count.style.color = pct > 0.5 ? '#5cb85c' : pct > 0.25 ? '#f4a261' : '#e63946';
+}
+
+// ═══════════════════════════════════════════════════════
+// THEME ENGINE
+// ═══════════════════════════════════════════════════════
+function applyTheme(theme){
+  document.body.classList.toggle('light', theme === 'light');
+}
+function toggleTheme(){
+  const s = DB.getSettings();
+  s.theme = s.theme === 'light' ? 'dark' : 'light';
+  DB.saveSettings(s);
+  applyTheme(s.theme);
+  render();
+}
+
 // ═══════════════════════════════════════════════════════
 function calcReadiness(d){
   const factors={};
@@ -2523,12 +2845,722 @@ const EXERCISE_LIBRARY = [
     mistakes:['Rounding the lower back — reduce range of motion','Bending the knees too much — defeats the stiffer-leg emphasis'],
     cues:['"Hamstrings like guitar strings — stretch them to the max"','Pause at the bottom — feel the full stretch before returning'],
   },
+  // ── MOBILITY — UPPER BODY ───────────────────────────
+  {
+    name:'Thoracic Foam Roll',category:'MOBILITY',equipment:'Foam Roller',
+    primary:['Thoracic Spine (T4–T10)'],secondary:['Thoracic Erectors','Rhomboids'],
+    setup:[
+      {title:'Placement',text:'Place the foam roller horizontally across your mid-back, perpendicular to your spine. Start at the bottom of your shoulder blades (around T10) and work upward toward T4. Support your head with your hands interlaced behind your neck.'},
+      {title:'Feet',text:'Feet flat on the floor, knees bent. Use your legs to control how much bodyweight is on the roller.'},
+    ],
+    execution:[
+      {title:'Roll',text:'Slowly roll up and down — 1–2 inches at a time. When you find a stiff or tender segment, pause there.'},
+      {title:'Pause & Extend',text:'At each tender spot, let your upper back relax over the roller and breathe deeply into your chest. Allow gravity to gently extend the thoracic spine. Hold 5–10 seconds before rolling to the next segment.'},
+      {title:'Segments',text:'Work each segment: lower thoracic (T9–T10), mid thoracic (T6–T8), upper thoracic (T4–T5). Do not roll the lower back (lumbar spine) — it is not designed to extend this way.'},
+    ],
+    mistakes:['Rolling the lower back — keep the roller above the bottom of the ribcage','Rushing through — the pause is the most important part','Head unsupported — always support the head to avoid neck strain'],
+    cues:['"Find the stiff spot and breathe into it"','Let gravity do the work — do not force the extension','30–60 seconds per tight segment'],
+  },
+  {
+    name:'Band Shoulder Dislocations',category:'MOBILITY',equipment:'Resistance Band or PVC Pipe',
+    primary:['Shoulder Capsule','Pectoralis Minor'],secondary:['Biceps (long head)','Thoracic Spine'],
+    setup:[
+      {title:'Grip',text:'Hold a resistance band or PVC pipe with a very wide overhand grip — much wider than shoulder width. The wider the grip, the easier the movement. Narrow the grip progressively as mobility improves.'},
+      {title:'Start',text:'Stand tall with arms in front of you, band at hip level.'},
+    ],
+    execution:[
+      {title:'Arc',text:'With straight arms, raise the band up and over your head, then behind you until it touches your glutes. The movement should be smooth and pain-free — if it hurts, widen your grip.'},
+      {title:'Return',text:'Reverse the arc, bringing the band back to the front. This is one rep. Do not bend your elbows at any point — straight arms throughout.'},
+    ],
+    mistakes:['Bending the elbows — defeats the purpose; the stretch comes from straight arms','Gripping too narrow before you have the mobility — pain is a signal to widen the grip','Rushing — slow and controlled reveals where stiffness lives'],
+    cues:['"If it hurts, widen your grip"','Think of the arms as a single rigid unit rotating around the shoulder joint','Every rep should feel slightly more open than the last'],
+  },
+  {
+    name:'Banded Pull-Aparts',category:'MOBILITY',equipment:'Resistance Band',
+    primary:['Posterior Deltoid','Rhomboids','Middle Trapezius'],secondary:['Infraspinatus','Teres Minor'],
+    setup:[
+      {title:'Grip',text:'Hold a resistance band at shoulder height with both hands, palms down (pronated). Hands shoulder-width apart or slightly wider.'},
+    ],
+    execution:[
+      {title:'Pull',text:'Pull the band apart, driving your elbows back and squeezing your shoulder blades together. The band should touch your chest at the end range. Hold for 1–2 seconds.'},
+      {title:'Return',text:'Control the band back to the start — do not let it snap forward. The eccentric is part of the movement.'},
+    ],
+    mistakes:['Shrugging the shoulders up — keep them depressed throughout','Arms drifting downward — keep them at shoulder height throughout','Using too strong a band — you need to complete the full range; choose a light band'],
+    cues:['"Squeeze a pencil between your shoulder blades at the end"','Chest proud, shoulders down — stand tall throughout'],
+  },
+  {
+    name:'Band Shoulder Pass-Throughs',category:'MOBILITY',equipment:'Resistance Band or PVC Pipe',
+    primary:['Shoulder Capsule (anterior)','Pectoralis Minor'],secondary:['Biceps (long head)','Latissimus Dorsi'],
+    setup:[{title:'Grip',text:'Hold a resistance band or PVC pipe with a wide overhand grip. Arms straight in front of you. Similar to shoulder dislocations but used as a shoulder warm-up drill, typically passing the band overhead to the back in a controlled, rhythmic fashion.'}],
+    execution:[
+      {title:'Pass',text:'Raise the band overhead and behind your body. Pause briefly at the back, then return to the front. Each pass should feel like you are opening the shoulder a little more.'},
+    ],
+    mistakes:['Going too narrow too soon — widen the grip until the movement is completely pain-free'],
+    cues:['"Progressively narrow the grip each set as you warm up"','Smooth arc — no jerking'],
+  },
+  {
+    name:'Wall Slides',category:'MOBILITY',equipment:'Wall',
+    primary:['Serratus Anterior','Lower Trapezius'],secondary:['Rotator Cuff','Thoracic Extensors'],
+    setup:[{title:'Position',text:'Stand with your back flat against a wall. Feet about 6 inches from the wall. Press your entire spine — lower back, upper back, and head — against the wall. Raise your arms to 90° (goalpost position) with the backs of your hands and forearms also touching the wall.'}],
+    execution:[
+      {title:'Slide',text:'Slowly slide your arms upward along the wall, maintaining contact with your hands, forearms, elbows and back throughout. Raise until your arms are straight overhead.'},
+      {title:'Return',text:'Slide back down to the 90° position. The key is maintaining the wall contact — if your arms peel away from the wall, you have found the limit of your current mobility.'},
+    ],
+    mistakes:['Lower back arching away from the wall — core must stay engaged','Arms losing wall contact — only go as high as you can keep everything touching','Rushing — this is a slow, deliberate movement'],
+    cues:['"Every part of your arms must stay glued to the wall"','If you cannot keep contact, work at the range you have — it will improve'],
+  },
+  {
+    name:'Scapular Push-Ups',category:'MOBILITY',equipment:'None',
+    primary:['Serratus Anterior'],secondary:['Lower Trapezius','Pectoralis Minor'],
+    setup:[{title:'Position',text:'Get into a standard push-up position — arms locked out, body in a straight line. This is purely a shoulder blade movement — your elbows do not bend at any point.'}],
+    execution:[
+      {title:'Protract',text:'Allow your chest to drop toward the floor by letting your shoulder blades come together (retract). This is the bottom position.'},
+      {title:'Retract',text:'Push the floor away, spreading your shoulder blades apart (protract) so your upper back rounds slightly. This is the top position. The movement range is small — only 2–4 inches of torso travel.'},
+    ],
+    mistakes:['Bending the elbows — this is not a push-up; arms stay locked throughout','Moving from the hips instead of the shoulder blades'],
+    cues:['"Think about spreading your wings at the top and pinching them at the bottom"','Slow and deliberate — feel the serratus activating'],
+  },
+  {
+    name:'Shoulder Internal/External Rotation',category:'MOBILITY',equipment:'Light Resistance Band or Light Dumbbell',
+    primary:['Rotator Cuff (Infraspinatus, Teres Minor, Subscapularis)'],secondary:['Posterior Deltoid'],
+    setup:[{title:'Position',text:'Stand with your elbow bent at 90° and pinned to your side (or use a rolled-up towel between your elbow and ribcage). Hold a light band or dumbbell.'}],
+    execution:[
+      {title:'External Rotation',text:'Rotate your forearm outward — away from your body — as far as comfortable. Hold 2 seconds.'},
+      {title:'Internal Rotation',text:'Rotate your forearm inward — across your body — as far as comfortable. Hold 2 seconds. This is a warm-up and activation exercise, not a strength movement.'},
+    ],
+    mistakes:['Elbow drifting away from the side — keep it pinned throughout','Using too much load — this is a rotator cuff activation, not an exercise'],
+    cues:['"Elbow is a hinge — it does not move, only the forearm rotates"','10 reps each direction, very light resistance'],
+  },
+  {
+    name:'Light DB Internal Rotation',category:'MOBILITY',equipment:'Very Light Dumbbell',
+    primary:['Subscapularis','Rotator Cuff'],secondary:['Anterior Deltoid'],
+    setup:[{title:'Setup',text:'Lie on your side on a bench or the floor. The arm you are working is on top, elbow bent at 90°, upper arm resting parallel to the floor.'}],
+    execution:[{title:'Rotate',text:'Slowly rotate the dumbbell downward (internal rotation) until the forearm is parallel to the floor. Return to the starting position. This is purely a warm-up movement before heavy pressing — use an extremely light weight (1–2kg).'}],
+    mistakes:['Using too much weight — the rotator cuff is a small muscle group; this is preparation, not training'],
+    cues:['"1–2kg only"','Slow and controlled — feel the rotator cuff activating before you load the shoulder'],
+  },
+  {
+    name:'Dead Hang',category:'MOBILITY',equipment:'Pull-Up Bar',
+    primary:['Latissimus Dorsi','Shoulder Capsule (inferior)'],secondary:['Thoracic Spine','Grip'],
+    setup:[{title:'Grip',text:'Take a pronated (overhand) grip on the bar, slightly wider than shoulder width. Step off the box or jump to the hang position.'}],
+    execution:[
+      {title:'Hang',text:'Allow your shoulders to fully relax and rise toward your ears — this is a passive hang. Let gravity do the work of decompressing your spine and stretching the lats and shoulder capsule.'},
+      {title:'Breathing',text:'Take slow, deep breaths. With each exhale, try to relax a little more into the hang. Hold for 20–30 seconds or as long as grip allows.'},
+    ],
+    mistakes:['Actively pulling the shoulders down — this is a passive stretch; let the shoulders rise','Holding the breath — breathe steadily'],
+    cues:['"Let the shoulders melt up toward the ears"','Feel the space being created between each vertebra','This is one of the best exercises for shoulder health and spinal decompression'],
+  },
+  {
+    name:'Spinal Decompression Hang',category:'MOBILITY',equipment:'Pull-Up Bar',
+    primary:['Lumbar Spine','Thoracic Spine'],secondary:['Latissimus Dorsi','Shoulder Capsule'],
+    setup:[{title:'Setup',text:'Same as the dead hang. The distinction here is the intent — focus on feeling your lower back lengthen and decompress, particularly after heavy squat or deadlift sessions.'}],
+    execution:[{title:'Hang',text:'Fully relax in the dead hang position. Tuck your pelvis slightly to increase lumbar lengthening. Breathe slowly. Stay for 20–30 seconds. Especially valuable at the end of sessions involving heavy spinal loading.'}],
+    mistakes:['Dropping suddenly from the bar — lower yourself gently to protect the shoulder joint'],
+    cues:['"Let the spine breathe"','Posterior pelvic tilt (tuck the tail) to maximise lumbar decompression'],
+  },
+  {
+    name:'Neck Semi-Circles',category:'MOBILITY',equipment:'None',
+    primary:['Cervical Spine','Sternocleidomastoid','Scalenes'],secondary:['Upper Trapezius'],
+    setup:[{title:'Position',text:'Stand or sit tall. Take the neck through a controlled arc from one side to the other — ear toward shoulder on one side, chin toward chest, ear toward shoulder on the other side. Do NOT perform full neck circles that involve extension (looking up to the ceiling) — this can compress the cervical facets.'}],
+    execution:[{title:'Arc',text:'Move slowly, pausing anywhere that feels tight. 5 slow reps in each direction. Breathe out as you move through the tight spot.'}],
+    mistakes:['Performing full circles with extension — avoid looking up to the ceiling during circles','Forcing the range — this is a gentle warm-up, not a stretch'],
+    cues:['"Imagine your chin drawing a slow rainbow from shoulder to shoulder"','Only the forward-bending arc — never the extension arc'],
+  },
+  {
+    name:'Cross-Body Shoulder Stretch',category:'MOBILITY',equipment:'None',
+    primary:['Posterior Deltoid','Infraspinatus'],secondary:['Rhomboids','Middle Trapezius'],
+    setup:[{title:'Setup',text:'Stand tall. Bring one arm across your chest at shoulder height. Use the opposite forearm or hand to apply gentle overpressure, pulling the arm closer to your chest.'}],
+    execution:[{title:'Stretch',text:'Hold for 30 seconds. You should feel the stretch in the back of the shoulder (posterior deltoid). Keep the stretched arm at shoulder height — do not let it drop.'}],
+    mistakes:['Arm too low — must be at shoulder height to target the posterior deltoid','Rotating the torso instead of pulling the arm — keep facing forward'],
+    cues:['"Feel the back of the shoulder — not the neck"'],
+  },
+  {
+    name:'Cross-Body Shoulder Reach',category:'MOBILITY',equipment:'None',
+    primary:['Posterior Deltoid','Posterior Shoulder Capsule'],secondary:['Rhomboids'],
+    setup:[{title:'Setup',text:'Same as the Cross-Body Shoulder Stretch. The "reach" variation involves actively trying to reach further across your body each breath, rather than using a passive hold. More dynamic.'}],
+    execution:[{title:'Reach',text:'With each exhale, actively try to pull the arm 1cm further across. This combines a passive stretch with active tension in the opposing muscles — more effective for improving actual range of motion.'}],
+    mistakes:['Passive only — the active reaching component is what drives mobility adaptation'],
+    cues:['"Actively reach further with each exhale — not just hold"'],
+  },
+  {
+    name:'Chest Opener (doorframe/band)',category:'MOBILITY',equipment:'Doorframe or Resistance Band',
+    primary:['Pectoralis Major','Pectoralis Minor'],secondary:['Anterior Deltoid','Biceps (long head)'],
+    setup:[
+      {title:'Doorframe',text:'Stand in a doorframe. Place both forearms on the door posts at 90°. Step one foot forward and gently lean into the doorframe until you feel a stretch across the chest.'},
+      {title:'Band',text:'Anchor a band behind you at shoulder height. Hold both ends and walk forward until the band is taut. Allow the arms to drift back behind the body.'},
+    ],
+    execution:[{title:'Stretch',text:'Hold the end range for 30 seconds, breathing deeply. With each exhale, allow the chest to open a little more. Do not force aggressively — a moderate, sustained stretch is more effective than an intense short one.'}],
+    mistakes:['Hyperextending the lower back — brace the core gently to maintain a neutral spine','Going too intense too fast — this stretch should be comfortable enough to sustain for 30 seconds'],
+    cues:['"Breathe the chest open"','Think about your shoulder blades coming together behind you'],
+  },
+  {
+    name:'Pec Minor Stretch (corner)',category:'MOBILITY',equipment:'Wall corner',
+    primary:['Pectoralis Minor'],secondary:['Anterior Deltoid','Coracobrachialis'],
+    setup:[{title:'Setup',text:'Stand in the corner of a room. Place both hands on the walls at shoulder height, arms slightly abducted (about 60° out from the body). This specifically targets the pectoralis minor — a deeper muscle that pulls the shoulder blade forward and is chronically tight in desk workers.'}],
+    execution:[{title:'Lean',text:'Gently lean your chest into the corner. Hold for 30–45 seconds. You should feel the stretch just below the collarbone, slightly deeper than a regular chest stretch.'}],
+    mistakes:['Arms too wide (90°) — this becomes a regular pec stretch; keep them around 60° for pec minor','Not leaning into the corner — gravity alone is not enough'],
+    cues:['"Feel it just below the collarbone"','Deeper than your usual chest stretch — this is the pec minor'],
+  },
+  {
+    name:'Doorframe Chest Stretch',category:'MOBILITY',equipment:'Doorframe',
+    primary:['Pectoralis Major'],secondary:['Anterior Deltoid'],
+    setup:[{title:'Setup',text:'Place one hand on a doorframe at shoulder height. Keep your arm slightly bent. Step through the doorway, rotating away from the hand on the frame.'}],
+    execution:[{title:'Stretch',text:'Hold for 30 seconds. Adjust the arm height: shoulder height targets the mid pec, below shoulder targets the lower pec, above shoulder targets the upper pec and anterior deltoid.'}],
+    mistakes:['Arm at one height only — vary the angle to hit different portions of the pec','Forcing the rotation — the stretch should feel comfortable and sustainable'],
+    cues:['Three angles — low, middle, high — for complete pec stretching'],
+  },
+  {
+    name:'Lat Overhead Stretch',category:'MOBILITY',equipment:'Wall or Pole',
+    primary:['Latissimus Dorsi'],secondary:['Teres Major','Thoracic Spine'],
+    setup:[{title:'Setup',text:'Stand facing a wall or pole. Raise one arm overhead and place your hand on the wall. Bend the elbow slightly.'}],
+    execution:[{title:'Stretch',text:'Lean your torso away from the raised arm, creating a lateral flexion of the spine. Hold 30 seconds each side. You should feel a deep stretch from your armpit down the side of your back.'}],
+    mistakes:['Not leaning away — the stretch comes from the lateral trunk lean, not just the overhead reach'],
+    cues:['"Feel the stretch from armpit to hip"'],
+  },
+  {
+    name:'Lat Hang Stretch',category:'MOBILITY',equipment:'Pull-Up Bar',
+    primary:['Latissimus Dorsi'],secondary:['Teres Major','Thoracic Spine'],
+    setup:[{title:'Setup',text:'Hang from a pull-up bar with one hand. Allow your body to rotate and hang with that arm overhead. The free arm can hold the bar too for safety.'}],
+    execution:[{title:'Stretch',text:'Let the lat fully relax and lengthen. You can gently reach the free arm across to increase the lateral stretch. Hold 20–30 seconds each side.'}],
+    mistakes:['Actively engaging the lat — this is a passive hang; let it lengthen'],
+    cues:['"Let the lat melt downward"'],
+  },
+  {
+    name:'Tricep Overhead Stretch',category:'MOBILITY',equipment:'None',
+    primary:['Triceps (long head)'],secondary:['Posterior Deltoid','Latissimus Dorsi'],
+    setup:[{title:'Setup',text:'Raise one arm overhead, then bend the elbow so your hand drops behind your head. Use the opposite hand to gently push the elbow further into flexion.'}],
+    execution:[{title:'Stretch',text:'Hold 30 seconds each side. You should feel the stretch in the back of the upper arm. Keep the elbow pointing straight to the ceiling — do not let it drift to the side.'}],
+    mistakes:['Elbow drifting sideways — keep it pointing directly to the ceiling','Over-pulling — moderate pressure for 30 seconds beats aggressive pulling'],
+    cues:['"Elbow to the ceiling"'],
+  },
+  {
+    name:'Bicep Wall Stretch',category:'MOBILITY',equipment:'Wall',
+    primary:['Biceps Brachii'],secondary:['Anterior Deltoid','Pectoralis Minor'],
+    setup:[{title:'Setup',text:'Stand next to a wall. Place the back of your hand, with arm straight, against the wall at shoulder height. Thumbs pointing downward. Slowly rotate your body away from the wall.'}],
+    execution:[{title:'Stretch',text:'Hold 30 seconds each side. You should feel the stretch along the front of the upper arm (bicep) and slightly into the anterior deltoid.'}],
+    mistakes:['Bending the elbow — keep the arm straight for a full bicep stretch'],
+    cues:['"Arm straight, thumb down, rotate away"'],
+  },
+  {
+    name:'Wrist Flexor / Extensor Stretch',category:'MOBILITY',equipment:'None',
+    primary:['Wrist Flexors','Wrist Extensors'],secondary:['Forearm Muscles'],
+    setup:[{title:'Setup',text:'For flexor stretch: extend one arm in front, palm facing up. Use the opposite hand to gently pull the fingers back toward you. For extensor stretch: arm extended, palm facing down, use opposite hand to press the back of the hand toward you.'}],
+    execution:[{title:'Hold',text:'Hold each position for 20 seconds. Perform before heavy pressing sessions to prepare the wrists for bar loading.'}],
+    mistakes:['Forcing the stretch — these are delicate structures; gentle persistent pressure works better than aggressive stretching'],
+    cues:['Perform both flexor and extensor versions — they are equally important'],
+  },
+  {
+    name:'Open Book Stretch',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Thoracic Spine (Rotation)','Pectoralis Major'],secondary:['Anterior Deltoid','Thoracic Erectors'],
+    setup:[{title:'Position',text:'Lie on your side on a mat with hips stacked and knees bent at 90°. Arms extended straight in front of you, stacked (like a closed book).'}],
+    execution:[
+      {title:'Open',text:'Keeping your knees together and stacked on the floor, take the top arm and slowly rotate it up and over — opening it to the ceiling and ideally to the floor on the other side. Your eyes follow the moving hand.'},
+      {title:'Hold',text:'Hold the open position for 2–3 seconds, breathing deeply into the chest. Return slowly. 8 reps each side.'},
+    ],
+    mistakes:['Knees lifting off the floor — the hips must stay stable; the rotation comes entirely from the thoracic spine','Rotating from the lower back instead — if your knees lift, you are lumbar rotating, not thoracic rotating'],
+    cues:['"Eyes follow the hand — look where your arm goes"','Knees stay welded together on the floor — they do not move'],
+  },
+  {
+    name:'Thread the Needle',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Thoracic Spine (Rotation)','Posterior Shoulder Capsule'],secondary:['Rhomboids','Latissimus Dorsi'],
+    setup:[{title:'Position',text:'Start on all fours (quadruped position). Spine neutral, wrists under shoulders, knees under hips.'}],
+    execution:[
+      {title:'Thread',text:'Take one arm and slide it along the floor under your body — "threading" it through the space between your supporting arm and knees. Let the shoulder and side of the head rest on the floor.'},
+      {title:'Hold',text:'Hold for 30 seconds. You should feel a deep rotation in the upper thoracic spine and a stretch across the posterior shoulder. Return and repeat on the other side.'},
+    ],
+    mistakes:['Rushing through — hold the end range long enough to feel the thoracic rotation','Not letting the shoulder touch the floor — relax into it'],
+    cues:['"Let the shoulder melt to the floor with each exhale"'],
+  },
+  // ── MOBILITY — LOWER BODY ───────────────────────────
+  {
+    name:'Hip 90/90 Stretch',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Hip External Rotators (Piriformis, Glute Med)','Hip Internal Rotators'],secondary:['Hip Flexors','Adductors'],
+    setup:[
+      {title:'Position',text:'Sit on the floor. Place both legs in a "90/90" position — front leg with hip and knee both at 90° with the shin parallel to you, rear leg with hip and knee both at 90° with the shin parallel behind you.'},
+      {title:'Hips',text:'The key is that both hips are sitting square on the floor (or as close as possible). Do not let one hip lift.'},
+    ],
+    execution:[
+      {title:'Forward Fold',text:'Sit tall, then hinge forward over the front shin, keeping your spine long. Hold 60–90 seconds. You should feel the stretch in the back of the front hip (external rotators).'},
+      {title:'Switch',text:'Rotate your legs to the other side and repeat. Over time, try to increase the rotation speed and reduce the amount of hand support needed.'},
+    ],
+    mistakes:['One hip lifting off the floor — place a block or folded mat under it until mobility improves','Rounding the spine to reach forward — hinge from the hip, not the lower back'],
+    cues:['"Sit tall first, then hinge forward"','Both hips on the floor — that\'s the whole exercise'],
+  },
+  {
+    name:'Hip 90/90 Flow',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Hip Capsule (all planes)','Hip External and Internal Rotators'],secondary:['Adductors','Hip Flexors'],
+    setup:[{title:'Setup',text:'Same starting position as the Hip 90/90 Stretch. The "flow" version adds active transition between the two sides, rotating the legs smoothly from one 90/90 position to the other without using your hands to assist.'}],
+    execution:[
+      {title:'Transition',text:'From the 90/90 position, rotate your pelvis and swing both legs to the opposite 90/90 position. The goal is to do this without using your hands — it requires significant hip mobility and core control.'},
+      {title:'Tempo',text:'3–4 seconds to transition in each direction. 5–8 transitions each way. Hold briefly at each end position.'},
+    ],
+    mistakes:['Using hands to push — build to unassisted transitions progressively','Rushing through — the value is in the controlled transition, not the end position'],
+    cues:['"Legs are a windshield wiper — slow and controlled"','The transition is where the mobility gain happens'],
+  },
+  {
+    name:'Hip 90/90 Transition Flow',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Hip Capsule (all planes)'],secondary:['Hip External Rotators','Hip Internal Rotators','Adductors'],
+    setup:[{title:'Setup',text:'Same as the Hip 90/90 Flow. This is the most advanced version — flowing between positions quickly and with full control, without any hand support.'}],
+    execution:[{title:'Flow',text:'Continuously rotate between 90/90 positions for 2 minutes — building a rhythm. This is used as a dynamic warm-up before heavy lower body sessions. The goal is smooth, pain-free rotation with both hips staying as close to the floor as possible.'}],
+    mistakes:['Hips rising too high during the transition — keep them low'],
+    cues:['"Flow like a windshield wiper — smooth and rhythmic"'],
+  },
+  {
+    name:'Pigeon Pose',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Piriformis','Gluteus Medius','Hip External Rotators'],secondary:['Hip Flexors','TFL'],
+    setup:[
+      {title:'Position',text:'From a hands-and-knees position, bring one knee forward and place it behind your wrist. The shin is angled across your body (not straight across — angle it based on your flexibility). Extend the rear leg straight back.'},
+      {title:'Square',text:'Try to keep both hips as square to the front as possible. The hip of the front leg will want to tilt open — resist this. You can place a folded mat under the front hip if it does not reach the floor.'},
+    ],
+    execution:[{title:'Hold',text:'Walk your hands forward and lower your torso toward the floor. Hold 60–90 seconds. Breathe deeply. You should feel the stretch in the glute and outer hip of the front leg.'}],
+    mistakes:['Front hip lifting and tilting open — square the hips, use a block if needed','Placing the foot too close to the body — a longer shin angle increases the stretch'],
+    cues:['"Square hips to the floor"','Breathe into the restriction — do not force it','The longer the hold, the more the tissue releases'],
+  },
+  {
+    name:'Seated Pigeon',category:'MOBILITY',equipment:'Chair or Bench',
+    primary:['Piriformis','Gluteus Medius'],secondary:['Hip External Rotators'],
+    setup:[{title:'Setup',text:'Sit upright in a chair. Place one ankle on the opposite knee — foot flexed. This is a seated version of pigeon pose, easier for those with limited hip mobility.'}],
+    execution:[{title:'Fold',text:'Sit tall, then gently hinge forward at the hip. Hold 30–60 seconds. Feel the stretch in the outer glute of the raised leg.'}],
+    mistakes:['Foot not flexed — always flex the foot to protect the knee joint'],
+    cues:['"Foot flexed — always — to protect the knee"'],
+  },
+  {
+    name:'Seated Piriformis Stretch',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Piriformis'],secondary:['Gluteus Medius','Hip External Rotators'],
+    setup:[{title:'Setup',text:'Sit on the floor with legs extended. Cross one leg over, placing the foot flat on the floor outside the opposite knee. Wrap the opposite arm around the raised knee and pull it toward the opposite shoulder.'}],
+    execution:[{title:'Rotate',text:'Sit tall and gently rotate your torso toward the raised knee. Hold 30–45 seconds each side.'}],
+    mistakes:['Rounding the lower back — sit tall on a folded blanket if the hamstrings are restricting'],
+    cues:['"Long spine, rotate into the knee"'],
+  },
+  {
+    name:'Glute Figure-4 Stretch',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Gluteus Maximus','Piriformis'],secondary:['Hip External Rotators'],
+    setup:[{title:'Setup',text:'Lie on your back. Bring both feet off the floor, knees bent. Place the ankle of one leg across the opposite knee — creating a figure-4 shape. Flex the foot.'}],
+    execution:[{title:'Pull',text:'Thread your hands through the figure-4 and grip behind the thigh of the lower leg. Pull both legs toward your chest. Hold 45–60 seconds. Deepen by pulling the legs closer.'}],
+    mistakes:['Not flexing the foot — always flex to protect the knee','Neck tensing up — relax the head on the floor'],
+    cues:['"Foot flexed, pull toward chest, breathe into the glute"'],
+  },
+  {
+    name:'Supine Glute Stretch (figure-4)',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Gluteus Maximus','Piriformis'],secondary:['Hip External Rotators'],
+    setup:[{title:'Setup',text:'Same as the Glute Figure-4 Stretch. Used specifically as a cool-down after posterior chain work — the supine position allows complete relaxation of the glutes and hip external rotators after hip thrust and deadlift work.'}],
+    execution:[{title:'Hold',text:'Hold for 45–60 seconds. Focus on completely relaxing every muscle in the glute and hip area — let the tension from the workout drain out.'}],
+    mistakes:['Tensing — the goal is complete relaxation; let gravity assist'],
+    cues:['"Melt into the floor — release all the tension from the session"'],
+  },
+  {
+    name:'Kneeling Hip Flexor Stretch',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Iliopsoas (Hip Flexor)'],secondary:['Rectus Femoris','TFL'],
+    setup:[
+      {title:'Position',text:'Kneel on one knee with the other foot forward (half-kneeling). The knee on the floor is the side being stretched. Keep your torso upright.'},
+      {title:'Pelvis',text:'Apply a posterior pelvic tilt — tuck your tailbone under. This is the critical detail — without the pelvic tilt, most people are just stretching the quad, not the hip flexor.'},
+    ],
+    execution:[{title:'Drive',text:'While maintaining the posterior pelvic tilt, gently drive your hips forward until you feel a stretch in the front of the hip of the kneeling leg. Do not lean the torso forward. Hold 60–90 seconds.'}],
+    mistakes:['Not applying the posterior pelvic tilt — the hip flexor stretch requires the pelvis to be posteriorly tilted','Leaning forward with the torso — stand tall; the hip drives forward, not the chest'],
+    cues:['"Tuck the tailbone under first, then drive the hip forward"','Squeeze the glute of the rear leg to increase the stretch neurologically'],
+  },
+  {
+    name:'Hip Flexor Lunge Stretch',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Iliopsoas','Rectus Femoris'],secondary:['TFL','Sartorius'],
+    setup:[{title:'Setup',text:'From a deep lunge position with the rear knee on the floor. This is a more dynamic version of the kneeling hip flexor stretch — often used mid-warm-up.'}],
+    execution:[{title:'Stretch',text:'From the lunge, apply a posterior pelvic tilt and drive the hips forward and downward. You can add a lateral lean (toward the front foot side) to also target the TFL and IT band area. Hold 60–90 seconds each side.'}],
+    mistakes:['Front knee diving inward — keep it tracking over the toes','Not tucking the pelvis — same critical detail as all hip flexor stretches'],
+    cues:['"Posterior pelvic tilt — always"'],
+  },
+  {
+    name:'Hip Flexor Couch Stretch',category:'MOBILITY',equipment:'Wall or Sofa',
+    primary:['Rectus Femoris','Hip Flexors'],secondary:['Iliopsoas','TFL'],
+    setup:[{title:'Setup',text:'Kneel facing away from a wall. Place the top of one foot against the wall so the shin is vertical against it. Step the other foot forward into a half-kneeling position. This is the most intense hip flexor stretch — it stretches the rectus femoris (quad portion of the hip flexor) particularly hard because the knee is fully flexed as well.'}],
+    execution:[{title:'Stretch',text:'Apply a posterior pelvic tilt (tuck the tailbone) and maintain an upright torso. Drive the hips forward and down. Hold 60–90 seconds each side. Start gently — this stretch can be very intense.'}],
+    mistakes:['Not tucking the pelvis — the pelvic tilt is what makes this stretch effective','Arching the lower back — tuck, do not arch','Going too deep too fast — this stretch is intense; progress gradually'],
+    cues:['"Glute of the rear leg, squeeze it — this neurologically releases the hip flexor"','Tailbone tucked, torso tall'],
+  },
+  {
+    name:'Hip Flexor Active Stretch',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Iliopsoas'],secondary:['Glutes (Reciprocal Inhibition)'],
+    setup:[{title:'Setup',text:'Half-kneeling position. This is an active version — you actively contract the glute of the rear leg (which neurologically inhibits and relaxes the opposing hip flexor) while in the stretch position.'}],
+    execution:[{title:'Active Contraction',text:'From the half-kneeling hip flexor stretch position, squeeze the glute of the kneeling leg as hard as possible for 5 seconds, then relax for 5 seconds. Repeat 3–5 times. You should notice you can sink deeper into the stretch with each relaxation phase.'}],
+    mistakes:['Passive only — the active contraction is what makes this version significantly more effective than a standard passive hip flexor stretch'],
+    cues:['"Squeeze the glute to release the hip flexor — they are opposites"','Contract for 5, relax for 5 — repeat'],
+  },
+  {
+    name:'Hip Flexor Deep Stretch',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Iliopsoas','Rectus Femoris'],secondary:['TFL','Sartorius'],
+    setup:[{title:'Setup',text:'Combines the kneeling hip flexor stretch with a longer hold and potentially added movement — e.g. a lateral trunk lean, or a slight backward lean of the torso to increase the stretch on the rectus femoris.'}],
+    execution:[{title:'Hold',text:'Hold for 60–90 seconds per side. Add variety by reaching the same-side arm overhead and leaning away to increase the stretch, or reaching the arm behind you to draw the shoulder back and deepen the anterior chain opening.'}],
+    mistakes:['Rushing the hold — hip flexor tissue responds to longer sustained stretches more than short intense ones'],
+    cues:['"At least 60 seconds — hip flexors are slow to release"'],
+  },
+  {
+    name:'Hip Flexor + Quad Stretch',category:'MOBILITY',equipment:'None',
+    primary:['Rectus Femoris','Iliopsoas'],secondary:['TFL'],
+    setup:[{title:'Setup',text:'Standing on one leg, grip the ankle of the other leg behind you. This combines a quadriceps stretch with a hip flexor stretch when the posterior pelvic tilt is applied.'}],
+    execution:[{title:'Stretch',text:'Apply a posterior pelvic tilt, squeeze the glute of the standing leg, and hold the ankle so the knee is pointing straight down. Hold 45–60 seconds. Use a wall for balance if needed.'}],
+    mistakes:['Knee pointing outward — keep it pointing straight down for a true quad stretch','Not applying the pelvic tilt — without it, this is a quad stretch only, not a hip flexor stretch'],
+    cues:['"Knee down, tailbone tucked, stand tall"'],
+  },
+  {
+    name:'Kneeling Quad Stretch',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Rectus Femoris','Quadriceps'],secondary:['Hip Flexors'],
+    setup:[{title:'Setup',text:'Kneel on one knee. Reach back and grab the ankle of the kneeling leg. Hold the ankle close to the glute.'}],
+    execution:[{title:'Stretch',text:'Gently push the hip of the kneeling side forward and apply a posterior pelvic tilt. Hold 45–60 seconds each side. Feel the stretch on the front of the thigh.'}],
+    mistakes:['Not tucking the pelvis — this turns it into a pure knee flexion movement, not a quad stretch'],
+    cues:['"Hip forward, tailbone tucked"'],
+  },
+  {
+    name:'Quad Foam Roll',category:'MOBILITY',equipment:'Foam Roller',
+    primary:['Quadriceps','Rectus Femoris'],secondary:['TFL','IT Band'],
+    setup:[{title:'Setup',text:'Lie face down. Place the foam roller under the front of one thigh. Support your weight on your forearms. You can also cross one leg over the other for increased pressure.'}],
+    execution:[
+      {title:'Roll',text:'Slowly roll from just above the knee to just below the hip. Pause for 5–10 seconds on any tender spots.'},
+      {title:'Angle',text:'Roll slightly outward to hit the TFL and outer quad, and slightly inward to hit the inner quad. Cover the full width of the muscle.'},
+    ],
+    mistakes:['Rolling over the knee joint — stay on the muscle belly only','Rolling too fast — pause on the tight spots'],
+    cues:['"Find the knot, park there, breathe into it"','Combine with knee bends on the tight spot — flex and extend the knee slowly while on the foam roller'],
+  },
+  {
+    name:'Leg Swings',category:'MOBILITY',equipment:'Wall (for support)',
+    primary:['Hip Flexors','Hip Extensors','Hip Abductors'],secondary:['Hamstrings','Adductors'],
+    setup:[{title:'Setup',text:'Stand sideways to a wall, hand on the wall for support. For forward/backward swings: swing the outside leg forward and back. For lateral swings: face the wall and swing the leg out to the side and across the body.'}],
+    execution:[{title:'Swing',text:'Start with small, controlled swings and gradually increase the range over 10 reps. The leg should swing freely — not be forced. 10 reps each direction, each leg.'}],
+    mistakes:['Swinging too aggressively from rep 1 — start small and build the range','Using the hip to rotate the torso — the torso stays relatively still'],
+    cues:['"Let momentum do the work — do not force the range"','Progressive — each swing slightly larger than the last'],
+  },
+  {
+    name:'Ankle Circles + Dorsiflexion',category:'MOBILITY',equipment:'None',
+    primary:['Ankle Joint Capsule','Gastrocnemius','Soleus'],secondary:['Tibialis Anterior','Peroneals'],
+    setup:[{title:'Setup',text:'Seated or standing. Lift one foot off the floor. For circles: rotate the foot in large, full circles — 10 clockwise, 10 counterclockwise. For dorsiflexion: flex the foot by pulling toes toward the shin as far as possible, then plantarflex (point the toes).'}],
+    execution:[{title:'Drill',text:'10 circles each way, then 10 dorsiflexion/plantarflexion pumps. Then perform the knee-over-toe dorsiflexion drill: stand facing a wall, toes 2 inches from the wall, push your knee toward the wall over your little toe without the heel lifting. Gradually move the foot further from the wall.'}],
+    mistakes:['Small circles only — make them as large as possible','Heel lifting during the knee-over-toe drill — the heel must stay flat'],
+    cues:['"Big circles — trace the full alphabet if you want to be thorough"','Ankle mobility is one of the most common limiters of squat depth'],
+  },
+  {
+    name:'Ankle Dorsiflexion Stretch',category:'MOBILITY',equipment:'Wall',
+    primary:['Soleus','Gastrocnemius','Ankle Joint Capsule'],secondary:['Achilles Tendon','Peroneals'],
+    setup:[{title:'Setup',text:'Stand facing a wall, toes 2–3 inches from the wall. Place one foot forward. The goal is to push your knee toward the wall over your pinky toe without the heel lifting.'}],
+    execution:[{title:'Drive',text:'Gently push your knee as close to the wall as possible. Hold 3 seconds. Move the foot back 1cm each time the heel stays flat. This is the most functional ankle dorsiflexion drill because it mirrors the squat position.'}],
+    mistakes:['Heel lifting — the heel must stay flat the entire time','Knee collapsing inward — knee must track over the pinky toe, not the big toe'],
+    cues:['"Knee over pinky toe — not big toe"','This drill directly improves your squat depth'],
+  },
+  {
+    name:'Ankle Rockers',category:'MOBILITY',equipment:'None',
+    primary:['Ankle Dorsiflexion','Peroneals'],secondary:['Gastrocnemius','Soleus'],
+    setup:[{title:'Setup',text:'Half-kneeling position or seated. Foot flat on the floor. Rock the knee forward over the foot, then back — a gentle rocking motion to mobilise the talocrural joint.'}],
+    execution:[{title:'Rock',text:'10–15 gentle rocks each side. The rocking motion lubricates the joint and increases ankle dorsiflexion range. Particularly effective when combined with the Ankle Dorsiflexion Stretch.'}],
+    mistakes:['Forcing the range — this is a gentle joint mobilisation, not a stretch'],
+    cues:['"Gentle rocking — like a rocking chair for your ankle"'],
+  },
+  {
+    name:'Calf + Achilles Stretch',category:'MOBILITY',equipment:'Wall or Step',
+    primary:['Gastrocnemius (straight knee)','Soleus (bent knee)'],secondary:['Achilles Tendon','Plantar Fascia'],
+    setup:[
+      {title:'Straight Knee (Gastrocnemius)',text:'Stand facing a wall with hands on the wall. Step one foot back, keeping it flat. Press the heel down and gently push the hip forward until the calf is stretched. Hold 30 seconds.'},
+      {title:'Bent Knee (Soleus)',text:'Same position but slightly bend the rear knee. This removes the gastrocnemius from the stretch and isolates the soleus and Achilles tendon. Hold 30 seconds.'},
+    ],
+    execution:[{title:'Both Versions',text:'Always perform both the straight-knee and bent-knee version — they target different muscles. The soleus version is critical for those with Achilles tightness.'}],
+    mistakes:['Heel lifting during the stretch — the heel must stay flat','Doing straight-knee only — the soleus stretch (bent knee) is equally important'],
+    cues:['Two versions for two muscles — do both every time'],
+  },
+  {
+    name:'Seated Calf Stretch',category:'MOBILITY',equipment:'Towel or Band',
+    primary:['Soleus','Gastrocnemius'],secondary:['Achilles Tendon','Plantar Fascia'],
+    setup:[{title:'Setup',text:'Sit on the floor with legs extended. Loop a towel or resistance band around the ball of one foot. Gently pull the band toward you, dorsiflexing the foot.'}],
+    execution:[{title:'Stretch',text:'Hold 30 seconds each side. This is a gentler version of the calf stretch and is particularly useful as a cool-down when you do not want to load the calf through a standing position.'}],
+    mistakes:['Pulling aggressively — gentle, sustained tension is most effective'],
+    cues:['"Pull until you feel the stretch, breathe, and hold"'],
+  },
+  {
+    name:'Glute Bridge Activation',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Gluteus Maximus','Gluteus Medius'],secondary:['Hamstrings','Core'],
+    setup:[{title:'Setup',text:'Lie on your back, knees bent, feet flat on the floor hip-width apart. Arms by your sides or folded on your chest.'}],
+    execution:[
+      {title:'Squeeze First',text:'Before you lift, squeeze your glutes as hard as you can. Then drive through your heels to raise your hips. Hold at the top for 1–2 seconds, squeezing hard.'},
+      {title:'Lower',text:'Lower with control and repeat. This is an activation drill — the goal is to feel your glutes working, not to add load.'},
+    ],
+    mistakes:['Driving from the heels without squeezing the glutes first — you need to activate, not just lift','Hips rising too fast — slow and deliberate'],
+    cues:['"Squeeze the glutes before you lift — activation before loading"','If you feel it in your hamstrings more than your glutes, place your feet slightly further forward'],
+  },
+  {
+    name:'Banded Clamshell',category:'MOBILITY',equipment:'Light Resistance Band',
+    primary:['Gluteus Medius','Hip External Rotators'],secondary:['Piriformis','TFL'],
+    setup:[{title:'Setup',text:'Lie on your side with a resistance band around your thighs (just above the knees). Hips stacked, knees bent at 45°. Keep your feet together.'}],
+    execution:[{title:'Clam',text:'Keeping your feet together, rotate the top knee upward like a clamshell opening. The key is that the pelvis does NOT rotate — only the hip rotates. At the top, hold 1–2 seconds. Lower with control. 12–15 reps each side.'}],
+    mistakes:['Pelvis rolling backward — the pelvis must stay completely still; if it moves, reduce the band tension or range of motion','Using momentum — slow and controlled throughout'],
+    cues:['"Only the knee moves — the pelvis is a statue"','Feel the side of the glute, not the TFL (front of hip) — if you feel it at the front, your pelvis is rotating'],
+  },
+  {
+    name:'Banded Hip Activation',category:'MOBILITY',equipment:'Light Resistance Band',
+    primary:['Gluteus Medius','Gluteus Maximus'],secondary:['Hip External Rotators','TFL'],
+    setup:[{title:'Setup',text:'Place a resistance band just above the knees. Stand in an athletic position, feet hip-width apart.'}],
+    execution:[
+      {title:'Monster Walks',text:'Walk sideways — 10 steps each direction — keeping constant tension in the band. Do not let the knees cave inward. Stay in a slight squat position.'},
+      {title:'Clamshell',text:'After the walks, perform clamshells as described above. This combination thoroughly activates the glute med before squatting or deadlifting.'},
+    ],
+    mistakes:['Letting the band go slack at any point — keep it taut throughout','Standing fully upright during the walks — stay in a slight squat to load the glutes'],
+    cues:['"Knees out — always pushing against the band"'],
+  },
+  {
+    name:'Cat-Cow',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Lumbar Spine (Flexion/Extension)','Thoracic Spine'],secondary:['Core','Hip Flexors','Erector Spinae'],
+    setup:[{title:'Setup',text:'Start on all fours — wrists under shoulders, knees under hips. Spine neutral.'}],
+    execution:[
+      {title:'Cat (Flexion)',text:'Exhale and round your entire spine upward — tuck the tailbone, round the lower back, round the upper back, and lower the head. Hold 1–2 seconds.'},
+      {title:'Cow (Extension)',text:'Inhale and reverse — tilt the tailbone upward, drop the lower back toward the floor, open the chest, and look gently forward. Hold 1–2 seconds.'},
+      {title:'Flow',text:'The movement should be segmental — initiated at the tailbone and flowing up through each vertebral segment to the neck. 8 full cycles.'},
+    ],
+    mistakes:['Moving in one block instead of segmentally — work each segment of the spine through the movement','Moving too fast — slow and deliberate, with breath'],
+    cues:['"Initiate from the tailbone — let the wave travel upward"','One breath per movement — exhale for cat, inhale for cow'],
+  },
+  {
+    name:'World\'s Greatest Stretch',category:'MOBILITY',equipment:'None',
+    primary:['Hip Flexors','Thoracic Spine','Hamstrings','Adductors'],secondary:['Shoulder','Ankle','Glutes'],
+    setup:[{title:'Setup',text:'Start in a lunge position — right foot forward, left knee on the floor. Place both hands on the floor inside the right foot.'}],
+    execution:[
+      {title:'Hip Drop',text:'From the hands-inside-foot position, drop your left knee to the floor (or hover it) and feel the hip flexor stretch.'},
+      {title:'Thoracic Rotation',text:'Take the right elbow and drive it down toward the floor (inside the right foot), then rotate it up to the ceiling, following with your eyes. Hold 2 seconds at the top.'},
+      {title:'Hip Hinge',text:'Straighten the right leg and hinge forward — feeling the hamstring stretch. Hold 2 seconds. Return to the lunge. This is one rep — 5 each side.'},
+    ],
+    mistakes:['Rushing — each phase should be deliberate and held briefly','Not reaching full range — the thoracic rotation especially should be maximised'],
+    cues:['"This is 5 stretches in one — give each phase its moment"','The most efficient single mobility drill in existence'],
+  },
+  {
+    name:'Inchworm to Push-Up',category:'MOBILITY',equipment:'None',
+    primary:['Hamstrings','Thoracic Spine','Shoulder Stabilisers'],secondary:['Core','Hip Flexors','Calves'],
+    setup:[{title:'Setup',text:'Stand tall, feet hip-width. This exercise combines a hamstring stretch, shoulder activation and spine warm-up in one flowing movement.'}],
+    execution:[
+      {title:'Inchworm',text:'Hinge at the hips, keeping legs as straight as possible, and walk your hands out to a push-up position.'},
+      {title:'Push-Up',text:'Perform one controlled push-up (optional but recommended).'},
+      {title:'Walk Back',text:'Walk your hands back toward your feet, keeping legs as straight as possible, then stand tall. That is one rep — 5 full reps.'},
+    ],
+    mistakes:['Bending the knees excessively — the goal is to feel the hamstring stretch on the walk out and back','Rushing — pause briefly in the push-up position'],
+    cues:['"Feel the hamstrings stretch on the way out — do not take shortcuts"'],
+  },
+  {
+    name:'Squat to Stand',category:'MOBILITY',equipment:'None',
+    primary:['Ankle Dorsiflexion','Hip Flexors','Adductors'],secondary:['Hamstrings','Thoracic Spine'],
+    setup:[{title:'Setup',text:'Stand with feet shoulder-width apart. Hinge down and grip both big toes (or the front of your feet) while keeping the legs as straight as possible.'}],
+    execution:[
+      {title:'Squat Down',text:'While gripping your toes, pull yourself down into the deepest squat you can manage — heels stay flat. Elbows push your knees outward inside the squat.'},
+      {title:'Stand',text:'While still gripping the toes, straighten your legs as much as possible, feeling the hamstring stretch. The hips rise while your hands stay on your feet.'},
+      {title:'Repeat',text:'Flow between the squat and the standing position — 8–10 reps. This is one of the most comprehensive lower body mobility drills available.'},
+    ],
+    mistakes:['Releasing the toes when standing — maintain the grip throughout','Heels lifting in the squat — push the knees out and the hips down'],
+    cues:['"Squat down, stand up, never let go"','This is the ultimate test of lower body mobility — the more restricted, the more you need it'],
+  },
+  {
+    name:'Deep Squat Hold',category:'MOBILITY',equipment:'TRX, Pole, or Doorframe',
+    primary:['Hip Capsule','Ankle Dorsiflexion','Adductors'],secondary:['Thoracic Spine','Lumbar Spine'],
+    setup:[{title:'Setup',text:'Hold a TRX, pole or doorframe in front of you for support. Stand with feet shoulder-width, toes out 30°.'}],
+    execution:[
+      {title:'Sink',text:'Using the support to counterbalance, lower yourself into the deepest squat possible — heels flat, chest as upright as possible. Elbows drive the knees apart from inside.'},
+      {title:'Hold',text:'Hold the bottom position for 30–60 seconds. Breathe deeply. With each exhale, try to relax deeper into the position.'},
+    ],
+    mistakes:['Heels lifting — use more forward lean on the support to allow the heels to stay flat','Hunching the upper back — try to keep the chest as tall as possible'],
+    cues:['"Heels flat, knees out, chest proud"','If this is very difficult, you have found a key mobility restriction to address daily'],
+  },
+  {
+    name:'Hip Circles (standing)',category:'MOBILITY',equipment:'None',
+    primary:['Hip Joint Capsule'],secondary:['Hip Flexors','Hip External/Internal Rotators','Adductors'],
+    setup:[{title:'Setup',text:'Stand on one leg, holding a wall for support. Lift the other knee to 90° in front of you.'}],
+    execution:[{title:'Circle',text:'Rotate the raised leg in large, controlled circles — drawing as big a circle as possible with the knee. 10 circles forward, 10 backward. Maximise the range in every direction: up, out, back, and in. Switch legs.'}],
+    mistakes:['Small circles — make them as large as your hip will allow','Moving the standing leg — the hip circles from the raised leg, not from a torso lean'],
+    cues:['"Draw the biggest circle you can — progressively increasing range"'],
+  },
+  {
+    name:'Standing Hamstring Stretch',category:'MOBILITY',equipment:'None',
+    primary:['Hamstrings','Gastrocnemius'],secondary:['Lower Back','Sciatic Nerve'],
+    setup:[{title:'Setup',text:'Stand tall. Place one heel on a raised surface (bench, step, or even the floor for a gentler version) with the leg straight.'}],
+    execution:[{title:'Hinge',text:'Keeping your spine long and neutral (do not round the back), hinge forward at the hip toward the elevated leg. Hold 45 seconds. You should feel the stretch behind the knee and up the back of the thigh.'}],
+    mistakes:['Rounding the lower back — the stretch must come from a hip hinge, not lumbar flexion','Flexing the foot aggressively — this can provoke sciatic nerve tension; keep the foot relatively neutral'],
+    cues:['"Long spine — hinge from the hip, not the back"'],
+  },
+  {
+    name:'Lying Hamstring Stretch',category:'MOBILITY',equipment:'Strap or Band (optional)',
+    primary:['Hamstrings'],secondary:['Gastrocnemius','Sciatic Nerve'],
+    setup:[{title:'Setup',text:'Lie on your back. Loop a strap or band around one foot. Straighten the leg as much as possible while keeping the lower back flat on the floor.'}],
+    execution:[{title:'Hold',text:'Gently pull the strap to increase the stretch. The lower back stays flat — if it rounds, reduce the leg height. Hold 60 seconds. Breathe steadily throughout.'}],
+    mistakes:['Lower back lifting off the floor — reduce the leg angle until the back is flat','Pulling aggressively — gentle sustained tension is best for neural tissue'],
+    cues:['"Back flat — always — even if the leg cannot go high"'],
+  },
+  {
+    name:'Active Hamstring Floss',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Hamstrings','Sciatic Nerve (Neural Mobilisation)'],secondary:['Gastrocnemius','Lower Back'],
+    setup:[{title:'Setup',text:'Sit on the floor with legs extended. Sit tall — do not round the lower back. This is a dynamic (not static) neural flossing exercise.'}],
+    execution:[
+      {title:'Floss',text:'Reach toward one foot — extending the knee fully and dorsiflexing the foot simultaneously. Then flex the knee and plantarflex — returning to a neutral position. Alternate these positions rhythmically for 10 reps per leg.'},
+      {title:'Purpose',text:'This is a neural mobilisation drill as much as a hamstring stretch — it mobilises the sciatic nerve along its path from the lower back to the foot. Extremely useful for those with lower back tightness or posterior chain restriction.'},
+    ],
+    mistakes:['Aggressive bouncing — this should be controlled and rhythmic, not violent'],
+    cues:['"Extend and flex — slow rhythm — this is for the nerve as much as the muscle"'],
+  },
+  {
+    name:'Active Hamstring Stretch',category:'MOBILITY',equipment:'None',
+    primary:['Hamstrings'],secondary:['Gastrocnemius','Sciatic Nerve'],
+    setup:[{title:'Setup',text:'Stand with one foot on a raised surface or simply standing on one leg. Actively extend the raised knee as fully as possible using your own quad strength.'}],
+    execution:[{title:'Active Extension',text:'The "active" component means you are contracting the quad to straighten the leg — this creates reciprocal inhibition of the hamstring, making the stretch more effective. Hold the fully extended position for 2–3 seconds, then lower. 10 reps each leg.'}],
+    mistakes:['Passive only — the contraction of the quad is what makes this version more effective'],
+    cues:['"Actively straighten the leg — the quad contracts, the hamstring must release"'],
+  },
+  {
+    name:'Hamstring Floss Stretch',category:'MOBILITY',equipment:'Strap or Band',
+    primary:['Hamstrings','Sciatic Nerve'],secondary:['Gastrocnemius','Lower Back'],
+    setup:[{title:'Setup',text:'Lie on your back. Loop a band around one foot and raise the leg. Start with the knee slightly bent — not fully locked.'}],
+    execution:[{title:'Floss',text:'Slowly extend the knee as much as possible — hold 2 seconds. Then bend the knee slightly — hold 2 seconds. Repeat 10 times before holding the fully extended position for 60 seconds. The bend-extend motion mobilises the sciatic nerve along the hamstring.'}],
+    mistakes:['Staying static only — the dynamic component first, then the hold'],
+    cues:['"Bend and extend first to floss the nerve — then hold the stretch"'],
+  },
+  {
+    name:'Supine IT Band Stretch',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['IT Band','TFL','Lateral Quad'],secondary:['Gluteus Medius','Biceps Femoris'],
+    setup:[{title:'Setup',text:'Lie on your back. Bring one knee across your body toward the floor on the opposite side — a supine crossover stretch. Use the opposite hand to hold the knee.'}],
+    execution:[{title:'Stretch',text:'The foot of the crossing leg should dangle freely — do not hook it. Hold 45 seconds. You should feel the stretch on the outer thigh and hip. Keep both shoulders flat on the floor.'}],
+    mistakes:['Foot hooking on the floor — the leg should cross freely to target the IT band','Shoulder lifting — keep both shoulders flat'],
+    cues:['"Leg crosses, shoulder stays flat"'],
+  },
+  {
+    name:'Supine Twist',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Thoracic Spine (Rotation)','Piriformis'],secondary:['Obliques','Lower Back'],
+    setup:[{title:'Setup',text:'Lie on your back. Pull one knee to your chest, then guide it across your body to the floor on the opposite side. Extend the other arm out to the side at shoulder height.'}],
+    execution:[{title:'Hold',text:'Keep both shoulders flat on the floor. Hold 30 seconds each side. Breathe deeply — with each exhale, allow the twist to deepen slightly.'}],
+    mistakes:['Shoulder lifting — both shoulders stay flat throughout','Forcing the knee to the floor — let it hover if your thoracic mobility does not allow it to reach'],
+    cues:['"Shoulders flat — that\'s the non-negotiable"','Breathe into the rotation'],
+  },
+  {
+    name:'Cobra / Sphinx Pose',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Lumbar Spine (Extension)','Hip Flexors'],secondary:['Abdominal Fascia','Thoracic Spine'],
+    setup:[
+      {title:'Sphinx',text:'Lie face down. Place forearms on the floor, elbows under shoulders. This is the gentle version (Sphinx). Hold for 30–45 seconds.'},
+      {title:'Cobra',text:'Place hands under shoulders. Push up, straightening the arms partially or fully. The pelvis stays on the floor — this is what makes it different from a push-up. Hold for 45 seconds.'},
+    ],
+    execution:[{title:'Breathe',text:'Breathe steadily throughout. With each inhale, feel the chest open. With each exhale, allow the lower back to relax into the extension. Start with Sphinx; progress to Cobra as comfort increases.'}],
+    mistakes:['Squeezing the glutes — this limits lumbar extension; relax the glutes completely','Craning the neck — keep it in a neutral position'],
+    cues:['"Relax the glutes and the lower back — let the spine decompress in extension"','This is the antidote to sitting — do it every day'],
+  },
+  {
+    name:'Child\'s Pose',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Lumbar Spine (Flexion)','Thoracic Spine','Latissimus Dorsi'],secondary:['Hip Flexors','Glutes','Shoulder Extensors'],
+    setup:[{title:'Setup',text:'Kneel on the floor. Sit your hips back toward your heels. Walk your hands forward as far as possible and lower your forehead to the floor.'}],
+    execution:[{title:'Hold',text:'Hold for 45 seconds. For a lat stretch variation, walk both hands to one side and hold — this creates a lateral flexion of the spine and a deeper stretch on the contralateral lat. Switch sides.'}],
+    mistakes:['Hips not reaching the heels — place a pillow between your calves and thighs if tight knees or hips prevent this'],
+    cues:['"Walk the hands as far as they will go — then breathe and relax further"','One of the best decompression positions for the lower back after heavy training'],
+  },
+  {
+    name:'Low Back Extension Stretch',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Lumbar Spine (Flexion)','Erector Spinae'],secondary:['Glutes','Sacroiliac Joint'],
+    setup:[{title:'Setup',text:'Lie on your back. Pull both knees toward your chest, wrapping your arms around your shins.'}],
+    execution:[{title:'Rock',text:'Gently rock side to side while holding the knees to your chest. This provides a gentle traction/decompression for the lumbar spine. Hold the knees-to-chest position for 45 seconds. Use after heavy hinge or squat sessions.'}],
+    mistakes:['Pulling the neck up off the floor — keep the head relaxed'],
+    cues:['"Melt the lower back into the floor"','Gentle rocking massages the lumbar spine'],
+  },
+  {
+    name:'Spinal Warm-Up (prone + supine)',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Lumbar Spine','Thoracic Spine'],secondary:['Erector Spinae','Glutes','Core'],
+    setup:[{title:'Setup',text:'Alternate between prone (face down) and supine (face up) positions to mobilise the full spinal range of motion before loading.'}],
+    execution:[
+      {title:'Prone',text:'Cobra pose (lumbar extension) → prone hip extension (squeeze one glute and lift one leg slightly) × 8 each side.'},
+      {title:'Supine',text:'Knees-to-chest hold → single knee pull × 8 each side → glute bridge × 10. This sequence warms up both the extension and flexion ranges of the spine.'},
+    ],
+    mistakes:['Skipping the prone component — both extension and flexion need warming up'],
+    cues:['"Warm the spine in both directions — extension and flexion"'],
+  },
+  {
+    name:'Thoracic Rotation (half-kneeling)',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Thoracic Spine (Rotation)'],secondary:['Obliques','Rib Cage'],
+    setup:[{title:'Setup',text:'Half-kneeling position — one knee down, one foot forward. Place hands behind your head or extend one arm. The half-kneeling position locks the lumbar spine, ensuring the rotation comes from the thoracic spine, not the lower back.'}],
+    execution:[{title:'Rotate',text:'Rotate your upper body toward the side of the front foot as far as possible. Hold 1–2 seconds at the end range. Return to centre and repeat. 8 reps each side.'}],
+    mistakes:['Rotating from the lower back — the half-kneeling position should prevent this; if the hips are rotating, get into a tighter half-kneeling position'],
+    cues:['"Your hips are locked — only the ribcage rotates"','Reach the elbow to the ceiling at the top of each rotation'],
+  },
+  {
+    name:'Thoracic Extension + Rotation',category:'MOBILITY',equipment:'Foam Roller or Wall',
+    primary:['Thoracic Spine (Extension + Rotation)'],secondary:['Rib Cage','Posterior Shoulder Capsule'],
+    setup:[{title:'Setup',text:'Either over a foam roller (placed horizontally across the mid-back for extension) or in half-kneeling with hands behind head. For the combined version: extend over the roller, then add rotation by reaching one elbow toward the ceiling.'}],
+    execution:[{title:'Combine',text:'Extend back over the roller for 5–10 seconds. Then, from the extended position, rotate right and hold 2 seconds, rotate left and hold 2 seconds. Return to neutral and move to the next thoracic segment.'}],
+    mistakes:['Performing on the lumbar spine — this must be thoracic only (above the bottom of the ribcage)'],
+    cues:['"Extension first, then rotation — in sequence"'],
+  },
+  {
+    name:'Diaphragmatic Breathing',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Diaphragm','Parasympathetic Nervous System'],secondary:['Transverse Abdominis','Thoracic Spine'],
+    setup:[{title:'Setup',text:'Lie on your back with knees bent. Place one hand on your chest and one on your belly. The goal is to breathe so that only the belly hand rises — not the chest hand.'}],
+    execution:[
+      {title:'Inhale',text:'Breathe in through the nose for 4 counts. The belly should rise (diaphragm descends and pushes abdominal contents down) while the chest stays relatively still.'},
+      {title:'Hold',text:'Hold for 7 counts (optional — the 4-7-8 method).'},
+      {title:'Exhale',text:'Exhale through the mouth for 8 counts. The belly falls as the diaphragm rises. This extended exhale activates the parasympathetic nervous system — specifically valuable after intense training to down-regulate the nervous system.'},
+    ],
+    mistakes:['Breathing into the chest only — this is chest breathing (shallow), not diaphragmatic breathing','Rushing the exhale — the long exhale is the key therapeutic component'],
+    cues:['"Belly rises, chest stays still"','2 minutes of this at the end of every session reduces cortisol and improves recovery'],
+  },
+  {
+    name:'Arm Circles (fwd/back)',category:'MOBILITY',equipment:'None',
+    primary:['Shoulder Joint Capsule','Rotator Cuff'],secondary:['Anterior Deltoid','Posterior Deltoid'],
+    setup:[{title:'Setup',text:'Stand with arms extended to the sides at shoulder height.'}],
+    execution:[{title:'Circles',text:'Make slow, controlled full circles — forward for 10 reps, then backward for 10 reps. Start small and gradually increase the circle size with each rep. Keep the arms straight throughout.'}],
+    mistakes:['Small circles only — build to the largest circle your shoulder allows','Tense shoulders — keep them relaxed'],
+    cues:['"Progressively larger circles — feel the shoulder opening up"'],
+  },
+  {
+    name:'Arm Swing Practice',category:'MOBILITY',equipment:'None',
+    primary:['Shoulder Joint','Thoracic Spine'],secondary:['Core','Hip Coordination'],
+    setup:[{title:'Setup',text:'Stand in an athletic stance. This drill is used before explosive/power sessions to warm up the arm-leg coordination pattern for jumping and Olympic lifting.'}],
+    execution:[{title:'Swing',text:'Swing both arms back simultaneously (loading the hips and shoulders), then swing them forward and upward explosively. Coordinate this with a quarter-squat dip and a hip drive. Practice the timing for box jumps and broad jumps — 10 controlled practice reps.'}],
+    mistakes:['Arms and legs out of sync — the arm swing should happen simultaneously with the hip drive'],
+    cues:['"Arms and hips move together"'],
+  },
+  {
+    name:'Hip + Shoulder Activation',category:'MOBILITY',equipment:'Resistance Band',
+    primary:['Gluteus Medius','Rotator Cuff'],secondary:['Trapezius','Hip External Rotators'],
+    setup:[{title:'Setup',text:'A combined activation circuit used before power sessions: band pull-aparts (10 reps) immediately followed by banded glute bridges (10 reps). Performed as a superset to activate both the upper and lower body simultaneously.'}],
+    execution:[{title:'Circuit',text:'Band pull-aparts × 10 → immediately to glute bridges with band × 10 → repeat 2 rounds. This primes both the rotator cuff and the glutes for the subsequent explosive session.'}],
+    mistakes:['Resting between the exercises — perform them back-to-back for the CNS priming effect'],
+    cues:['"Back-to-back — upper then lower — no rest between"'],
+  },
+  {
+    name:'Jump Prep — Ankle/Calf Activation',category:'MOBILITY',equipment:'None',
+    primary:['Gastrocnemius','Soleus','Achilles Tendon (stiffness)'],secondary:['Peroneals','Tibialis Anterior'],
+    setup:[{title:'Setup',text:'This is a progressive activation sequence before jumping sessions: 1) Double calf raises (slow) × 10, 2) Single calf raises × 10 each, 3) Pogo hops (staying on the balls of the feet, quick ground contact) × 20, 4) Sub-maximal hops × 10.'}],
+    execution:[{title:'Sequence',text:'Work through the sequence progressively — each phase prepares the ankle for the increasing ground reaction forces of plyometric work. Do not skip to hops without the slow calf raises first.'}],
+    mistakes:['Jumping straight into box jumps without ankle prep — the Achilles needs progressive loading to avoid strain'],
+    cues:['"Load the calf progressively — slow raises before explosive hops"'],
+  },
+  {
+    name:'Jump Prep Sequence',category:'MOBILITY',equipment:'Plyometric Box',
+    primary:['Hip Extensors','Ankle Complex','CNS Activation'],secondary:['Quadriceps','Core'],
+    setup:[{title:'Setup',text:'A complete jump warm-up sequence used before block 5 power sessions: Pogo hops × 20 → Broad jump × 2 (sub-maximal) → Box jump × 2 (sub-maximal).'}],
+    execution:[{title:'Progression',text:'Each element of the sequence progressively increases the neuromuscular demand: pogos prime the ankle, broad jumps activate horizontal power, and box jumps activate vertical power. All at 60–70% effort — this is preparation, not performance.'}],
+    mistakes:['Performing at 100% effort in the warm-up — save maximum effort for the working sets','Skipping the pogo hop stage — it is the essential first step for Achilles preparation'],
+    cues:['"Sub-maximal in warm-up — save the full effort for the work sets"'],
+  },
+  {
+    name:'Full Dynamic Warm-Up',category:'MOBILITY',equipment:'None',
+    primary:['Full Body','CNS Activation'],secondary:['All Joints','Cardiovascular System'],
+    setup:[{title:'Setup',text:'A complete dynamic warm-up sequence for power-focused sessions: High knees (20m) → Butt kicks (20m) → A-skips (20m) → Leg swings (10 each direction, each leg) → Arm circles (10 forward, 10 backward) → Hip circles (10 each way) → World\'s Greatest Stretch (3 each side).'}],
+    execution:[{title:'Flow',text:'Perform each movement continuously without stopping. The total sequence takes approximately 5 minutes. By the end, you should feel warm, coordinated and ready for explosive work — not fatigued.'}],
+    mistakes:['Performing it slowly and casually — each movement should have intent and progressively increase effort','Skipping the stretching component at the end — the World\'s Greatest Stretch is the essential mobility piece'],
+    cues:['"Progressive intensity — start at 50%, finish at 80%"','By the last drill, you should feel switched on'],
+  },
+  {
+    name:'BW Glute Bridge + Hip Thrust',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Gluteus Maximus','Hamstrings'],secondary:['Core','Hip Flexors (stretching)'],
+    setup:[{title:'Setup',text:'Lie on your back (for glute bridge) or with upper back on a bench (for hip thrust). No load — bodyweight only. Used as a posterior chain activation drill before loading hip hinge exercises.'}],
+    execution:[{title:'Activation',text:'Perform 10–15 bodyweight reps with a 2-second squeeze at the top of each rep. Focus entirely on feeling the glutes contract — if you feel it more in the hamstrings, place the feet slightly further from your body.'}],
+    mistakes:['Rushing — this is about activating the glutes, not completing reps','No pause at the top — the squeeze is the point'],
+    cues:['"Squeeze the glutes hard at the top — this is activation, not training"'],
+  },
+  {
+    name:'Glute Bridge Activation',category:'MOBILITY',equipment:'None (Mat)',
+    primary:['Gluteus Maximus'],secondary:['Hamstrings','Core'],
+    setup:[{title:'Setup',text:'Lie on your back, knees bent, feet flat on the floor at hip-width. Used as a low-intensity glute activation drill at the start of lower body sessions.'}],
+    execution:[{title:'Bridge',text:'Drive through both heels, squeeze the glutes and raise the hips. Hold 1–2 seconds at the top. Lower with control. 12 bodyweight reps. The goal is to establish the neuromuscular connection between your brain and your glutes before adding load.'}],
+    mistakes:['Not pausing at the top — the brief hold is what creates the activation response'],
+    cues:['"This is your brain practising talking to your glutes before the workout begins"'],
+  },
 ];
 
 // ── Library helpers ─────────────────────────────────────
-const LIB_CATEGORIES=['ALL','UPPER PUSH','UPPER PULL','LOWER PUSH','LOWER PULL','FULL BODY','CORE','POWER'];
-const CAT_COLORS={'UPPER PUSH':'rgba(230,57,70,.12)','UPPER PULL':'rgba(100,149,237,.12)','LOWER PUSH':'rgba(244,162,97,.12)','LOWER PULL':'rgba(92,184,92,.12)','FULL BODY':'rgba(180,100,220,.12)','CORE':'rgba(255,209,102,.12)','POWER':'rgba(255,100,100,.12)'};
-const CAT_TEXT={'UPPER PUSH':'#e63946','UPPER PULL':'#6495ed','LOWER PUSH':'#f4a261','LOWER PULL':'#5cb85c','FULL BODY':'#b464dc','CORE':'#ffd166','POWER':'#ff6464'};
+const LIB_CATEGORIES=['ALL','UPPER PUSH','UPPER PULL','LOWER PUSH','LOWER PULL','FULL BODY','CORE','POWER','MOBILITY'];
+const CAT_COLORS={'UPPER PUSH':'rgba(230,57,70,.12)','UPPER PULL':'rgba(100,149,237,.12)','LOWER PUSH':'rgba(244,162,97,.12)','LOWER PULL':'rgba(92,184,92,.12)','FULL BODY':'rgba(180,100,220,.12)','CORE':'rgba(255,209,102,.12)','POWER':'rgba(255,100,100,.12)','MOBILITY':'rgba(56,178,172,.12)'};
+const CAT_TEXT={'UPPER PUSH':'#e63946','UPPER PULL':'#6495ed','LOWER PUSH':'#f4a261','LOWER PULL':'#5cb85c','FULL BODY':'#b464dc','CORE':'#ffd166','POWER':'#ff6464','MOBILITY':'#38b2ac'};
 
 function getLibraryExercise(name){
   return EXERCISE_LIBRARY.find(e=>e.name===name)
@@ -2629,7 +3661,9 @@ function renderExerciseDetail(name){
       <div style="font-size:9px;color:var(--text4);margin-top:2px">${hist.length} sessions logged</div>
     </div>
     <button class="btn btn-ghost" style="font-size:10px" onclick="S.progExercise='${ex.name.replace(/'/g,"\\'")}';nav('progress')">PROGRESS ›</button>
-  </div>`:`<div style="margin:12px 16px;background:var(--surf);border:1px solid var(--border);border-radius:5px;padding:10px 14px;font-size:10px;color:var(--text4)">No sessions logged yet — complete a workout to track progress here</div>`}
+  </div>
+  ${renderRMCalc(pb.weight, pb.reps)}`:`<div style="margin:12px 16px;background:var(--surf);border:1px solid var(--border);border-radius:5px;padding:10px 14px;font-size:10px;color:var(--text4)">No sessions logged yet — complete a workout to track progress here</div>
+  ${renderRMCalc()}`}
 
   <!-- Muscles -->
   <div class="section-block">
@@ -2685,13 +3719,348 @@ function renderExerciseDetail(name){
 
 
 // ═══════════════════════════════════════════════════════
-// INIT
+// MUSCLE FREQUENCY TRACKER ENGINE
+// ═══════════════════════════════════════════════════════
+
+// Maps raw library muscle names → canonical tracker groups
+const MUSCLE_MAP = {
+  // CHEST
+  'Pectoralis Major':'chest','Lower Pectoralis Major':'chest',
+  'Upper Pectoralis Major':'chest','Pectoralis Minor':'chest',
+  // SHOULDERS
+  'Anterior Deltoid':'shoulders','Medial Deltoid':'shoulders',
+  'Posterior Deltoid':'shoulders','Rear Deltoid':'shoulders',
+  'Rotator Cuff':'shoulders','Supraspinatus':'shoulders',
+  'Infraspinatus':'shoulders','Teres Minor':'shoulders',
+  'Subscapularis':'shoulders','Shoulder Stabilisers':'shoulders',
+  'Shoulder Capsule':'shoulders','Shoulder Joint Capsule':'shoulders',
+  'Shoulder Capsule (anterior)':'shoulders','Shoulder Capsule (inferior)':'shoulders',
+  'Rotator Cuff (Infraspinatus, Teres Minor, Subscapularis)':'shoulders',
+  'External Rotators':'shoulders','Serratus Anterior':'shoulders',
+  // UPPER BACK
+  'Latissimus Dorsi':'upperback','Rhomboids':'upperback',
+  'Middle Trapezius':'upperback','Lower Trapezius':'upperback',
+  'Upper Trapezius':'upperback','Trapezius':'upperback',
+  'Teres Major':'upperback',
+  // BICEPS
+  'Biceps Brachii':'biceps','Biceps Brachii (Long Head)':'biceps',
+  'Biceps':'biceps','Biceps (long head)':'biceps',
+  'Brachialis':'biceps','Brachioradialis':'biceps',
+  // TRICEPS
+  'Triceps':'triceps','Triceps (Long Head)':'triceps',
+  'Triceps (all 3 heads)':'triceps','Triceps (long head)':'triceps',
+  'Medial and Lateral Tricep Heads':'triceps','Anconeus':'triceps',
+  // CORE
+  'Rectus Abdominis':'core','Transverse Abdominis':'core',
+  'Obliques':'core','Core':'core',
+  // LOWER BACK
+  'Erector Spinae':'lowerback','Lumbar Spine':'lowerback',
+  'Thoracic Erectors':'lowerback',
+  // GLUTES
+  'Gluteus Maximus':'glutes','Gluteus Medius':'glutes',
+  'Glutes':'glutes','Piriformis':'glutes',
+  'Hip External Rotators':'glutes','Hip External/Internal Rotators':'glutes',
+  'Hip External Rotators (Piriformis, Glute Med)':'glutes',
+  // QUADS
+  'Quadriceps':'quads','Rectus Femoris':'quads',
+  'Lateral Quad':'quads',
+  // HAMSTRINGS
+  'Hamstrings':'hamstrings','Hamstrings (Eccentric)':'hamstrings',
+  'Biceps Femoris':'hamstrings','Posterior Chain':'hamstrings',
+  'Posterior Chain (Hamstrings, Glutes, Erectors)':'hamstrings',
+  // ADDUCTORS
+  'Adductors':'adductors','TFL':'adductors','Sartorius':'adductors',
+  'IT Band':'adductors','Hip Flexors':'adductors','Iliopsoas':'adductors',
+  'Iliopsoas (Hip Flexor)':'adductors',
+  // CALVES
+  'Gastrocnemius':'calves','Soleus':'calves','Calves':'calves',
+  'Achilles Tendon':'calves','Peroneals':'calves',
+  'Gastrocnemius (straight knee)':'calves','Soleus (bent knee)':'calves',
+};
+
+// The 12 display groups with labels, icons, SVG regions
+const MUSCLE_GROUPS = [
+  {id:'chest',     label:'Chest',    icon:'🫁', side:'front'},
+  {id:'shoulders', label:'Delts',    icon:'💪', side:'front'},
+  {id:'upperback', label:'Back',     icon:'🔙', side:'back'},
+  {id:'biceps',    label:'Biceps',   icon:'💪', side:'front'},
+  {id:'triceps',   label:'Triceps',  icon:'💪', side:'back'},
+  {id:'core',      label:'Core',     icon:'⬡',  side:'front'},
+  {id:'lowerback', label:'Low Back', icon:'🔙', side:'back'},
+  {id:'glutes',    label:'Glutes',   icon:'🍑', side:'back'},
+  {id:'quads',     label:'Quads',    icon:'🦵', side:'front'},
+  {id:'hamstrings',label:'Hams',     icon:'🦵', side:'back'},
+  {id:'adductors', label:'Adduct.',  icon:'🦵', side:'front'},
+  {id:'calves',    label:'Calves',   icon:'🦶', side:'back'},
+];
+
+// SVG region definitions (front body left, back body right)
+// Each region is a simplified polygon path within a 80x200 viewBox
+const BODY_SVG_REGIONS = {
+  // FRONT body regions (viewBox 0 0 80 220)
+  front:{
+    chest:     'M22,52 L58,52 L62,72 L18,72 Z',
+    shoulders: 'M10,42 L22,52 L22,65 L10,65 Z M58,52 L70,42 L70,65 L58,65 Z',
+    biceps:    'M8,66 L18,66 L16,95 L6,95 Z M62,66 L72,66 L74,95 L64,95 Z',
+    core:      'M22,72 L58,72 L58,105 L22,105 Z',
+    quads:     'M18,112 L38,112 L36,160 L16,160 Z M42,112 L62,112 L64,160 L44,160 Z',
+    adductors: 'M36,112 L44,112 L46,155 L34,155 Z',
+    calves:    'M18,162 L34,162 L32,200 L16,200 Z M46,162 L62,162 L64,200 L48,200 Z',
+  },
+  // BACK body regions (viewBox 0 0 80 220)
+  back:{
+    upperback: 'M22,50 L58,50 L60,85 L20,85 Z',
+    shoulders: 'M8,40 L22,50 L22,68 L8,68 Z M58,50 L72,40 L72,68 L58,68 Z',
+    triceps:   'M6,68 L18,68 L16,96 L5,96 Z M62,68 L74,68 L75,96 L64,96 Z',
+    lowerback: 'M24,85 L56,85 L58,112 L22,112 Z',
+    glutes:    'M18,112 L40,112 L40,138 L16,138 Z M40,112 L62,112 L64,138 L40,138 Z',
+    hamstrings:'M16,138 L38,138 L36,178 L14,178 Z M42,138 L64,138 L66,178 L44,178 Z',
+    calves:    'M16,180 L34,180 L32,210 L14,210 Z M46,180 L64,180 L66,210 L48,210 Z',
+  }
+};
+
+// Muscle heat status based on days since last trained
+function getMuscleHeatStatus(daysSince){
+  if(daysSince === null) return {label:'No data', color:'#444', cls:'heat-fresh', pct:0, emoji:'⚫'};
+  if(daysSince <= 1)     return {label:'Today/Yesterday', color:'#e63946', cls:'heat-today', pct:95, emoji:'🔴'};
+  if(daysSince <= 2)     return {label:'2 days ago', color:'#e76f51', cls:'heat-2day', pct:75, emoji:'🟠'};
+  if(daysSince <= 3)     return {label:'3 days ago', color:'#f4a261', cls:'heat-3day', pct:50, emoji:'🟡'};
+  if(daysSince <= 5)     return {label:'Ready', color:'#5cb85c', cls:'heat-ready', pct:25, emoji:'🟢'};
+  return {label:'Fully fresh', color:'#5cb85c', cls:'heat-ready', pct:10, emoji:'🟢'};
+}
+
+// Core engine: returns daysSince map for all muscle groups
+function getMuscleFrequencyData(){
+  const workouts = DB.getWorkoutList()
+    .filter(w => w.completed && w.exercises)
+    .slice(0, 30); // last 30 sessions max
+
+  const lastTrained = {}; // groupId → Date
+  const now = new Date();
+  now.setHours(0,0,0,0);
+
+  workouts.forEach(w => {
+    const wDate = new Date(w.date + 'T00:00:00');
+    const daysDiff = Math.round((now - wDate) / 86400000);
+
+    w.exercises.forEach(ex => {
+      const libEx = getLibraryExercise(ex.name);
+      if(!libEx) return;
+      const allMuscles = [...(libEx.primary||[]), ...(libEx.secondary||[])];
+      allMuscles.forEach(m => {
+        const group = MUSCLE_MAP[m];
+        if(!group) return;
+        if(lastTrained[group] === undefined || daysDiff < lastTrained[group]){
+          lastTrained[group] = daysDiff;
+        }
+      });
+    });
+  });
+
+  return MUSCLE_GROUPS.map(g => ({
+    ...g,
+    daysSince: lastTrained[g.id] !== undefined ? lastTrained[g.id] : null,
+    status: getMuscleHeatStatus(lastTrained[g.id] !== undefined ? lastTrained[g.id] : null)
+  }));
+}
+
+// Session muscle impact — which groups does today's session hit?
+function getSessionMuscleGroups(blockIdx, weekIdx, sessionType){
+  const block = BLOCKS[blockIdx];
+  if(!block) return [];
+  const session = block.sessions[sessionType];
+  if(!session) return [];
+  const groups = new Set();
+  session.exercises.forEach(ex => {
+    const libEx = getLibraryExercise(ex.name);
+    if(!libEx) return;
+    [...(libEx.primary||[])].forEach(m => {
+      const g = MUSCLE_MAP[m]; if(g) groups.add(g);
+    });
+  });
+  return [...groups];
+}
+
+// ── HOME STRIP ───────────────────────────────────────────
+function renderHomeMuscleStrip(){
+  const data = getMuscleFrequencyData();
+  const hasData = data.some(g => g.daysSince !== null);
+  if(!hasData) return '';
+
+  const rec = getCurrentRecommendation();
+  const sessionGroups = new Set(getSessionMuscleGroups(rec.block, rec.week, rec.session));
+
+  return`<div class="muscle-strip" onclick="nav('muscles')">
+    <div class="muscle-strip-title">
+      <span>MUSCLE RECOVERY</span>
+      <span style="color:var(--accent);font-size:9px">VIEW FULL MAP ›</span>
+    </div>
+    <div class="muscle-dot-row">
+      ${data.filter(g => g.daysSince !== null).map(g => {
+        const isTarget = sessionGroups.has(g.id);
+        return`<div class="muscle-dot">
+          <div class="muscle-dot-circle ${g.status.cls}" style="${isTarget?'box-shadow:0 0 0 2px var(--accent)':''}">
+            ${g.icon}
+          </div>
+          <div class="muscle-dot-label" style="${isTarget?'color:var(--accent)':''}">${g.label}</div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap">
+      <span style="font-size:8px;color:var(--text4)">🔴 Recovering &nbsp;🟡 Approaching &nbsp;🟢 Ready</span>
+    </div>
+  </div>`;
+}
+
+// ── FULL TRACKER SCREEN ──────────────────────────────────
+function renderMuscleTracker(){
+  const data = getMuscleFrequencyData();
+  const rec = getCurrentRecommendation();
+  const sessionGroups = new Set(getSessionMuscleGroups(rec.block, rec.week, rec.session));
+  const block = BLOCKS[rec.block];
+  const session = block.sessions[rec.session];
+  const hasAnyData = data.some(g => g.daysSince !== null);
+
+  // Workout recommendations based on recovery state
+  const warningGroups = data.filter(g => sessionGroups.has(g.id) && g.daysSince !== null && g.daysSince <= 1);
+  const borderlineGroups = data.filter(g => sessionGroups.has(g.id) && g.daysSince !== null && g.daysSince === 2);
+  const readyGroups = data.filter(g => sessionGroups.has(g.id) && (g.daysSince === null || g.daysSince >= 3));
+
+  let recStatus = 'GO';
+  let recColor = '#5cb85c';
+  let recMsg = '';
+  if(warningGroups.length >= 2){
+    recStatus = 'CAUTION';
+    recColor = '#e63946';
+    recMsg = `${warningGroups.map(g=>g.label).join(', ')} trained within 24h — reduce load 15–20% or swap session.`;
+  } else if(warningGroups.length === 1 || borderlineGroups.length >= 2){
+    recStatus = 'MODIFIED';
+    recColor = '#f4a261';
+    recMsg = `${[...warningGroups,...borderlineGroups].map(g=>g.label).join(', ')} may be under-recovered. Monitor during warm-up.`;
+  } else {
+    recMsg = 'Target muscles are well recovered. Train as programmed.';
+  }
+
+  const frontGroups = data.filter(g => g.side === 'front');
+  const backGroups = data.filter(g => g.side === 'back');
+
+  return`<div class="fade-slide">
+  <div class="hdr">
+    <div class="hdr-sub">Recovery Status</div>
+    <div class="hdr-title">MUSCLE MAP</div>
+  </div>
+
+  <!-- Body SVG heatmap -->
+  <div style="background:var(--surf);border-bottom:1px solid var(--border);padding-bottom:16px">
+    <div class="body-wrap">
+      <div class="body-panel">
+        <div class="body-label">FRONT</div>
+        ${renderBodySVG('front', data)}
+      </div>
+      <div class="body-panel">
+        <div class="body-label">BACK</div>
+        ${renderBodySVG('back', data)}
+      </div>
+    </div>
+    <!-- Legend -->
+    <div style="display:flex;justify-content:center;gap:14px;flex-wrap:wrap;padding:0 16px">
+      ${[['#e63946','Recovering (0–1d)'],['#f4a261','Approaching (2–3d)'],['#5cb85c','Ready (4d+)'],['#444','No data']].map(([c,l])=>
+        `<div style="display:flex;align-items:center;gap:5px">
+          <div style="width:10px;height:10px;border-radius:50%;background:${c}"></div>
+          <span style="font-size:9px;color:var(--text4)">${l}</span>
+        </div>`
+      ).join('')}
+    </div>
+  </div>
+
+  <!-- Session readiness panel -->
+  <div style="margin:12px 16px;background:var(--surf);border:1px solid var(--border);border-left:3px solid ${recColor};border-radius:5px;padding:14px">
+    <div style="font-size:9px;color:var(--text4);letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px">NEXT SESSION — ${session?.label||''}</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:${recColor}">${recStatus}</div>
+      <div style="font-size:10px;color:var(--text2);line-height:1.6;flex:1">${recMsg}</div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      ${data.filter(g => sessionGroups.has(g.id)).map(g =>
+        `<div style="display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:3px;background:${g.status.cls==='heat-today'?'rgba(230,57,70,.1)':g.status.cls==='heat-2day'?'rgba(231,111,81,.1)':g.status.cls==='heat-3day'?'rgba(244,162,97,.1)':'rgba(92,184,92,.1)'};border:1px solid ${g.status.color}30">
+          <span style="font-size:10px">${g.status.emoji}</span>
+          <span style="font-family:var(--font-display);font-size:12px;font-weight:700;color:${g.status.color}">${g.label}</span>
+          <span style="font-size:9px;color:var(--text4)">${g.daysSince===null?'fresh':g.daysSince===0?'today':g.daysSince+'d'}</span>
+        </div>`
+      ).join('')}
+    </div>
+  </div>
+
+  <!-- Full muscle list -->
+  <div class="section-label">ALL MUSCLE GROUPS</div>
+  <div style="margin:0 16px;border:1px solid var(--border);border-radius:6px;overflow:hidden">
+    ${data.map((g, i) => {
+      const isTarget = sessionGroups.has(g.id);
+      const dLabel = g.daysSince === null ? 'No data' : g.daysSince === 0 ? 'Today' : g.daysSince === 1 ? 'Yesterday' : `${g.daysSince} days ago`;
+      return`<div class="muscle-list-row" style="${i===data.length-1?'border-bottom:none':''}">
+        <div style="width:28px;text-align:center;font-size:16px">${g.icon}</div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
+            <span style="font-family:var(--font-display);font-size:14px;font-weight:700;color:${isTarget?g.status.color:'var(--text)'}">${g.label}</span>
+            ${isTarget?`<span style="font-size:8px;color:var(--accent);letter-spacing:.1em">TODAY</span>`:''}
+          </div>
+          <div class="muscle-heat-bar-wrap">
+            <div class="muscle-heat-bar" style="width:${g.daysSince===null?0:Math.max(5,100-g.daysSince*18)}%;background:${g.status.color}"></div>
+          </div>
+        </div>
+        <div style="text-align:right;padding-left:10px;flex-shrink:0">
+          <div class="muscle-days-badge" style="color:${g.status.color}">${g.daysSince===null?'–':g.daysSince===0?'0d':g.daysSince+'d'}</div>
+          <div class="muscle-status-text" style="color:${g.status.color}">${g.daysSince===null?'NO DATA':g.daysSince<=1?'RECOVERING':g.daysSince<=3?'BUILDING':'READY'}</div>
+        </div>
+      </div>`;
+    }).join('')}
+  </div>
+
+  ${!hasAnyData?`<div style="margin:12px 16px;padding:14px;background:var(--surf);border:1px solid var(--border);border-radius:5px;font-size:10px;color:var(--text3);line-height:1.7">
+    Complete some workouts to start seeing your muscle recovery data here. The tracker reads your logged sessions and maps each exercise to its primary muscle groups automatically.
+  </div>`:''}
+
+  <div style="height:16px"></div>
+  </div>`;
+}
+
+// ── SVG BODY RENDERER ────────────────────────────────────
+function renderBodySVG(side, data){
+  const regions = BODY_SVG_REGIONS[side];
+  const groupMap = {};
+  data.forEach(g => { groupMap[g.id] = g; });
+
+  // Body outline paths
+  const bodyOutline = side === 'front'
+    ? `M40,5 C28,5 20,12 18,22 L14,38 C10,40 7,45 8,52 L10,65 C8,68 6,74 6,82 L6,95 C4,98 4,102 6,105 L8,112 L16,112 L16,160 C16,165 18,168 18,178 C18,185 16,190 16,200 C16,205 18,208 22,210 L28,210 L28,200 L30,200 L30,210 L36,210 L36,195 L38,170 L40,170 L42,195 L42,210 L48,210 L48,200 L50,200 L50,210 L56,210 C60,208 62,205 62,200 C62,190 60,185 60,178 C60,168 62,165 62,160 L64,112 L72,112 L74,105 C76,102 76,98 74,95 L74,82 C74,74 72,68 70,65 L72,52 C73,45 70,40 66,38 L62,22 C60,12 52,5 40,5 Z`
+    : `M40,5 C28,5 20,12 18,22 L14,38 C10,40 7,45 8,52 L10,65 C8,68 6,74 6,82 L6,95 C4,98 4,102 6,105 L8,112 L16,112 L16,138 L14,178 C14,182 16,185 16,195 L16,210 C16,210 20,212 24,210 L24,195 C24,190 26,185 28,180 L36,178 L40,180 L44,178 L52,180 C54,185 56,190 56,195 L56,210 C60,212 64,210 64,210 L64,195 C64,185 66,182 66,178 L64,138 L64,112 L72,112 L74,105 C76,102 76,98 74,95 L74,82 C74,74 72,68 70,65 L72,52 C73,45 70,40 66,38 L62,22 C60,12 52,5 40,5 Z`;
+
+  const fills = Object.entries(regions).map(([groupId, path]) => {
+    const g = groupMap[groupId];
+    if(!g) return `<path d="${path}" fill="var(--surf3)" opacity="0.5"/>`;
+    const color = g.status.color;
+    const opacity = g.daysSince === null ? 0.15 : g.daysSince <= 1 ? 0.7 : g.daysSince <= 3 ? 0.5 : 0.35;
+    return `<path d="${path}" fill="${color}" opacity="${opacity}"/>`;
+  }).join('');
+
+  return`<svg viewBox="0 0 80 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:120px;display:block;margin:0 auto">
+    <!-- Body outline -->
+    <path d="${bodyOutline}" fill="var(--surf3)" stroke="var(--border)" stroke-width="1"/>
+    <!-- Muscle regions -->
+    ${fills}
+    <!-- Subtle region outlines -->
+    ${Object.values(regions).map(path => `<path d="${path}" fill="none" stroke="var(--border)" stroke-width="0.5" opacity="0.4"/>`).join('')}
+  </svg>`;
+}
+
 // ═══════════════════════════════════════════════════════
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
     navigator.serviceWorker.register('sw.js').catch(()=>{});
   });
 }
+// Apply saved theme before first render
+applyTheme(DB.getSettings().theme||'dark');
 render();
 </script>
 </body>

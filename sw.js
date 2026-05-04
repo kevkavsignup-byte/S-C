@@ -3,8 +3,8 @@
 // Caches the app for full offline use after first load
 // ═══════════════════════════════════════════════════════
 
-const CACHE_NAME = '6m-strength-v4';
-const CACHE_VERSION = 4;
+const CACHE_NAME = '6m-strength-v8';
+const CACHE_VERSION = 8;
 
 // Files to cache on install
 const STATIC_ASSETS = [

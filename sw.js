@@ -1,127 +1,78 @@
 // ═══════════════════════════════════════════════════════
-// 6M STRENGTH — SERVICE WORKER
-// Caches the app for full offline use after first load
+// 6M STRENGTH — SERVICE WORKER (lean version)
 // ═══════════════════════════════════════════════════════
 
-const CACHE_NAME = '6m-strength-v9';
-const CACHE_VERSION = 9;
+const CACHE_NAME = '6m-strength-v10';
 
-// Files to cache on install
-const STATIC_ASSETS = [
-  './',
+// Only cache the two files the app needs to run offline
+const CORE_FILES = [
   './index.html',
-  './manifest.json',
-  'https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap'
+  './manifest.json'
 ];
 
 // ── INSTALL ─────────────────────────────────────────────
-// Cache all static assets when the SW is first installed
+// Cache only core files — nothing else
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      // Cache core files - fonts may fail in some environments, that's fine
-      return cache.addAll(['./index.html', './manifest.json'])
-        .then(() => {
-          // Try to cache fonts separately (non-fatal if blocked)
-          return cache.add('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap')
-            .catch(() => {/* fonts unavailable offline — acceptable */});
-        });
-    }).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(CORE_FILES))
+      .then(() => self.skipWaiting())
   );
 });
 
 // ── ACTIVATE ─────────────────────────────────────────────
-// Clean up old caches from previous versions
+// Delete EVERY cache that is not the current one.
+// This is what stops cache accumulation — old versions are always purged.
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys => {
-      return Promise.all(
+    caches.keys()
+      .then(keys => Promise.all(
         keys
           .filter(key => key !== CACHE_NAME)
-          .map(key => {
-            console.log('[SW] Deleting old cache:', key);
-            return caches.delete(key);
-          })
-      );
-    }).then(() => self.clients.claim())
+          .map(key => caches.delete(key))
+      ))
+      .then(() => self.clients.claim())
   );
 });
 
 // ── FETCH ─────────────────────────────────────────────────
-// Strategy: Cache First for static assets, Network First for everything else
+// Network first — always try to get the latest version.
+// Fall back to cache only when genuinely offline.
+// External requests (fonts, etc.) are not intercepted at all.
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // Skip non-GET requests
-  if (event.request.method !== 'GET') return;
+  // Skip non-GET and cross-origin requests entirely
+  if(event.request.method !== 'GET') return;
+  if(url.origin !== self.location.origin) return;
 
-  // Skip chrome-extension and other non-http requests
-  if (!event.request.url.startsWith('http')) return;
+  // Only handle index.html and manifest.json
+  const isCoreFile = url.pathname === '/'
+    || url.pathname === ''
+    || url.pathname.endsWith('/index.html')
+    || url.pathname.endsWith('/manifest.json');
 
-  // For HTML and app files: Network First, cache as fallback
-  if (
-    url.pathname.endsWith('.html') ||
-    url.pathname.endsWith('.json') ||
-    url.pathname === '/' ||
-    url.origin === self.location.origin
-  ) {
-    event.respondWith(
-      fetch(event.request)
-        .then(response => {
-          if (response && response.status === 200) {
-            const responseClone = response.clone();
-            caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone));
-          }
-          return response;
-        })
-        .catch(() => {
-          // Offline fallback — serve from cache
-          return caches.match(event.request).then(cached => cached || caches.match('./index.html'));
-        })
-    );
-    return;
-  }
+  if(!isCoreFile) return;
 
-  // For fonts and external resources: Cache First, no fallback
-  if (
-    url.hostname.includes('fonts.googleapis.com') ||
-    url.hostname.includes('fonts.gstatic.com')
-  ) {
-    event.respondWith(
-      caches.match(event.request).then(cached => {
-        return cached || fetch(event.request).then(response => {
-          if (!response || response.status !== 200) return response;
-          const responseClone = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone));
-          return response;
-        }).catch(() => new Response('', {status: 408}));
-      })
-    );
-    return;
-  }
-
-  // Default: Network with cache fallback
   event.respondWith(
-    fetch(event.request).catch(() => caches.match(event.request))
+    fetch(event.request)
+      .then(response => {
+        if(response && response.status === 200){
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+        }
+        return response;
+      })
+      .catch(() =>
+        caches.match(event.request)
+          .then(cached => cached || caches.match('./index.html'))
+      )
   );
 });
 
 // ── MESSAGES ─────────────────────────────────────────────
-// Handle skip waiting message from the app
 self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
+  if(event.data && event.data.type === 'SKIP_WAITING'){
     self.skipWaiting();
-  }
-  if (event.data && event.data.type === 'GET_VERSION') {
-    event.ports[0].postMessage({ version: CACHE_VERSION, cacheName: CACHE_NAME });
-  }
-});
-
-// ── BACKGROUND SYNC ──────────────────────────────────────
-// Placeholder for future background sync if needed
-self.addEventListener('sync', event => {
-  if (event.tag === 'sync-workouts') {
-    // Future: sync workout data to a backend
-    console.log('[SW] Background sync triggered');
   }
 });
